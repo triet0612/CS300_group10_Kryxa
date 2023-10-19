@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "requirements/Kryxa requirements - Dang Minh Triet.md",
+                "file": "requirements/Plan.md",
                 "mode": "preview",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "requirements/Kryxa requirements - Dang Minh Triet.md",
+                "file": "requirements/Plan.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "requirements/Kryxa requirements - Dang Minh Triet.md",
+                "file": "requirements/Plan.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "requirements/Kryxa requirements - Dang Minh Triet.md"
+                "file": "requirements/Plan.md"
               }
             }
           }
@@ -148,6 +148,7 @@
   },
   "active": "fa1a13101135ff10",
   "lastOpenFiles": [
-    "requirements/Kryxa requirements - Dang Minh Triet.md"
+    "requirements/Kryxa requirements - Dang Minh Triet.md",
+    "requirements/Plan.md"
   ]
 }

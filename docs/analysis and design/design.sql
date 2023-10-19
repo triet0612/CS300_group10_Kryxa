@@ -5,7 +5,7 @@ CREATE TABLE "Admin" (
     "Password" TEXT NOT NULL,
     PRIMARY KEY("AdminID")
 );
-CREATE TABLE "PCs" (
+CREATE TABLE "Pc" (
     "PcID" INTEGER NOT NULL CHECK("PcID" >= 0) UNIQUE,
     "Password" TEXT NOT NULL CHECK(LENGTH("Password") == 6),
     "MAC" TEXT NOT NULL UNIQUE,
@@ -13,10 +13,12 @@ CREATE TABLE "PCs" (
     PRIMARY KEY("PcID")
 );
 CREATE TABLE "SaleItem" (
-    "ItemID" INTEGER NOT NULL CHECK("ItemID" > 0) UNIQUE,
+    "ItemID" INTEGER NOT NULL CHECK("ItemID" >= 0) UNIQUE,
     "Name" TEXT NOT NULL,
-    "Price" REAL NOT NULL CHECK("Price" > 1000),
+    "Price" REAL NOT NULL CHECK("Price" >= 1000),
     "Category" TEXT NOT NULL,
+    "ItemStatus" TEXT NOT NULL CHECK ("ItemStatus" IN ("Deprecated", "On sale")),
+    "Stock" INTEGER NOT NULL CHECK ("Stock" >= 0),
     PRIMARY KEY("ItemID")
 );
 CREATE TABLE "Bill" (
@@ -25,7 +27,8 @@ CREATE TABLE "Bill" (
     "AdminID" INTEGER NOT NULL,
     "Status" TEXT NOT NULL CHECK("Status" IN ("In progress", "Completed", "Denied")),
     "Note" TEXT,
-    FOREIGN KEY("PcID") REFERENCES "PCs"("PcID"),
+    "Total" REAL NOT NULL,
+    FOREIGN KEY("PcID") REFERENCES "Pc"("PcID"),
     FOREIGN KEY("AdminID") REFERENCES "Admin"("AdminID"),
     PRIMARY KEY("PcID","Datetime")
 );
@@ -33,7 +36,7 @@ CREATE TABLE "Cart" (
     "PcID" INTEGER NOT NULL,
     "DateTime" TEXT NOT NULL,
     "ItemID" INTEGER NOT NULL,
-    "Count" INTEGER NOT NULL CHECK("Count" > 0),
+    "Count" INTEGER NOT NULL CHECK("Count" >= 0),
     PRIMARY KEY("PcID","DateTime"),
     FOREIGN KEY("PcID") REFERENCES "Bill"("PcID"),
     FOREIGN KEY("DateTime") REFERENCES "Bill"("Datetime")

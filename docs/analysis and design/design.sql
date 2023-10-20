@@ -6,14 +6,14 @@ CREATE TABLE "Admin" (
     PRIMARY KEY("AdminID")
 );
 CREATE TABLE "Pc" (
-    "PcID" INTEGER NOT NULL CHECK("PcID" >= 0) UNIQUE,
-    "Password" TEXT NOT NULL CHECK(LENGTH("Password") == 6),
+    "PcID" INTEGER NOT NULL CHECK("PcID" > 0) UNIQUE,
+    "Password" TEXT NOT NULL CHECK(LENGTH("Password") == 4),
     "MAC" TEXT NOT NULL UNIQUE,
     "TimeUsage" INTEGER,
     PRIMARY KEY("PcID")
 );
 CREATE TABLE "SaleItem" (
-    "ItemID" INTEGER NOT NULL CHECK("ItemID" >= 0) UNIQUE,
+    "ItemID" INTEGER NOT NULL CHECK("ItemID" > 0) UNIQUE,
     "Name" TEXT NOT NULL,
     "Price" REAL NOT NULL CHECK("Price" >= 1000),
     "Category" TEXT NOT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE "Cart" (
     "PcID" INTEGER NOT NULL,
     "DateTime" TEXT NOT NULL,
     "ItemID" INTEGER NOT NULL,
-    "Count" INTEGER NOT NULL CHECK("Count" >= 0),
+    "Count" INTEGER NOT NULL CHECK("Count" > 0),
     PRIMARY KEY("PcID","DateTime"),
     FOREIGN KEY("PcID") REFERENCES "Bill"("PcID"),
     FOREIGN KEY("DateTime") REFERENCES "Bill"("Datetime")

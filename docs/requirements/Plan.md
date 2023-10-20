@@ -1,0 +1,23 @@
+- Admin:
+	- Assign PCs for users:
+		- Create/remove PCs: 5 pd
+		- Admin choose a PCs from GUI to open a session for user: 3 pd
+	- Manage sales, items, billing for customers
+		- When a session is over or terminated, generate a bill for customer: 3 pd
+		- Add/remove/edit items on sale: 5pd
+	- View sales, history, statistics:
+		- View sales for each item: 
+		- Time usage per PCs:
+		- Graphs, visualization (potential)
+	- Report issues, bugs:
+		- Create bug report:
+	- Create tournament (potential)
+- User:
+	- Buy items:
+		- Can buy food, drinks, etc
+		- Extend session
+	- View timer for session:
+	- View bill: 
+	- Report issues
+		- Technical issues
+		- Service issues

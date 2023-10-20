@@ -6,10 +6,11 @@ CREATE TABLE "Admin" (
     PRIMARY KEY("AdminID")
 );
 CREATE TABLE "Pc" (
-    "PcID" INTEGER NOT NULL CHECK("PcID" > 0) UNIQUE,
-    "Password" TEXT NOT NULL CHECK(LENGTH("Password") == 4),
+    "PcID" INTEGER NOT NULL CHECK("PcID" >= 0) UNIQUE,
+    "Password" TEXT NOT NULL CHECK(LENGTH("Password") == 3),
     "MAC" TEXT NOT NULL UNIQUE,
-    "TimeUsage" INTEGER,
+    "IPv4" TEXT NOT NULL UNIQUE,
+    "TimeUsage" INTEGER NOT NULL DEFAULT 0,
     PRIMARY KEY("PcID")
 );
 CREATE TABLE "SaleItem" (
@@ -26,18 +27,10 @@ CREATE TABLE "Bill" (
     "Datetime" TEXT NOT NULL CHECK("Datetime" == datetime("Datetime")),
     "AdminID" INTEGER NOT NULL,
     "Status" TEXT NOT NULL CHECK("Status" IN ("In progress", "Completed", "Denied")),
-    "Note" TEXT,
-    "Total" REAL NOT NULL,
+    "Note" TEXT CHECK (LENGTH("Note") <= 100),
+    "Total" REAL NOT NULL DEFAULT 0,
+    "Cart" BLOB NOT NULL,
     FOREIGN KEY("PcID") REFERENCES "Pc"("PcID"),
     FOREIGN KEY("AdminID") REFERENCES "Admin"("AdminID"),
     PRIMARY KEY("PcID","Datetime")
-);
-CREATE TABLE "Cart" (
-    "PcID" INTEGER NOT NULL,
-    "DateTime" TEXT NOT NULL,
-    "ItemID" INTEGER NOT NULL,
-    "Count" INTEGER NOT NULL CHECK("Count" > 0),
-    PRIMARY KEY("PcID","DateTime"),
-    FOREIGN KEY("PcID") REFERENCES "Bill"("PcID"),
-    FOREIGN KEY("DateTime") REFERENCES "Bill"("Datetime")
 );

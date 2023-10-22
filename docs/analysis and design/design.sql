@@ -29,7 +29,7 @@ CREATE TABLE "Bill" (
     "Status" TEXT NOT NULL CHECK("Status" IN ("In progress", "Completed", "Denied")),
     "Note" TEXT CHECK (LENGTH("Note") <= 100),
     "Total" REAL NOT NULL DEFAULT 0,
-    "Cart" TEXT NOT NULL,
+    "Cart" BLOB NOT NULL,
     FOREIGN KEY("PcID") REFERENCES "Pc"("PcID"),
     FOREIGN KEY("AdminID") REFERENCES "Admin"("AdminID"),
     PRIMARY KEY("PcID","Datetime")

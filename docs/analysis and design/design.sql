@@ -1,3 +1,4 @@
+
 CREATE TABLE "Admin" (
     "AdminID" INTEGER NOT NULL CHECK("AdminID" >= 0) UNIQUE,
     "Fullname" TEXT NOT NULL,

@@ -20,3 +20,12 @@ class Bill(BaseModel):
     @field_serializer('Datetime')
     def serialize_datetime(self, d: datetime):
         return d.astimezone().isoformat()
+
+
+class Pc(BaseModel):
+    PcID: Annotated[int, Field(ge=0)]
+    Password: Annotated[str, Field(max_length=3, min_length=3)]
+    MAC: str
+    IPv4: str
+    TimeUsage: Annotated[int, Field(default=0)]
+

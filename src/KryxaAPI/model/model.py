@@ -15,7 +15,7 @@ class Bill(BaseModel):
 class SaleItems(BaseModel):
     ItemID: Annotated[int, Field(ge = 0)]
     Name: Annotated[str, Field(max_length=20)]
-    Price: Annotated[float, Field(ge=1000)]
+    Price: float
     Category: Annotated[str, Field(max_length=20)]
     ItemStatus: Literal['Deprecated','On Sale']
     Stock: Annotated[int, Field(ge = 0)]

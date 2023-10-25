@@ -35,3 +35,5 @@ CREATE TABLE "Bill" (
     FOREIGN KEY("AdminID") REFERENCES "Admin"("AdminID"),
     PRIMARY KEY("PcID","Datetime")
 );
+INSERT INTO Admin VALUES (0, "Default Admin", "(+84)1234567", "1234");
+INSERT INTO Pc VALUES (0, "123", "Default Pc", "11-22-33-44-55-66", "192.168.0.2", 0);

@@ -1,3 +1,4 @@
+
 CREATE TABLE "Admin" (
     "AdminID" INTEGER NOT NULL CHECK("AdminID" >= 0) UNIQUE,
     "Fullname" TEXT NOT NULL,
@@ -16,7 +17,7 @@ CREATE TABLE "Pc" (
 CREATE TABLE "SaleItem" (
     "ItemID" INTEGER NOT NULL CHECK("ItemID" > 0) UNIQUE,
     "Name" TEXT NOT NULL,
-    "Price" REAL NOT NULL CHECK("Price" >= 1000),
+    "Price" REAL NOT NULL,
     "Category" TEXT NOT NULL,
     "ItemStatus" TEXT NOT NULL CHECK ("ItemStatus" IN ("Deprecated", "On sale")),
     "Stock" INTEGER NOT NULL CHECK ("Stock" >= 0),
@@ -24,7 +25,7 @@ CREATE TABLE "SaleItem" (
 );
 CREATE TABLE "Bill" (
     "PcID" INTEGER NOT NULL,
-    "Datetime" TEXT NOT NULL CHECK("Datetime" == datetime("Datetime")),
+    "Datetime" TEXT NOT NULL,
     "AdminID" INTEGER NOT NULL,
     "Status" TEXT NOT NULL CHECK("Status" IN ("In progress", "Completed", "Denied")),
     "Note" TEXT CHECK (LENGTH("Note") <= 100),

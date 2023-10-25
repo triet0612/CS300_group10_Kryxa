@@ -1,29 +1,28 @@
 from datetime import datetime
 import json
 import sqlite3
-from model.model import Bill
+from model.model import Bill, AccountDTO
 
 
 class DBService:
-    def __init__(self, path='../bin/test.db'):
+    def __init__(self, path='./bin/test.db'):
         self.path = path
         self.con: sqlite3.Connection
 
     def __enter__(self):
         self.con = sqlite3.connect(self.path)
-        self.con.serialize()
         return self.con
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self.con:
             self.con.close()
 
-# Triet
+
 def fetchBillList() -> list[Bill]:
     with DBService() as cur:
         try:
             bill: list[Bill] = []
-            rows = cur.execute("SELECT * FROM Bill")
+            rows = cur.cursor().execute("SELECT * FROM Bill")
             for row in rows.fetchall():
                 bill.append(Bill(
                     PcID=row[0], Datetime=datetime.fromisoformat(row[1]),
@@ -75,11 +74,18 @@ def updateBill(changedBill: Bill):
             cur.rollback()
             print(err)
 
-# Khiem
 
-
-# Minh
-
-
-# Bao & An
-
+def checkAdminAccount(acc: AccountDTO) -> bool:
+    with DBService() as cur:
+        try:
+            row = cur.cursor().execute(
+                "SELECT Password FROM Admin WHERE AdminID=?",
+                [acc.ID]
+            ).fetchone()
+            if acc.Password == row[0]:
+                return True
+            return False
+        except Exception as err:
+            cur.rollback()
+            print(err)
+            return False

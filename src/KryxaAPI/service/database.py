@@ -5,7 +5,7 @@ from model.model import Bill, AccountDTO
 
 
 class DBService:
-    def __init__(self, path='./bin/test.db'):
+    def __init__(self, path='./bin/kryxa.db'):
         self.path = path
         self.con: sqlite3.Connection
 
@@ -73,19 +73,3 @@ def updateBill(changedBill: Bill):
         except Exception as err:
             cur.rollback()
             print(err)
-
-
-def checkAdminAccount(acc: AccountDTO) -> bool:
-    with DBService() as cur:
-        try:
-            row = cur.cursor().execute(
-                "SELECT Password FROM Admin WHERE AdminID=?",
-                [acc.ID]
-            ).fetchone()
-            if acc.Password == row[0]:
-                return True
-            return False
-        except Exception as err:
-            cur.rollback()
-            print(err)
-            return False

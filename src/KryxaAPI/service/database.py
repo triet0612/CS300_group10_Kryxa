@@ -18,7 +18,7 @@ class DBService:
         if self.con:
             self.con.close()
 
-
+# Triet
 def fetchBillList() -> list[Bill]:
     with DBService() as cur:
         try:
@@ -74,3 +74,12 @@ def updateBill(changedBill: Bill):
         except Exception as err:
             cur.rollback()
             print(err)
+
+# Khiem
+
+
+# Minh
+
+
+# Bao & An
+

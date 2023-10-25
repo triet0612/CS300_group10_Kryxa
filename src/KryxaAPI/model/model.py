@@ -12,7 +12,6 @@ class Bill(BaseModel):
     Note: Annotated[str, Field(max_length=100)]
     Total: Annotated[float, Field(default=0)]
     Cart: list[dict]
-
     @field_serializer('Cart')
     def serialize_cart(self, c: list[dict]):
         return json.dumps(c)
@@ -34,3 +33,11 @@ class Admin(BaseModel):
     Fullname: Annotated[str, Field(max_length=100, min_length=1)]
     Phone: Annotated[str, Field(min_length=1)]
     Password: Annotated[str, Field(min_length=1)]
+
+class SaleItems(BaseModel):
+    ItemID: Annotated[int, Field(ge = 0)]
+    Name: Annotated[str, Field(max_length=20)]
+    Price: float
+    Category: Annotated[str, Field(max_length=20)]
+    ItemStatus: Literal['Deprecated','On Sale']
+    Stock: Annotated[int, Field(ge = 0)]

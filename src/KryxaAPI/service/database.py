@@ -2,6 +2,7 @@ from datetime import datetime
 import json
 import sqlite3
 from model.model import Bill, AccountDTO
+from model.model import SaleItems
 
 
 class DBService:
@@ -17,7 +18,7 @@ class DBService:
         if self.con:
             self.con.close()
 
-
+#Bill 
 def fetchBillList() -> list[Bill]:
     with DBService() as cur:
         try:
@@ -73,8 +74,62 @@ def updateBill(changedBill: Bill):
         except Exception as err:
             cur.rollback()
             print(err)
+#SaleItems 
+def fetchItem()->list[SaleItems]:
+    with DBService() as cur:
+        try:
+            items: list[SaleItems] = []
+            rows = cur.cursor().execute("SELECT * FROM SaleItems")
+            for row in rows.fetchall():
+                items.append(SaleItems(
+                    ItemID=row[0], Name= str(row[1]),
+                    Price=float(row[2]), Category=str(row[3]),
+                    ItemStatus=row[4],Stock=row[5]
+                ))
+            return items
+        except Exception as error:
+            print(error)
+            return []
+
+def insertItem(newItem:SaleItems):
+    with DBService() as cur:
+        try:
+            cur.execute(
+                "INSERT INTO SaleItems VALUES (:ItemID, :Name, :Price, :Category, :ItemStatus, :Stock)",
+                newItem.model_dump()
+            )
+            cur.commit()
+        except Exception as err:
+            cur.rollback()
+            print(err)
+
+def deleteItem(ItemID: int):
+    with DBService() as cur:
+        try:
+            cur.execute(
+                "DELETE FROM SaleItems WHERE ItemID=?",
+                [ItemID]
+            )
+            cur.commit()
+        except Exception as err:
+            cur.rollback()
+            print(err)
 
 
+def updateItem(changedItem: SaleItems):
+    with DBService() as cur:
+        try:
+            cur.execute(
+                "UPDATE SaleItems SET ItemID=:ItemID, Name=:Name, Price=:Price, Category=:Category, ItemStatus=:ItemStatus, Stock=:Stock"
+                "WHERE ItemID==:ItemID",
+                changedItem.model_dump()
+            )
+            cur.commit()
+        except Exception as err:
+            cur.rollback()
+            print(err)
+
+#login logic
 def checkAdminAccount(acc: AccountDTO) -> bool:
     with DBService() as cur:
         try:

@@ -1,4 +1,5 @@
 import adapter from '@sveltejs/adapter-static';
+import { vitePreprocess } from '@sveltejs/kit/vite';
 
 export default  {
 	kit: {
@@ -6,5 +7,6 @@ export default  {
 			fallback: 'index.html',
 			pages: '../www'
 		})
-	}
+	},
+	preprocess: vitePreprocess()
 };

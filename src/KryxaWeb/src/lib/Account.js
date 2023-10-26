@@ -31,6 +31,6 @@ export class Account {
       return
     }
     localStorage.setItem("jwt", creds)
-    location.replace("./")
+    location.replace("/")
   }
 }

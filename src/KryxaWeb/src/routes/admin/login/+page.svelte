@@ -1,6 +1,6 @@
 <script>
     import { Account } from '$lib/Account.js'
-    import background from '$lib/assets/ad-login-bg.png';
+    import background from '$lib/assets/admin/nav-login-bg.png';
     let acc = new Account()
 </script>
 

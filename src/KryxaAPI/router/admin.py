@@ -1,6 +1,7 @@
-from fastapi import APIRouter, HTTPException, Response, Depends
+from fastapi import APIRouter, HTTPException, Response, Depends, File
 from typing import Annotated
 from auth import checkAdminAccount, generate_token, validateAdminToken, AccountDTO
+import model.SaleItems
 
 adminRouter = APIRouter(tags=["admin"])
 
@@ -49,9 +50,12 @@ fake_items_db = [
     }
 ]
 
+
+# track info for each item id
 @adminRouter.get("/items/{item_id}")
 async def read_item(item_id: int):
     try:
+        #fake_items_db = model.SaleItems.fetch_all_items()
         for item in fake_items_db:
             if item_id == item["ItemID"]:
                 return item
@@ -59,3 +63,9 @@ async def read_item(item_id: int):
     except Exception as err:
         print(err)
         raise HTTPException(status_code=404, detail="Item id does not exist")
+
+
+# create item and image file
+@adminRouter.post("/get_items")
+async def create_item(item: model.SaleItems.SaleItems, file: Annotated[bytes,File()]):
+    return item, file

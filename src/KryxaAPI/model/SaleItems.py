@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
 from typing import Annotated, Literal
+from db.database import DBService
 
 
 class SaleItems(BaseModel):
@@ -9,3 +10,9 @@ class SaleItems(BaseModel):
     Category: Annotated[str, Field(max_length=20)]
     ItemStatus: Literal['Deprecated', 'On Sale']
     Stock: Annotated[int, Field(ge=0)]
+
+
+def fetch_all_items():
+    with DBService('../bin/kryxa.db') as cur:
+        items = cur.cursor().execute("SELECT * FROM SaleItems").fetchall()
+        return items

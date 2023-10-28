@@ -12,6 +12,7 @@ CREATE TABLE "Pc" (
     "MAC" TEXT NOT NULL UNIQUE,
     "IPv4" TEXT NOT NULL UNIQUE,
     "TimeUsage" INTEGER NOT NULL DEFAULT 0,
+    "Status" TEXT NOT NULL CHECK("Status" IN ("Available", "Unavailable")),
     PRIMARY KEY("PcID")
 );
 CREATE TABLE "SaleItem" (

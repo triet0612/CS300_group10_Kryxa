@@ -1,6 +1,8 @@
+from typing import Annotated
 import jwt
-from model.model import AccountDTO
-from service.database import DBService
+from pydantic import BaseModel, Field
+
+from db.database import DBService
 from fastapi.security import HTTPBearer
 from fastapi import Depends, HTTPException
 
@@ -10,6 +12,11 @@ JWT_SECRET = 'secret'
 jwt_auth = HTTPBearer(
     scheme_name='Authorization'
 )
+
+
+class AccountDTO(BaseModel):
+    ID: Annotated[int, Field(ge=0)]
+    Password: str
 
 
 def generate_token(acc: AccountDTO) -> str:
@@ -44,6 +51,7 @@ def validateAdminToken(creds=Depends(jwt_auth)) -> AccountDTO:
             raise HTTPException(status_code=401, detail='Token unauthorized')
         return acc
     except Exception as err:
+        print(err)
         raise HTTPException(status_code=401, detail='Error token')
 
 
@@ -71,4 +79,5 @@ def validatePcToken(creds=Depends(jwt_auth)) -> AccountDTO:
             raise HTTPException(status_code=401, detail='Token unauthorized')
         return acc
     except Exception as err:
+        print(err)
         raise HTTPException(status_code=401, detail='Error token')

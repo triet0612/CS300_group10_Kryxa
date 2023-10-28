@@ -3,7 +3,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi import HTTPException
 
 
-class SPAfallback(StaticFiles):
+class PageServer(StaticFiles):
     async def get_response(self, path: str, scope):
         try:
             return await super().get_response(path, scope)

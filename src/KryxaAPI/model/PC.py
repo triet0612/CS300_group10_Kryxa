@@ -11,17 +11,16 @@ class Pc(BaseModel):
     Status: Literal['Available', 'Unavailable']
 
 
-#TODO: getAllPcs()
-@Pc.get("/Pcs")
-async def fetch_All_Pcs():
-    Pcs = []
+#TODO: getAllPcsForView()
+def fetch_All_Pcs():
     with DBService() as cur:
         try:
-            rows = cur.cursor().execute(
-             "SELECT PcID, Status FROM Pc LEFT JOIN Bill ON Pc.PcID=Bill.PcID WHERE Bill.Status='In progress'"
+            view_Pc_info = cur.cursor().execute(
+             "SELECT PcID, Status FROM Pc "
             ).fetchall()
-            for r in rows:
-                Pcs.append(Pc(PcID=r[0], Status=r[1]))
+            return view_Pc_info
+            # for r in rows:
+            #     Pc.append(Pc(PcID=r[0], Status=r[1]))
         except Exception as err:
             print(err)
 

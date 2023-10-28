@@ -1,5 +1,5 @@
 <script>
-    import {NavIcons} from '$lib/ImageAssets.js'
+    import {NavIcons} from '$lib/Assets.js'
     const items = ["Management", "Items", "Tournament", "Statistics", "Settings"]
 </script>
 

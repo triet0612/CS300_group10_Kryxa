@@ -5,7 +5,7 @@ export default  {
 	kit: {
 		adapter: adapter({
 			fallback: 'index.html',
-			pages: '../www'
+			pages: '../KryxaAPI/bin/www'
 		})
 	},
 	preprocess: vitePreprocess()

@@ -2,7 +2,7 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from router.admin import adminRouter
-from service.SPAserver import SPAfallback
+from service.page import PageServer
 
 
 def get_server():
@@ -18,7 +18,7 @@ def get_server():
     )
 
     app_router.include_router(adminRouter, prefix="/api/admin")
-    app_router.mount("/", SPAfallback(directory="./bin/www", html=True))
+    app_router.mount("/", PageServer(directory="./bin/www", html=True))
     return app_router
 
 

@@ -8,15 +8,12 @@ class Pc(BaseModel):
     MAC: str
     IPv4: str
     TimeUsage: Annotated[int, Field(default=0)]
-
-class PcDTO(BaseModel):
-    PcID: Annotated[int, Field(ge=0)]
-    Status: Literal['In progress', 'Completed', 'Denied']
+    Status: Literal['Available', 'Unavailable']
 
 
 #TODO: getAllPcs()
 @Pc.get("/Pcs")
-async def get_All_Pcs():
+async def fetch_All_Pcs():
     Pcs = []
     with DBService() as cur:
         try:
@@ -24,7 +21,7 @@ async def get_All_Pcs():
              "SELECT PcID, Status FROM Pc LEFT JOIN Bill ON Pc.PcID=Bill.PcID WHERE Bill.Status='In progress'"
             ).fetchall()
             for r in rows:
-                Pcs.append(PcDTO(PcID=r[0], Status=r[1]))
+                Pcs.append(Pc(PcID=r[0], Status=r[1]))
         except Exception as err:
             print(err)
 

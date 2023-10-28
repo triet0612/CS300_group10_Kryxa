@@ -21,3 +21,41 @@ async def login(acc: AccountDTO, res: Response) -> str:
     except Exception as err:
         print(err)
         raise HTTPException(status_code=401, detail="Error validating")
+
+
+fake_items_db = [
+    {
+        "ItemID": 1,
+        "Name": "Com ga",
+        "Price": 50000,
+        "Category": "Food",
+        "ItemStatus": "On sale",
+        "Stock": 1
+    },
+    {
+        "ItemID": 2,
+        "Name": "Com khong ga",
+        "Price": 50000,
+        "Category": "Food",
+        "ItemStatus": "On sale",
+        "Stock": 1
+    }, {
+        "ItemID": 3,
+        "Name": "Com ga khong",
+        "Price": 50000,
+        "Category": "Food",
+        "ItemStatus": "On sale",
+        "Stock": 1
+    }
+]
+
+@adminRouter.get("/items/{item_id}")
+async def read_item(item_id: int):
+    try:
+        for item in fake_items_db:
+            if item_id == item["ItemID"]:
+                return item
+        raise HTTPException(status_code=404, detail="Item id does not exist")
+    except Exception as err:
+        print(err)
+        raise HTTPException(status_code=404, detail="Item id does not exist")

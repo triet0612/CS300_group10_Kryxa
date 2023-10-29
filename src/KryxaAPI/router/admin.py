@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException, Response, Depends
 from typing import Annotated
 from auth import checkAdminAccount, generate_token, validateAdminToken, AccountDTO
+from model.PC import insert_pc, Pc
 
 adminRouter = APIRouter(tags=["admin"])
 
@@ -21,3 +22,13 @@ async def login(acc: AccountDTO, res: Response) -> str:
     except Exception as err:
         print(err)
         raise HTTPException(status_code=401, detail="Error validating")
+
+
+@adminRouter.post("/pc", dependencies=[Depends(validateAdminToken)])
+async def create_pc(new_pc: Pc):
+    try:
+        insert_pc(new_pc)
+        return "Successfully create pc"
+    except Exception as err:
+        print(err)
+        raise HTTPException(status_code=400, detail="Error create Pc")

@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face{
+    font-family: "Blackops";
+    src: url("$lib/font/BlackOpsOne-Relugar.ttf") format(ttf)
+}

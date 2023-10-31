@@ -64,6 +64,7 @@ async def login(acc: AccountDTO, res: Response) -> str:
         raise HTTPException(status_code=401, detail="Error validating")
 
 
+
 # TODO: getAllItem()
 @adminRouter.get("/items")
 async def get_all_items():
@@ -84,19 +85,46 @@ async def get_all_items():
 
 # TODO: getItemsByName(nameString: str)
 
+# fake_items_db = [
+#     {
+#         "ItemID": 1,
+#         "Name": "Com ga",
+#         "Price": 50000,
+#         "Category": "Food",
+#         "ItemStatus": "On sale",
+#         "Stock": 1
+#     },
+#     {
+#         "ItemID": 2,
+#         "Name": "Com khong ga",
+#         "Price": 50000,
+#         "Category": "Food",
+#         "ItemStatus": "On sale",
+#         "Stock": 1
+#     }, {
+#         "ItemID": 3,
+#         "Name": "Com ga khong",
+#         "Price": 50000,
+#         "Category": "Food",
+#         "ItemStatus": "On sale",
+#         "Stock": 1
+#     }
+# ]
+
+
 
 # track info for each item id
 @adminRouter.get("/items/{item_id}")
 async def read_item(item_id: int):
     try:
-        #fake_items_db = model.SaleItems.fetch_all_items()
+        fake_items_db = model.SaleItems.fetch_all_items()
         for item in fake_items_db:
             if item_id == item["ItemID"]:
                 return item
         raise HTTPException(status_code=404, detail="Item id does not exist")
     except Exception as err:
         print(err)
-        raise HTTPException(status_code=404, detail="Item id does not exist")
+        raise RuntimeError
 
 
 # create item and image file

@@ -31,6 +31,10 @@ export class Account {
       return
     }
     localStorage.setItem("jwt", creds)
-    location.replace("/")
+    if (role === "Admin") {
+      location.replace('/admin')
+    } else {
+      location.replace('/')
+    }
   }
 }

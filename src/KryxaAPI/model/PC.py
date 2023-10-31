@@ -13,12 +13,12 @@ class Pc(BaseModel):
 
 #TODO: getAllPcsForView()
 def fetch_All_Pcs():
-    with DBService() as cur:
+    with DBService('../bin/kryxa.db') as cur:
         try:
-            view_Pc_info = cur.cursor().execute(
-             "SELECT PcID, Status FROM Pc "
+            pc_info = cur.cursor().execute(
+             "SELECT * FROM Pc "
             ).fetchall()
-            return view_Pc_info
+            return pc_info
             # for r in rows:
             #     Pc.append(Pc(PcID=r[0], Status=r[1]))
         except Exception as err:

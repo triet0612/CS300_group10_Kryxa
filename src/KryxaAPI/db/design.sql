@@ -37,4 +37,5 @@ CREATE TABLE "Bill" (
     PRIMARY KEY("PcID","Datetime")
 );
 INSERT INTO Admin VALUES (0, "Default Admin", "(+84)1234567", "1234");
-INSERT INTO Pc VALUES (0, "123", "11-22-33-44-55-66", "192.168.0.2", 0);
+INSERT INTO Pc VALUES (0, "123", "11-22-33-44-55-66", "192.168.0.2", 0,'Available' );
+INSERT INTO Pc VALUES (2, "124", "11-22-33-44-55-76", "192.148.0.2", 0,'Available' );

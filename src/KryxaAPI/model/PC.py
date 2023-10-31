@@ -11,17 +11,22 @@ class Pc(BaseModel):
     Status: Literal['Available', 'Unavailable']
 
 
+
 #TODO: getAllPcsForView()
 def fetch_All_Pcs():
+    list_Pc=[]
     with DBService('../bin/kryxa.db') as cur:
         try:
             pc_info = cur.cursor().execute(
-             "SELECT * FROM Pc "
+             "SELECT PcID,Status FROM Pc "
             ).fetchall()
-            return pc_info
-            # for r in rows:
-            #     Pc.append(Pc(PcID=r[0], Status=r[1]))
+            for i in pc_info:
+                list_Pc.append({'PcID':i[0], 'Status':i[1]})
+            return list_Pc
         except Exception as err:
             print(err)
 
+
 #TODO: getPCbyID(id: int)
+a = fetch_All_Pcs()
+print(a)

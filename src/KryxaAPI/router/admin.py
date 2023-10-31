@@ -1,5 +1,7 @@
 from fastapi import APIRouter, HTTPException, Response, Depends
 from typing import Annotated
+
+import model.PC
 from auth import checkAdminAccount, generate_token, validateAdminToken, AccountDTO
 import array as arr
 adminRouter = APIRouter(tags=["admin"])
@@ -23,4 +25,13 @@ async def login(acc: AccountDTO, res: Response) -> str:
         print(err)
         raise HTTPException(status_code=401, detail="Error validating")
 
+
+@adminRouter.get("/pc_status")
+async def view_pcs():
+    list_pc=[]
+    try:
+        list_pc=model.PC.fetch_All_Pcs()
+        return list_pc
+    except Exception as err:
+        raise HTTPException(status_code=401, detail="Error validating")
 

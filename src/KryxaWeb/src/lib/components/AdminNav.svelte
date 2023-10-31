@@ -1,27 +1,27 @@
 <script>
-    import {NavIcons} from '$lib/Assets.js'
+    import {AppLogo} from '$lib/Assets.js'
     const items = ["Management", "Items", "Tournament", "Statistics", "Settings"]
+
+    function logout() {
+        localStorage.removeItem("jwt")
+        location.replace("/admin")
+    }
 </script>
 
-<aside class="fixed top-0 left-0 w-64 h-screen">
-    <div class="h-full px-3 overflow-y-auto bg-[#2B2A2A]">
-        <ul class="text-xl text-[#E3A052]">
-            <li><img src="{NavIcons["Logo"]}" alt="Logo"></li>
+<aside class="flex flex-col m-4 w-60 h-screen justify-center">
+    <div class="p-3 rounded-lg bg-white/5 border-2 border-gray-500 backdrop-blur-md backdrop-brightness-125">
+        <ul class="text-2xl text-[#E3A052] font-BlackOpsOne">
+            <li><img src="{AppLogo}" alt="Logo"></li>
             {#each items as it}
-                <div class="flex m-3">
-                    <li class="flex items-center p-2">
-                        <div class="w-10">
-                            <img src="{NavIcons[it]}" alt="Icon">
-                        </div>
-                        <div>
-                            <a href="/admin/{it}">
-                                <p class="ml-6">{it}</p>
-                            </a>
-                        </div>
+                <div class="flex my-2">
+                    <li class="flex p-2 hover:bg-[#E3A052] hover:text-black">
+                        <a href="/admin/{it}">{it}</a>
                     </li>
                 </div>
-                <hr>
             {/each}
+            <div class="flex my-3 border-2 border-gray-500 text-red-700 hover:bg-red-900 hover:text-[#E3A052] justify-center">
+                <button class="p-3" on:click={() => logout()}>Logout</button>
+            </div>
         </ul>
     </div>
 </aside>

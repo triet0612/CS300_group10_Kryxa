@@ -4,7 +4,7 @@ from typing import Annotated
 import model.PC
 from auth import checkAdminAccount, generate_token, validateAdminToken, AccountDTO
 import array as arr
-from model.PC import Pc, fetch_pc_by_id
+from model.PC import Pc, fetch_pc_by_id, insert_pc
 
 adminRouter = APIRouter(tags=["admin"])
 
@@ -46,3 +46,13 @@ async def view_pcs():
     except Exception as err:
         print(err)
         raise HTTPException(status_code=401, detail="Error validating")
+
+
+@adminRouter.post("/pc", dependencies=[Depends(validateAdminToken)])
+async def create_pc(new_pc: Pc):
+    try:
+        insert_pc(new_pc)
+        return "Successfully create pc"
+    except Exception as err:
+        print(err)
+        raise HTTPException(status_code=400, detail="Error create Pc")

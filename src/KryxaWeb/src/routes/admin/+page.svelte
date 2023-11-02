@@ -1,4 +1,6 @@
 <script>
+    import AdminNav from "$lib/components/AdminNav.svelte";
+    import ModalPc from "$lib/components/ModalPc.svelte"
   import AdminNav from "$lib/components/AdminNav.svelte";
   import { MainScreen } from "$lib/Assets.js";
   let pc_ids = [
@@ -57,3 +59,4 @@
     </ul>
   </div>
 </div>
+<ModalPc status="open"/>

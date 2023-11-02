@@ -1,4 +1,4 @@
-from typing import Annotated, Literal
+from typing import Annotated
 from pydantic import BaseModel, Field
 from db.database import DBService
 
@@ -9,7 +9,7 @@ class Pc(BaseModel):
     MAC: str
     IPv4: str
     TimeUsage: Annotated[int, Field(default=0)]
-    Status: Literal['Available', 'Unavailable']
+Status: Literal['Available', 'Unavailable']
 
 
 # TODO: getAllPcsForView()
@@ -45,3 +45,15 @@ def fetch_pc_by_id(pc_id: int) -> Pc:
 # print(a)
 #
 
+
+def insert_pc(new_pc: Pc):
+    with DBService() as cur:
+        try:
+            cur.execute(
+                "INSERT INTO Pc VALUES (?, ?, ?, ?, 0)",
+                [new_pc.PcID, new_pc.Password, new_pc.MAC, new_pc.IPv4]
+            )
+            cur.commit()
+        except Exception as err:
+            cur.rollback()
+            raise err

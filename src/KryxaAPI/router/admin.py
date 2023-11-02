@@ -39,7 +39,6 @@ async def fetch_pc_id(pc_id: int):
 
 @adminRouter.get("/")
 async def view_pcs():
-    list_pc = []
     try:
         list_pc = model.PC.fetch_All_Pcs()
         return list_pc

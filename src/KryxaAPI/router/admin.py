@@ -4,7 +4,6 @@ from typing import Annotated
 import model.PC
 from auth import checkAdminAccount, generate_token, validateAdminToken, AccountDTO
 import array as arr
-
 from model.PC import Pc, fetch_pc_by_id
 
 adminRouter = APIRouter(tags=["admin"])
@@ -13,7 +12,6 @@ adminRouter = APIRouter(tags=["admin"])
 # @adminRouter.get("/")
 # async def home_admin(acc: Annotated[AccountDTO, Depends(validateAdminToken)]):
 #     return {"message": "welcome admin ID: " + str(acc.ID)}
-
 
 
 @adminRouter.post("/login")
@@ -37,13 +35,14 @@ async def fetch_pc_id(pc_id: int):
     except Exception as err:
         print(err)
         raise HTTPException(status_code=404, detail="No pc with that id")
-@adminRouter.get("/pc_status")
+
+
+@adminRouter.get("/")
 async def view_pcs():
-    list_pc=[]
+    list_pc = []
     try:
-        list_pc=model.PC.fetch_All_Pcs()
+        list_pc = model.PC.fetch_All_Pcs()
         return list_pc
     except Exception as err:
+        print(err)
         raise HTTPException(status_code=401, detail="Error validating")
-
-

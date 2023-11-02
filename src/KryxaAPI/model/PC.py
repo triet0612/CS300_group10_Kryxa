@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, Literal
 from pydantic import BaseModel, Field
 from db.database import DBService
 
@@ -9,7 +9,7 @@ class Pc(BaseModel):
     MAC: str
     IPv4: str
     TimeUsage: Annotated[int, Field(default=0)]
-Status: Literal['Available', 'Unavailable']
+    Status: Literal['Available', 'Unavailable']
 
 
 # TODO: getAllPcsForView()

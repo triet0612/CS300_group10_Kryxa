@@ -10,17 +10,18 @@ class Pc(BaseModel):
     TimeUsage: Annotated[int, Field(default=0)]
     Status: Literal['Available', 'Unavailable']
 
+#TODO: getAllPcsForView()
 
-# TODO: getAllPcsForView()
 def fetch_All_Pcs():
-    with DBService() as cur:
+    list_Pc=[]
+    with DBService('../bin/kryxa.db') as cur:
         try:
-            view_Pc_info = cur.cursor().execute(
-             "SELECT PcID, Status FROM Pc "
+            pc_info = cur.cursor().execute(
+             "SELECT PcID,Status FROM Pc "
             ).fetchall()
-            return view_Pc_info
-            # for r in rows:
-            #     Pc.append(Pc(PcID=r[0], Status=r[1]))
+            for i in pc_info:
+                list_Pc.append({'PcID':i[0], 'Status':i[1]})
+            return list_Pc
         except Exception as err:
             print(err)
 
@@ -41,4 +42,8 @@ def fetch_pc_by_id(pc_id: int) -> Pc:
             return pc_info
         except Exception as err:
             print(err)
+
+#TODO: getPCbyID(id: int)
+a = fetch_All_Pcs()
+print(a)
 

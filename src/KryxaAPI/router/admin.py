@@ -1,5 +1,7 @@
 from fastapi import APIRouter, HTTPException, Response, Depends
 from typing import Annotated
+
+import model.PC
 from auth import checkAdminAccount, generate_token, validateAdminToken, AccountDTO
 import array as arr
 
@@ -35,4 +37,13 @@ async def fetch_pc_id(pc_id: int):
     except Exception as err:
         print(err)
         raise HTTPException(status_code=404, detail="No pc with that id")
+@adminRouter.get("/pc_status")
+async def view_pcs():
+    list_pc=[]
+    try:
+        list_pc=model.PC.fetch_All_Pcs()
+        return list_pc
+    except Exception as err:
+        raise HTTPException(status_code=401, detail="Error validating")
+
 

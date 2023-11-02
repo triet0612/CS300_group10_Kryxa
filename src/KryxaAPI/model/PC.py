@@ -11,13 +11,9 @@ class Pc(BaseModel):
     TimeUsage: Annotated[int, Field(default=0)]
     Status: Literal['Available', 'Unavailable']
 
-<<<<<<< Updated upstream
-#TODO: getAllPcsForView()
-
-=======
 
 # TODO: getAllPcsForView()
->>>>>>> Stashed changes
+
 def fetch_All_Pcs():
     list_Pc = []
     with DBService() as cur:
@@ -32,7 +28,6 @@ def fetch_All_Pcs():
             print(err)
 
 
-<<<<<<< Updated upstream
 # TODO: getPCbyID(id: int)
 def fetch_pc_by_id(pc_id: int) -> Pc:
     with DBService() as cur:
@@ -40,7 +35,7 @@ def fetch_pc_by_id(pc_id: int) -> Pc:
             pc = cur.cursor().execute(
                 "SELECT * FROM Pc WHERE PcId =?", [pc_id]
             ).fetchone()
-            pc_info = Pc(PcID=pc_id,Password='123',MAC='',IPv4='',TimeUsage=0,Status='Available')
+            pc_info = Pc(PcID=pc_id, Password='123', MAC='', IPv4='', TimeUsage=0, Status='Available')
             pc_info.Password = pc[1]
             pc_info.MAC = pc[2]
             pc_info.IPv4 = pc[3]
@@ -50,12 +45,7 @@ def fetch_pc_by_id(pc_id: int) -> Pc:
         except Exception as err:
             print(err)
 
-#TODO: getPCbyID(id: int)
+
+# TODO: getPCbyID(id: int)
 a = fetch_All_Pcs()
 print(a)
-
-=======
-# # TODO: getPCbyID(id: int)
-# a = fetch_All_Pcs()
-# print(a)
->>>>>>> Stashed changes

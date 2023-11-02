@@ -4,12 +4,8 @@ from typing import Annotated
 import model.PC
 from auth import checkAdminAccount, generate_token, validateAdminToken, AccountDTO
 import array as arr
-
-<<<<<<< Updated upstream
 from model.PC import Pc, fetch_pc_by_id
 
-=======
->>>>>>> Stashed changes
 adminRouter = APIRouter(tags=["admin"])
 
 
@@ -31,7 +27,6 @@ async def login(acc: AccountDTO, res: Response) -> str:
         raise HTTPException(status_code=401, detail="Error validating")
 
 
-<<<<<<< Updated upstream
 @adminRouter.get("/{pc_id}")
 async def fetch_pc_id(pc_id: int):
     try:
@@ -40,10 +35,9 @@ async def fetch_pc_id(pc_id: int):
     except Exception as err:
         print(err)
         raise HTTPException(status_code=404, detail="No pc with that id")
-@adminRouter.get("/pc_status")
-=======
-@adminRouter.get("/pc")
->>>>>>> Stashed changes
+
+
+@adminRouter.get("/")
 async def view_pcs():
     list_pc = []
     try:
@@ -52,8 +46,3 @@ async def view_pcs():
     except Exception as err:
         print(err)
         raise HTTPException(status_code=401, detail="Error validating")
-<<<<<<< Updated upstream
-
-
-=======
->>>>>>> Stashed changes

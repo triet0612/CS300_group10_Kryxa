@@ -13,7 +13,7 @@ export class Pc {
       method: "POST",
       body: JSON.stringify({
         "PcID": this.PcID,
-        "Password": this.Password,
+        "Password": "",
         "MAC": this.MAC,
         "IPv4": this.IPv4,
         "TimeUsage": 0

@@ -33,7 +33,7 @@
   <div class="mr-auto ml-auto p-20 overflow-y-scroll">
     <ul class="grid grid-cols-5 gap-20">
       <div
-        class="w-56 h-56 bg-yellow-400 bg-opacity-70 backdrop-blur-2xl backdrop-brightness-200 text-black-400 font-NotoSans font-bold text-center flex flex-col rounded-xl justify-center"
+        class="w-50 h-50 bg-yellow-400 bg-opacity-70 backdrop-blur-2xl backdrop-brightness-200 text-black-400 font-NotoSans font-bold text-center flex flex-col rounded-xl justify-center"
       >
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-interactive-supports-focus -->
@@ -45,7 +45,7 @@
       {#each pc_ids as pc_id}
         <li>
           <div
-            class="w-56 h-56 {pc_id['Status'] == 'Available'
+            class="w-50 h-50 {pc_id['Status'] == 'Available'
               ? 'bg-green-600 bg-opacity-75'
               : pc_id['Status'] == 'Unavailable'
               ? 'bg-red-900 bg-opacity-75'

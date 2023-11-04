@@ -1,8 +1,11 @@
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+from model.SaleItems import fetch_all_items
 from router.admin import adminRouter
 from service.page import PageServer
+
 
 
 def get_server():
@@ -25,3 +28,5 @@ def get_server():
 if __name__ == '__main__':
     server = get_server()
     uvicorn.run(server, host='localhost', port=8000)
+
+

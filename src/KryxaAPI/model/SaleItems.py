@@ -13,12 +13,12 @@ class SaleItems(BaseModel):
 
 
 def fetch_all_items():
-    with DBService('../bin/kryxa.db') as cur:
+    with DBService() as cur:
         items = cur.cursor().execute("SELECT * FROM SaleItem").fetchall()
         return items
 
 
 def fetch_items_id(itemid):
-    with DBService('../bin/kryxa.db') as cur:
-        items = cur.cursor().execute("SELECT * FROM SaleItem where ItemID = ?", itemid).fetchall()
+    with DBService() as cur:
+        items = cur.cursor().execute("SELECT * FROM SaleItem where ItemID = ?", (itemid,)).fetchall()
         return items

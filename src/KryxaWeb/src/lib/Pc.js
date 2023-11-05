@@ -1,10 +1,11 @@
 export class Pc {
-  constructor(PcID, Password, MAC, IPv4, TimeUsage) {
+  constructor(PcID, Password, MAC, IPv4, TimeUsage, Status) {
     this.PcID = PcID
     this.Password = Password
     this.MAC = MAC
     this.IPv4 = IPv4
     this.TimeUsage = TimeUsage
+    this.Status = Status
   }
 
   async createPc() {
@@ -13,10 +14,11 @@ export class Pc {
       method: "POST",
       body: JSON.stringify({
         "PcID": this.PcID,
-        "Password": "",
+        "Password": "123",
         "MAC": this.MAC,
         "IPv4": this.IPv4,
-        "TimeUsage": 0
+        "TimeUsage": 0,
+        "Status": "Available"
       }),
       headers: {
         "Content-Type": "application/json",

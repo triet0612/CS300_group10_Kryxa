@@ -24,26 +24,16 @@ async def login(acc: AccountDTO, res: Response) -> str:
         raise HTTPException(status_code=401, detail="Error validating")
 
 
-# TODO: getAllItem()
 @adminRouter.get("/items")
-async def get_all_items():
+async def get_all_items(item_name: str | None = None, item_category: str | None = None):
     try:
-        # TODO: replace fake_items_db with itemList
-        # itemList = List of items get from getAllItem()
-        fake_items_db = model.SaleItems.fetch_all_items()
-        if len(fake_items_db) == 0:
+        item_list = model.SaleItems.fetch_all_items(item_name, item_category)
+        if len(item_list) == 0:
             raise HTTPException(status_code=404,
                                 detail="No items")  # This should not be 404, should have a notification screen
-        return fake_items_db
-    except Exception as err:
-        print(err)
-
-
-# TODO: getItemByID(ID: int)
-
-# TODO: getItemsByCategory(category: str)
-
-# TODO: getItemsByName(nameString: str)
+        return item_list
+    except HTTPException:
+        pass  # ignore HTTPException
 
 
 # track info for each item id
@@ -56,7 +46,7 @@ async def read_item(item_id: int):
         raise HTTPException(status_code=404, detail="Item id does not exist")
     except Exception as err:
         print(err)
-        raise RuntimeError
+        raise HTTPException(status_code=404, detail="Item id does not exist")
 
 
 # create item and image file

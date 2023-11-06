@@ -8,7 +8,7 @@ class SaleItems(BaseModel):
     Name: Annotated[str, Field(max_length=20)]
     Price: float
     Category: Annotated[str, Field(max_length=20)]
-    ItemStatus: Literal['Deprecated', 'On Sale']
+    ItemStatus: Literal['Deprecated', 'On sale']
     Stock: Annotated[int, Field(ge=0)]
 
 
@@ -45,7 +45,21 @@ def fetch_all_items(item_name: str | None = None, item_category: str | None = No
         return item_list
 
 
-def fetch_items_id(itemid):
+def fetch_items_id(itemid: int):
     with DBService() as cur:
-        items = cur.cursor().execute("SELECT * FROM SaleItem where ItemID = ?", (itemid,)).fetchall()
-        return items
+        try:
+            items = cur.cursor().execute("SELECT * FROM SaleItem where ItemID = ?", (itemid,)).fetchone()
+            fetched = SaleItems(ItemID=itemid, Name=items[1], Price=items[2], Category=items[3], ItemStatus=items[4],
+                                Stock=items[5])
+            return fetched
+        except Exception as err:
+            print(err)
+
+
+def create_item(item: SaleItems):
+    with DBService() as cur:
+        try:
+            cur.cursor().execute("INSERT INTO SaleItem VALUES (?,?,?,?,?,?)",
+                                 (item.ItemID, item.Name, item.Price, item.Category, item.ItemStatus, item.Stock,))
+        except Exception as err:
+            print(err)

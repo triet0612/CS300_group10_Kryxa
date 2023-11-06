@@ -1,5 +1,15 @@
 <script>
     import AdminNav from "$lib/components/AdminNav.svelte";
+    let list_items=[
+      {ItemID: 1, Name: "Com ga 1", ItemStatus: "On sale"},
+      {ItemID: 2, Name: "Com ga 2", ItemStatus: "Depricated"},
+      {ItemID: 3, Name: "Com ga 3", ItemStatus: "On sale"},
+      {ItemID: 4, Name: "Com ga 4", ItemStatus: "On sale"},
+      {ItemID: 5, Name: "Com ga 5", ItemStatus: "On sale"},
+      {ItemID: 6, Name: "Com ga 6", ItemStatus: "Depricated"},
+      {ItemID: 7, Name: "Com ga 7", ItemStatus: "Depricated"},
+      {ItemID: 8, Name: "Com ga 8", ItemStatus: "On sale"},
+    ]
 </script>
 
 <div class="bg-gradient-to-b from-black to-yellow-600">
@@ -27,16 +37,16 @@
             </div>
             <div class="class = h-5"></div>
             <div class="pt-5 pl-20 w-11/12 h-screen border-2 mx-9">
-                <div class="grid grid-flow-col grid-rows-4 gap-4">
-                    <div>01</div>
-                    <div>02</div>
-                    <div>03</div>
-                    <div>04</div>
-                    <div>05</div>
-                    <div>06</div>
-                    <div>07</div>
-                    <div>08</div>
-                </div>
+              <div class="grid grid-flow-row grid-cols-4">
+                {#each list_items as list_item}
+                <li>
+                  <div class="w-56 h-56 flex-row text-white justify-center text-center">
+                    <div class="w-56 h-48 bg-gray-600 justify-center "></div>
+                    <p class="justify-center">{list_item.Name}</p>
+                  </div>
+                </li>
+                {/each}
+              </div>
             </div>
         </div>
     </div>

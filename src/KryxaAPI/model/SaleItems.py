@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import Annotated, Literal, List, Dict, Any
+from typing import Annotated, Literal
 from db.database import DBService
 
 
@@ -26,12 +26,21 @@ def fetch_all_items():
             print(err)
 
 
-def fetch_items_id(itemid):
+def fetch_items_id(itemid: int):
     with DBService() as cur:
         try:
             items = cur.cursor().execute("SELECT * FROM SaleItem where ItemID = ?", (itemid,)).fetchone()
             fetched = SaleItems(ItemID=itemid, Name=items[1], Price=items[2], Category=items[3], ItemStatus=items[4],
                                 Stock=items[5])
             return fetched
+        except Exception as err:
+            print(err)
+
+
+def create_item(item: SaleItems):
+    with DBService() as cur:
+        try:
+            cur.cursor().execute("INSERT INTO SaleItem VALUES (?,?,?,?,?,?)",
+                                 (item.ItemID, item.Name, item.Price, item.Category, item.ItemStatus, item.Stock,))
         except Exception as err:
             print(err)

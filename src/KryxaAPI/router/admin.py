@@ -27,7 +27,7 @@ async def login(acc: AccountDTO, res: Response) -> str:
         raise HTTPException(status_code=401, detail="Error validating")
 
 
-@adminRouter.get("/pc_id")
+@adminRouter.get("/pc_id",dependencies=[Depends(validateAdminToken)])
 async def fetch_pc_id(pc_id: int) -> Pc:
     try:
         pc_info = fetch_pc_by_id(pc_id)

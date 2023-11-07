@@ -4,7 +4,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        BlackOpsOne: ['"Black Ops One"']
+        BlackOpsOne: ['"Black Ops One"'],
+        NotoSans:['"Noto Serif"']
       }
     },
   },

@@ -12,11 +12,13 @@
     ]
 </script>
 
-<div class="bg-gradient-to-b from-black to-yellow-600">
-    <div class="gap-5 flex w-screen">
+<div class="bg-gradient-to-b from-black to-yellow-600 flex flex-row">
+    <div class="flex flex-col">
         <AdminNav></AdminNav>
+    </div>
+    <div class="mr-auto ml-auto ">
         <div class="flex-row w-screen">
-            <div class="gap-20 flex pl-8 ">
+            <div class="gap-36 flex w-9/12 mx-14">
                 <div class="flex flex-col marker:text-center w-[27%] ml-5 max-md:w-full max-md:ml-0">
                     <button class=" text-orange-400 text-4xl whitespace-nowrap border bg-black w-full max-w-[301px] mt-36 mx-auto px-20 py-6 rounded-3xl border-solid border-white self-start max-md:mt-10 max-md:pl-8 max-md:pr-5">
                         Food
@@ -36,17 +38,15 @@
                   </div>
             </div>
             <div class="class = h-5"></div>
-            <div class="pt-5 pl-20 w-11/12 h-screen border-2 mx-9">
-              <div class="grid grid-flow-row grid-cols-4">
+            <div class="pt-5 pl-20 w-9/12 h-screen mx-20">
+              <ul class="grid grid-flow-row grid-cols-5">
                 {#each list_items as list_item}
-                <li>
-                  <div class="w-56 h-56 flex-row text-white justify-center text-center">
-                    <div class="w-56 h-48 bg-gray-600 justify-center "></div>
+                  <div class="w-48 h-48 flex-row text-white justify-center text-center">
+                    <div class="w-48 h-36 bg-gray-600 justify-center "></div>
                     <p class="justify-center">{list_item.Name}</p>
                   </div>
-                </li>
                 {/each}
-              </div>
+                </ul>
             </div>
         </div>
     </div>

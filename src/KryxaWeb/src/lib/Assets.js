@@ -3,6 +3,8 @@ import login_bg from '$lib/assets/admin/login-bg.png'
 import bg_1 from '$lib/assets/admin/bg_1.png'
 import pc_screen from '$lib/assets/admin/pc_screen.png'
 import addPc from '$lib/assets/admin/addPc.png'
+import banner from '$lib/assets/banner.png'
+import board from '$lib/assets/admin/board.png'
 
 export const AppLogo = logo;
 
@@ -16,3 +18,9 @@ export const MainScreen ={
   "addPc": addPc,
 }
 
+export const PcInfo = {
+  "Board": board,
+}
+
+export const Banner = banner;
+export const Board = board;

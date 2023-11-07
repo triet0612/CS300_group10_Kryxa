@@ -44,7 +44,8 @@
       </div>
       {#each pc_ids as pc_id}
         <li>
-          <div
+          <a href="/admin/{pc_id['PcID']}">
+            <div
             class="w-50 h-50 {pc_id['Status'] == 'Available'
               ? 'bg-green-600 bg-opacity-75'
               : pc_id['Status'] == 'Unavailable'
@@ -59,8 +60,11 @@
                 class="bg-contain"
               />
             </div>
-            <div class="mb-6">Computer {pc_id.PcID}</div>
+
+             <div class="mb-6">Computer {pc_id.PcID}</div>
           </div>
+          </a>
+          
         </li>
       {/each}
     </ul>

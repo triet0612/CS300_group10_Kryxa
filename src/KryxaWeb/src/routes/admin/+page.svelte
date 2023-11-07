@@ -55,32 +55,26 @@
       </div>
       {#each pc_ids as pc_id}
         <li>
-<<<<<<< Updated upstream
           <a href="/admin/{pc_id['PcID']}">
             <div
-            class="w-50 h-50 {pc_id['Status'] == 'Available'
-=======
-          <div
-            class="w-56 h-56 {pc_id['Status'] == 'Available'
->>>>>>> Stashed changes
-              ? 'bg-green-600 bg-opacity-75'
-              : pc_id['Status'] == 'Unavailable'
-              ? 'bg-red-600 bg-opacity-75'
-              : 'bg-white  bg-opacity-25'}
+              class="w-50 h-50 {pc_id['Status'] == 'Available'
+                ? 'bg-green-600 bg-opacity-75'
+                : pc_id['Status'] == 'Unavailable'
+                ? 'bg-red-600 bg-opacity-75'
+                : 'bg-white  bg-opacity-25'}
               backdrop-blur-2xl backdrop-brightness-200 text-black font-semibold font-NotoSans text-center flex flex-col rounded-xl justify-center"
-          >
-            <div class="h-fit pt-5 px-5">
-              <img
-                src={MainScreen["pc_screen"]}
-                alt="screen"
-                class="bg-contain"
-              />
-            </div>
+            >
+              <div class="h-fit pt-5 px-5">
+                <img
+                  src={MainScreen["pc_screen"]}
+                  alt="screen"
+                  class="bg-contain"
+                />
+              </div>
 
-             <div class="mb-6">Computer {pc_id.PcID}</div>
-          </div>
+              <div class="mb-6">Computer {pc_id.PcID}</div>
+            </div>
           </a>
-          
         </li>
       {/each}
     </ul>

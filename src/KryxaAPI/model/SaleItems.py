@@ -13,29 +13,10 @@ class SaleItems(BaseModel):
 
 
 def fetch_all_items(item_name: str | None = None, item_category: str | None = None):
-    """
-    Returns a list of all SaleItems with optional filtering parameters if specified.
-    :param item_name: filtered items Name contains this string
-    :param item_category: filtered items Category equals to this string.
-    :return: list of all SaleItems
-    """
     sql_query: str = "SELECT * FROM SaleItem"
-    sql_params = ()
-    if item_name:  # items whose Name containing the string item_name
-        sql_query += " WHERE Name LIKE %?%"
-        sql_params = sql_params + (item_name,)
-        if item_category:  # items belong to the Category is item_category
-            sql_query += " AND Category = ?"
-            sql_params = sql_params + (item_category,)
-    elif item_category:  # items belong to the Category is item_category
-        sql_query += " WHERE Category = ?"
-        sql_params = sql_params + (item_category,)
-    sql_query += ";"
-
-    print(sql_query)
 
     with DBService() as cur:
-        items = cur.cursor().execute(sql_query, sql_params).fetchall()  # Row objects fetched
+        items = cur.cursor().execute(sql_query).fetchall()  # Row objects fetched
         item_list = []
         for item_row in items: # Convert Row objects to SaleItems objects
             item_list.append(SaleItems(ItemID=item_row[0],

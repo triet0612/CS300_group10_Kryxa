@@ -25,6 +25,7 @@ export class Item {
           return item
     }
 }
+
 export async function fetch_all(){
     let url = 'http://localhost:8000/api/admin/items'
     let items = await fetch(url, {
@@ -40,3 +41,4 @@ export async function fetch_all(){
     console.log(items[0])
     return items
 }
+

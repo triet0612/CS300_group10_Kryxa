@@ -28,20 +28,31 @@ async def login(acc: AccountDTO, res: Response) -> str:
         raise HTTPException(status_code=401, detail="Error validating")
 
 
-@adminRouter.get("/items",dependencies=[Depends(validateAdminToken)])
+@adminRouter.get("/items", dependencies=[Depends(validateAdminToken)])
 async def get_all_items(item_name: str | None = None, item_category: str | None = None):
     try:
         item_list = model.SaleItems.fetch_all_items(item_name, item_category)
         if len(item_list) == 0:
             raise HTTPException(status_code=404,
                                 detail="No items")  # This should not be 404, should have a notification screen
+
+        if item_category:
+            for item in item_list:
+                if item.Category != item_category:
+                    item_list.remove(item)  # use index could be faster?
+
+        if item_name:
+            for item in item_list:
+                if not item_name in item.Name:
+                    item_list.remove(item)
+
         return item_list
     except HTTPException:
         pass  # ignore HTTPException
 
 
 # track info for each item id
-@adminRouter.get("/items/{item_id}",dependencies=[Depends(validateAdminToken)])
+@adminRouter.get("/items/{item_id}", dependencies=[Depends(validateAdminToken)])
 async def read_item(item_id: int):
     try:
         item = model.SaleItems.fetch_items_id(item_id)
@@ -54,10 +65,12 @@ async def read_item(item_id: int):
 
 
 # create item and image file
-@adminRouter.post("/get_items",dependencies=[Depends(validateAdminToken)])
+@adminRouter.post("/get_items", dependencies=[Depends(validateAdminToken)])
 async def create_item(item: model.SaleItems.SaleItems, file: Annotated[bytes, File()]):
     return item, file
-@adminRouter.get("/{pc_id}",dependencies=[Depends(validateAdminToken)])
+
+
+@adminRouter.get("/{pc_id}", dependencies=[Depends(validateAdminToken)])
 async def fetch_pc_id(pc_id: int):
     try:
         pc_info = fetch_pc_by_id(pc_id)
@@ -67,7 +80,7 @@ async def fetch_pc_id(pc_id: int):
         raise HTTPException(status_code=404, detail="No pc with that id")
 
 
-@adminRouter.get("/",dependencies=[Depends(validateAdminToken)])
+@adminRouter.get("/", dependencies=[Depends(validateAdminToken)])
 async def view_pcs():
     try:
         list_pc = model.PC.fetch_All_Pcs()

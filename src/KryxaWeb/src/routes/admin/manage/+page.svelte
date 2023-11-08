@@ -1,15 +1,13 @@
 <script>
     import AdminNav from "$lib/components/AdminNav.svelte";
-    let list_items=[
-      {ItemID: 1, Name: "Com ga 1", ItemStatus: "On sale"},
-      {ItemID: 2, Name: "Com ga 2", ItemStatus: "Depricated"},
-      {ItemID: 3, Name: "Com ga 3", ItemStatus: "On sale"},
-      {ItemID: 4, Name: "Com ga 4", ItemStatus: "On sale"},
-      {ItemID: 5, Name: "Com ga 5", ItemStatus: "On sale"},
-      {ItemID: 6, Name: "Com ga 6", ItemStatus: "Depricated"},
-      {ItemID: 7, Name: "Com ga 7", ItemStatus: "Depricated"},
-      {ItemID: 8, Name: "Com ga 8", ItemStatus: "On sale"},
-    ]
+    import {ImageItem} from '$lib/Assets.js';
+    import {Item, fetch_all} from '$lib/Item.js';
+    import { onMount } from "svelte";
+    let list_items = []
+    onMount(async () => {
+        list_items = await fetch_all().then(res => res)
+        console.log(list_items)
+    })
 </script>
 
 <div class="bg-gradient-to-b from-black to-yellow-600 flex flex-row">
@@ -38,12 +36,18 @@
                   </div>
             </div>
             <div class="class = h-5"></div>
-            <div class="pt-5 pl-20 w-9/12 h-screen mx-20">
+            <div class="pt-5 pl-20 w-9/12 h-screen mx-20 ">
               <ul class="grid grid-flow-row grid-cols-5">
                 {#each list_items as list_item}
-                  <div class="w-48 h-48 flex-row text-white justify-center text-center">
-                    <div class="w-48 h-36 bg-gray-600 justify-center "></div>
-                    <p class="justify-center">{list_item.Name}</p>
+                  <div class="w-48 h-48 flex-row text-white justify-center text-center active:bg-violet-700">
+                    <div class="w-48 h-36 bg-gray-600 justify-center" >
+                      <img src = {
+                        ImageItem[list_item.Name]}
+                        alt="screen"
+                        class="bg-contain w-48 h-36"
+                        />
+                    </div>
+                    <p class="justify-center">{list_item.Name} : {list_item.Price}</p>
                   </div>
                 {/each}
                 </ul>

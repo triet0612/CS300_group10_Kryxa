@@ -28,7 +28,7 @@ async def login(acc: AccountDTO, res: Response) -> str:
         raise HTTPException(status_code=401, detail="Error validating")
 
 
-@adminRouter.get("/items")
+@adminRouter.get("/items",dependencies=[Depends(validateAdminToken)])
 async def get_all_items(item_name: str | None = None, item_category: str | None = None):
     try:
         item_list = model.SaleItems.fetch_all_items(item_name, item_category)
@@ -41,7 +41,7 @@ async def get_all_items(item_name: str | None = None, item_category: str | None 
 
 
 # track info for each item id
-@adminRouter.get("/items/{item_id}")
+@adminRouter.get("/items/{item_id}",dependencies=[Depends(validateAdminToken)])
 async def read_item(item_id: int):
     try:
         item = model.SaleItems.fetch_items_id(item_id)
@@ -54,10 +54,10 @@ async def read_item(item_id: int):
 
 
 # create item and image file
-@adminRouter.post("/get_items")
+@adminRouter.post("/get_items",dependencies=[Depends(validateAdminToken)])
 async def create_item(item: model.SaleItems.SaleItems, file: Annotated[bytes, File()]):
     return item, file
-@adminRouter.get("/{pc_id}")
+@adminRouter.get("/{pc_id}",dependencies=[Depends(validateAdminToken)])
 async def fetch_pc_id(pc_id: int):
     try:
         pc_info = fetch_pc_by_id(pc_id)
@@ -67,7 +67,7 @@ async def fetch_pc_id(pc_id: int):
         raise HTTPException(status_code=404, detail="No pc with that id")
 
 
-@adminRouter.get("/")
+@adminRouter.get("/",dependencies=[Depends(validateAdminToken)])
 async def view_pcs():
     try:
         list_pc = model.PC.fetch_All_Pcs()

@@ -3,6 +3,14 @@ import login_bg from '$lib/assets/admin/login-bg.png'
 import bg_1 from '$lib/assets/admin/bg_1.png'
 import pc_screen from '$lib/assets/admin/pc_screen.png'
 import addPc from '$lib/assets/admin/addPc.png'
+import Com_ga_1 from '$lib/items/Com_ga_1.jpg'
+import Com_ga_2 from '$lib/items/Com ga 2.jpg'
+import Com_ga_3 from '$lib/items/Com ga 3.jpg'
+import Com_ga_4 from '$lib/items/Com ga 4.jpg'
+import Com_ga_5 from '$lib/items/Com ga 5.jpg'
+import Com_ga_6 from '$lib/items/Com ga 6.jpg'
+import Com_ga_7 from '$lib/items/Com ga 7.jpg'
+import Com_ga_8 from '$lib/items/Com ga 8.jpg'
 
 export const AppLogo = logo;
 
@@ -16,3 +24,13 @@ export const MainScreen ={
   "addPc": addPc,
 }
 
+export const ImageItem={
+  "Com ga 1": Com_ga_1,
+  "Com ga 2": Com_ga_2,
+  "Com ga 3": Com_ga_3,
+  "Com ga 4": Com_ga_4,
+  "Com ga 5": Com_ga_5,
+  "Com ga 6": Com_ga_6,
+  "Com ga 7": Com_ga_7,
+  "Com ga 8": Com_ga_8
+}

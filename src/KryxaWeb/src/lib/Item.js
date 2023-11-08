@@ -7,6 +7,23 @@ export class Item {
       this.ItemStatus = ItemStatus
       this.Stock = Stock
     }
+
+    async getItemByID(input_id) {
+        let url = `http://localhost:8000/api/admin/items/${input_id}`
+        let item = await fetch(url, {
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("jwt")
+            },
+        })
+        .then(res=>res.json())
+        .catch(err => {
+            console.log(err)
+            return 500
+          })
+          console.log(item)
+          return item
+    }
 }
 export async function fetch_all(){
     let url = 'http://localhost:8000/api/admin/items'

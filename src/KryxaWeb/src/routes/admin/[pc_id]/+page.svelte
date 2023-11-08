@@ -6,7 +6,11 @@
     import { MainScreen } from "$lib/Assets.js";
 </script>
 
-<div class="flex flex-row h-screen bg-gradient-to-b from-black to-[#352900] overflow-y-scroll">
+<div
+  id="bg"
+  class="flex flex-row h-screen bg-cover"
+  style="background-image: url({MainScreen['Background2']});"
+>
     <div class="flex flex-col">
         <AdminNav />
     </div>

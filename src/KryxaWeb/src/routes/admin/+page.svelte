@@ -2,22 +2,29 @@
   import AdminNav from "$lib/components/AdminNav.svelte";
   import ModalPc from "$lib/components/ModalPc.svelte";
   import { MainScreen } from "$lib/Assets.js";
-  let pc_ids = [
-    { PcID: 1, Status: "Unavailable" },
-    { PcID: 2, Status: "Available" },
-    { PcID: 3, Status: "Available" },
-    { PcID: 4, Status: "Available" },
-    { PcID: 5, Status: "Maintainance" },
-    { PcID: 6, Status: "Maintainance" },
-    { PcID: 7, Status: "Maintainance" },
-    { PcID: 8, Status: "Maintainance" },
-    { PcID: 9, Status: "Maintainance" },
-    { PcID: 10, Status: "Maintainance" },
-    { PcID: 11, Status: "Maintainance" },
-    { PcID: 12, Status: "Maintainance" },
-    { PcID: 13, Status: "Maintainance" },
-    { PcID: 14, Status: "Maintainance" },
-  ];
+  import { Pc, get_Pcs } from "$lib/Pc.js";
+  import { onMount } from "svelte";
+  let pc_list = [];
+  onMount(async () => {
+    pc_list = await get_Pcs().then((res) => res);
+    console.log(pc_list);
+  });
+  // let pc_list = [
+  //   { PcID: 1, Status: "Unavailable" },
+  //   { PcID: 2, Status: "Available" },
+  //   { PcID: 3, Status: "Available" },
+  //   { PcID: 4, Status: "Available" },
+  //   { PcID: 5, Status: "Maintainance" },
+  //   { PcID: 6, Status: "Maintainance" },
+  //   { PcID: 7, Status: "Maintainance" },
+  //   { PcID: 8, Status: "Maintainance" },
+  //   { PcID: 9, Status: "Maintainance" },
+  //   { PcID: 10, Status: "Maintainance" },
+  //   { PcID: 11, Status: "Maintainance" },
+  //   { PcID: 12, Status: "Maintainance" },
+  //   { PcID: 13, Status: "Maintainance" },
+  //   { PcID: 14, Status: "Maintainance" },
+  // ];
   let status = "close";
   function close(event) {
     if (event.key === "Escape") {
@@ -36,9 +43,9 @@
     <AdminNav />
   </div>
   <div class="mr-auto ml-auto p-20 overflow-y-scroll">
-    <ul class="grid grid-cols-4 gap-20">
+    <ul class="grid grid-cols-5 gap-20">
       <div
-        class="w-56 h-56 bg-yellow-400 bg-opacity-70 backdrop-blur-2xl backdrop-brightness-200 text-black-400 font-NotoSans font-bold text-center flex flex-col rounded-xl justify-center"
+        class="w-50 h-50 bg-yellow-400 bg-opacity-70 backdrop-blur-2xl backdrop-brightness-200 text-black-400 font-NotoSans font-bold text-center flex flex-col rounded-xl justify-center"
       >
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-interactive-supports-focus -->
@@ -53,7 +60,7 @@
         </div>
         <div class="mb-6">Add Pc</div>
       </div>
-      {#each pc_ids as pc_id}
+      {#each pc_list as pc_id}
         <li>
           <a href="/admin/{pc_id['PcID']}">
             <div

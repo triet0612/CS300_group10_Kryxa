@@ -33,3 +33,20 @@ export class Pc {
     return statcode
   }
 }
+
+export async function get_Pcs(){
+  let url = "http://localhost:8000/api/admin/pc"
+  let pc_list= await fetch(url,({
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + localStorage.getItem("jwt")
+    },
+  }))
+  .then(res => res.json())
+  .catch(err => {
+    console.log(err); return [];
+  })
+  console.log(pc_list[0])
+  return pc_list
+  }

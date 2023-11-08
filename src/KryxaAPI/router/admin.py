@@ -37,7 +37,7 @@ async def fetch_pc_id(pc_id: int) -> Pc:
         raise HTTPException(status_code=404, detail="No pc with that id")
 
 
-@adminRouter.get("/",dependencies=[Depends(validateAdminToken)])
+@adminRouter.get("/pc" ,dependencies=[Depends(validateAdminToken)])
 async def view_pcs():
     try:
         list_pc = model.PC.fetch_All_Pcs()

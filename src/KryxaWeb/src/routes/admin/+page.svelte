@@ -31,12 +31,15 @@
       status = "close";
     }
   }
+  function openModal(event) {
+    status = "open";
+  }
 </script>
 
 <!-- <div class="flex flex-row h-screen bg-gradient-to-b from-black to-[#352900]"> -->
 <div
   id="bg"
-  class="flex flex-row h-screen bg-cover"
+  class="flex flex-row h-screen bg-cover {status === "open"? "blur-3xl": ""}"
   style="background-image: url({MainScreen['Background2']});"
 >
   <div class="flex flex-col">
@@ -52,9 +55,7 @@
         <div
           class="h-fit pt-5 px-5"
           role="button"
-          on:click={() => {
-            status = "open";
-          }}
+          on:click={openModal}
         >
           <img src={MainScreen["addPc"]} alt="screen" />
         </div>

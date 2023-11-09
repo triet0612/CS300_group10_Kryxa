@@ -62,7 +62,7 @@
       </div>
       {#each pc_list as pc_id}
         <li>
-          <a href="/admin/{pc_id['PcID']}">
+          <a href="/admin/pc_info/?pc_id={pc_id['PcID']}">
             <div
               class="w-50 h-50 {pc_id['Status'] == 'Available'
                 ? 'bg-green-600 bg-opacity-75'

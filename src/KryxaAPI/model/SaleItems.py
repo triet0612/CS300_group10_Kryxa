@@ -12,13 +12,13 @@ class SaleItems(BaseModel):
     Stock: Annotated[int, Field(ge=0)]
 
 
-def fetch_all_items(item_name: str | None = None, item_category: str | None = None):
+def fetch_all_items():
     sql_query: str = "SELECT * FROM SaleItem"
 
     with DBService() as cur:
         items = cur.cursor().execute(sql_query).fetchall()  # Row objects fetched
         item_list = []
-        for item_row in items: # Convert Row objects to SaleItems objects
+        for item_row in items:  # Convert Row objects to SaleItems objects
             item_list.append(SaleItems(ItemID=item_row[0],
                                        Name=item_row[1],
                                        Price=item_row[2],

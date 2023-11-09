@@ -31,22 +31,19 @@ async def login(acc: AccountDTO, res: Response) -> str:
 @adminRouter.get("/items", dependencies=[Depends(validateAdminToken)])
 async def get_all_items(item_name: str | None = None, item_category: str | None = None):
     try:
-        item_list = model.SaleItems.fetch_all_items(item_name, item_category)
+        item_list = model.SaleItems.fetch_all_items()
         if len(item_list) == 0:
             raise HTTPException(status_code=404,
                                 detail="No items")  # This should not be 404, should have a notification screen
 
         if item_category:
-            for item in item_list:
-                if item.Category != item_category:
-                    item_list.remove(item)  # use index could be faster?
+            item_list[:] = [item for item in item_list if item.Category == item_category]
 
         if item_name:
-            for item in item_list:
-                if not item_name in item.Name:
-                    item_list.remove(item)
+            item_list[:] = [item for item in item_list if item_name in item.Name]
 
         return item_list
+
     except HTTPException:
         pass  # ignore HTTPException
 

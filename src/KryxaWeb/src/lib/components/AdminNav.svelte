@@ -1,5 +1,6 @@
 <script>
   import { AppLogo } from "$lib/Assets.js";
+  import { MainScreen } from "$lib/Assets.js";
   const items = ["Management", "Items", "Tournament", "Statistics", "Settings"];
 
   function logout() {

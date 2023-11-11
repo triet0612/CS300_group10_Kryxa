@@ -39,8 +39,8 @@
 <!-- <div class="flex flex-row h-screen bg-gradient-to-b from-black to-[#352900]"> -->
 <div
   id="bg"
-  class="flex flex-row h-screen bg-cover {status === "open"? "blur-3xl": ""}"
-  style="background-image: url({MainScreen['Background2']});"
+  class="flex flex-row h-screen bg-cover {status === 'open' ? 'blur-3xl' : ''}"
+  style="background-image: url({MainScreen['Background4']});"
 >
   <div class="flex flex-col">
     <AdminNav />
@@ -52,11 +52,7 @@
       >
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-interactive-supports-focus -->
-        <div
-          class="h-fit pt-5 px-5"
-          role="button"
-          on:click={openModal}
-        >
+        <div class="h-fit pt-5 px-5" role="button" on:click={openModal}>
           <img src={MainScreen["addPc"]} alt="screen" />
         </div>
         <div class="mb-6">Add Pc</div>

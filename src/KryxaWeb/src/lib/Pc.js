@@ -69,10 +69,15 @@ export async function get_Pcs(){ //Fetch all Pcs with their ID and Status
   return pc_list
 }
 
-// export async function getPcByID(pc_id){
+// export async function updatePcByID(pc_id){
 //   let url = `http://localhost:8000/api/admin/pc/${pc_id}`
 //   let pc_info = await fetch(url,{
-//     method: "GET",
+//     method: "POST",
+//     body: JSON.stringify({
+//       "PcID": this.PcID,
+//       "MAC": this.MAC,
+//       "IPv4": this.IPv4,
+//     }),
 //     headers: {
 //       "Content-Type": "application/json",
 //       "Authorization": "Bearer " + localStorage.getItem("jwt")

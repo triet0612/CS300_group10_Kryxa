@@ -11,7 +11,10 @@
         console.log("Requested PC ID: "+urlSearchParams)
         pc_info = await pc_info.getPcByID(urlSearchParams).then(res=>res)
     })
-    console.log(pc_info.PcID)
+    // function saveNewInfo(event){
+    //     const urlSearchParams = new URLSearchParams(window.location.search).get("pc_id");
+    //     pc_info = updatePcByID(urlSearchParams).then(res=>res)
+    // }
 
 
 </script>
@@ -49,7 +52,8 @@
                         <div class ="ml-3 text-amber-400">
                             x30m    
                         </div>
-                        <button class = "ml-10  h-10 w-2/3 h-10 rounded-lg hover:bg-amber-600 active:bg-black  bg-stone-200 text-amber-700">
+                        <button
+                            class = "ml-10  h-10 w-2/3 h-10 rounded-lg hover:bg-amber-600 active:bg-black  bg-stone-200 text-amber-700">
                             Save
                         </button>
                     </div>

@@ -11,6 +11,10 @@ class Pc(BaseModel):
     TimeUsage: Annotated[int, Field(default=0)]
     Status: Literal['Available', 'Unavailable', 'Maintenance']
 
+class PcDTO(BaseModel):
+    PcID: Annotated[int, Field(ge=0)]
+    MAC: str
+    IPv4: str
 
 # TODO: getAllPcsForView()
 
@@ -40,11 +44,19 @@ def fetch_pc_by_id(pc_id: int) -> Pc:
         except Exception as err:
             print(err)
 
-# #TODO: getPCbyID(id: int)
-# a = fetch_All_Pcs()
-# print(a)
-#
 
+# TODO: UpdatePCbyID(id: int)
+# def update_pc_by_id(pc_info: PcDTO) -> str:
+#     with DBService() as cur:
+#         try:
+#             cur.execute(
+#                 "UPDATE Pc SET MAC = ?, IPv4 = ? WHERE PcID = ?", [pc_info.MAC, pc_info.IPv4, pc_info.PcID]
+#             )
+#             cur.commit()
+#             return pc_info.IPv4
+#         except Exception as err:
+#             cur.rollback()
+#             raise err
 
 def insert_pc(new_pc: Pc):
     with DBService() as cur:

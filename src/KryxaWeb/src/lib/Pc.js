@@ -32,6 +32,24 @@ export class Pc {
     })
     return statcode
   }
+
+  async getPcByID(pc_id){
+    let url = `http://localhost:8000/api/admin/pc/${pc_id}`
+    let pc_info = await fetch(url,{
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("jwt")
+      },
+    })
+    .then(res=>res.json())
+    .catch(err => {
+      console.log(err)
+      return 500
+    })
+    console.log(pc_info)
+    return pc_info
+  }
 }
 
 export async function get_Pcs(){
@@ -49,4 +67,22 @@ export async function get_Pcs(){
   })
   console.log(pc_list[0])
   return pc_list
-  }
+}
+
+// export async function getPcByID(pc_id){
+//   let url = `http://localhost:8000/api/admin/pc/${pc_id}`
+//   let pc_info = await fetch(url,{
+//     method: "GET",
+//     headers: {
+//       "Content-Type": "application/json",
+//       "Authorization": "Bearer " + localStorage.getItem("jwt")
+//     },
+//   })
+//   .then(res=>res.json())
+//   .catch(err => {
+//     console.log(err)
+//     return 500
+//   })
+//   console.log(pc_info)
+//   return pc_info
+// }

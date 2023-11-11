@@ -1,16 +1,22 @@
 <script>
     import AdminNav from "$lib/components/AdminNav.svelte";
     import { Banner } from "$lib/Assets.js";
-    import { PcInfo } from "$lib/Assets.js";
-    import { Board } from "$lib/Assets.js";
     import { MainScreen } from "$lib/Assets.js";
+    import {Pc} from "$lib/Pc.js";
+    import { onMount } from "svelte";
+    
+    let pc_info = new Pc()
+    onMount(async()=>{
+        const urlSearchParams = new URLSearchParams(window.location.search).get("pc_id");
+        console.log("Requested PC ID: "+urlSearchParams)
+        pc_info = await pc_info.getPcByID(urlSearchParams).then(res=>res)
+    })
+    console.log(pc_info.PcID)
+
+
 </script>
 
-<div
-  id="bg"
-  class="flex flex-row h-screen bg-cover"
-  style="background-image: url({MainScreen['Background2']});"
->
+<div class="flex flex-row h-screen bg-gradient-to-b from-black to-[#352900] overflow-y-scroll">
     <div class="flex flex-col">
         <AdminNav />
     </div>
@@ -26,21 +32,26 @@
                 <div class = "basis-3/5 gap-5 grid ml-5 text-amber-700 text-3xl " >
 
                     <div class ="mt-10 h-10 bg-stone-200 rounded" >
-                        PC NAME
+                        {pc_info.PcID}
     
                     </div>
-                    <div class ="h-10 bg-stone-200 rounded" >
-                        MAC Address
-                    </div>
-                    <div class ="h-10 bg-stone-200 rounded" >
-                        IP Address
-                    </div>
+                    <input class ="h-10 bg-stone-200 rounded" 
+                        placeholder={pc_info.MAC}
+                        bind:value = {pc_info.MAC}
+                    >
+                    <input class ="h-10 bg-stone-200 rounded" 
+                        placeholder={pc_info.IPv4}
+                        bind:value={pc_info.IPv4}
+                    >
                     
                     <div class ="flex flex-row">
                         <input class ="w-10 h-10 bg-stone-200 rounded" type ="number">
                         <div class ="ml-3 text-amber-400">
                             x30m    
                         </div>
+                        <button class = "ml-10  h-10 w-2/3 h-10 rounded-lg hover:bg-amber-600 active:bg-black  bg-stone-200 text-amber-700">
+                            Save
+                        </button>
                     </div>
                 </div>
                 <div class="flex flex-col basis-2/5 text-amber-700 text-3xl">

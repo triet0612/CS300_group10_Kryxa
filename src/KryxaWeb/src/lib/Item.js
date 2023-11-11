@@ -41,4 +41,20 @@ export async function fetch_all(){
     console.log(items[0])
     return items
 }
+export async function fetch_category(category){
+    let url = 'http://localhost:8000/api/admin/items?item_category='+category
+    console.log(url)
+    let items = await fetch(url, {
+    method: "GET",
+    headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("jwt")
+    }
+    })
+    .then(res => res.json())
+    .then(res => res)
+    .catch(err => {console.log(err); return [];})
+    console.log(items[0])
+    return items
+}
 

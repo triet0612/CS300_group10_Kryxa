@@ -16,7 +16,6 @@ import Com_ga_5 from '$lib/items/Com ga 5.jpg'
 import Com_ga_6 from '$lib/items/Com ga 6.jpg'
 import Com_ga_7 from '$lib/items/Com ga 7.jpg'
 import Com_ga_8 from '$lib/items/Com ga 8.jpg'
-import bg_3 from '$lib/assets/admin/bg_3.png'
 export const AppLogo = logo;
 
 export const MainScreen ={

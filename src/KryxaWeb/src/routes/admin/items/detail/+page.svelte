@@ -33,7 +33,7 @@
                     </script>
                     <p class="text-white"> There is no item with such ID, please return to previous page. *This message will be updated later*</p>
                 {:else}
-                    <div class="grid grid-flow-col grid-cols-2 gap-0 items-stretch gap-0 h-1/2 w-full">
+                    <div class="grid grid-flow-col grid-cols-2 gap-0 items-stretch h-1/2 w-full">
                         <div class = "h-full">
                             <img src={ImageItem[item.Name]} alt="selected item image" class="max-w-full max-h-full"/>
                         </div>

@@ -7,7 +7,6 @@ from router.admin import adminRouter
 from service.page import PageServer
 
 
-
 def get_server():
     app_router = FastAPI()
 
@@ -22,11 +21,9 @@ def get_server():
 
     app_router.include_router(adminRouter, prefix="/api/admin")
     app_router.mount("/", PageServer(directory="./bin/www", html=True))
-    return app_router   
+    return app_router
 
 
 if __name__ == '__main__':
     server = get_server()
     uvicorn.run(server, host='localhost', port=8000)
-
-

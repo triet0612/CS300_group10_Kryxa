@@ -6,6 +6,9 @@ export default {
       fontFamily: {
         BlackOpsOne: ['"Black Ops One"'],
         NotoSans:['"Noto Serif"']
+      },
+      backgroundImage: {
+        'login-bg': "url('$lib/assets/admin/login-bg.png')",
       }
     },
   },

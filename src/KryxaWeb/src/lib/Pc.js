@@ -52,7 +52,7 @@ export class Pc {
   }
 }
 
-export async function get_Pcs(){
+export async function get_Pcs(){ //Fetch all Pcs with their ID and Status
   let url = "http://localhost:8000/api/admin/pc"
   let pc_list= await fetch(url,({
     method: "GET",

@@ -9,6 +9,7 @@
     pc_list = await get_Pcs().then((res) => res);
     console.log(pc_list);
   });
+  
   // let pc_list = [
   //   { PcID: 1, Status: "Unavailable" },
   //   { PcID: 2, Status: "Available" },
@@ -25,6 +26,8 @@
   //   { PcID: 13, Status: "Maintainance" },
   //   { PcID: 14, Status: "Maintainance" },
   // ];
+
+  
   let status = "close";
   function close(event) {
     if (event.key === "Escape") {

@@ -1,8 +1,9 @@
-from fastapi import APIRouter, HTTPException, Response, Depends
+from fastapi import APIRouter, HTTPException, Response, Depends, File
 from typing import Annotated
 
 import model.PC
 from auth import checkAdminAccount, generate_token, validateAdminToken, AccountDTO
+import model.SaleItems
 import array as arr
 from model.PC import Pc, fetch_pc_by_id, insert_pc, PcDTO
 
@@ -25,6 +26,46 @@ async def login(acc: AccountDTO, res: Response) -> str:
     except Exception as err:
         print(err)
         raise HTTPException(status_code=401, detail="Error validating")
+
+
+@adminRouter.get("/items", dependencies=[Depends(validateAdminToken)])
+async def get_all_items(item_name: str | None = None, item_category: str | None = None):
+    try:
+        item_list = model.SaleItems.fetch_all_items()
+        if len(item_list) == 0:
+            raise HTTPException(status_code=404,
+                                detail="No items")  # This should not be 404, should have a notification screen
+
+        if item_category:
+            item_list[:] = [item for item in item_list if item.Category == item_category]
+
+        if item_name:
+            item_list[:] = [item for item in item_list if item_name in item.Name]
+
+        return item_list
+
+    except HTTPException:
+        pass  # ignore HTTPException
+
+
+# track info for each item id
+@adminRouter.get("/items/{item_id}", dependencies=[Depends(validateAdminToken)])
+async def read_item(item_id: int):
+    try:
+        item = model.SaleItems.fetch_items_id(item_id)
+        if item:
+            return item
+        raise HTTPException(status_code=404, detail="Error not found")
+    except FileNotFoundError as err:
+        print(err)
+        raise HTTPException(status_code=404, detail='File not found')
+
+
+
+# create item and image file
+# @adminRouter.post("/get_items", dependencies=[Depends(validateAdminToken)])
+# async def create_item(item: model.SaleItems.SaleItems, file: Annotated[bytes, File()]):
+#     return item, file
 
 
 @adminRouter.get("/pc/{pc_id}",dependencies=[Depends(validateAdminToken)])

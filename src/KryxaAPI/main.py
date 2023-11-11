@@ -1,6 +1,8 @@
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+from model.SaleItems import fetch_all_items
 from router.admin import adminRouter
 from service.page import PageServer
 
@@ -19,7 +21,7 @@ def get_server():
 
     app_router.include_router(adminRouter, prefix="/api/admin")
     app_router.mount("/", PageServer(directory="./bin/www", html=True))
-    return app_router   
+    return app_router
 
 
 if __name__ == '__main__':

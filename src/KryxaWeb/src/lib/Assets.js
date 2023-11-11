@@ -1,5 +1,4 @@
 import logo from '$lib/assets/logo.png'
-import login_bg from '$lib/assets/admin/login-bg.png'
 import bg_1 from '$lib/assets/admin/bg_1.png'
 import bg_3 from '$lib/assets/admin/bg_3.png'
 import bg_4 from '$lib/assets/admin/bg_4.png'
@@ -10,10 +9,6 @@ import banner from '$lib/assets/banner.png'
 import board from '$lib/assets/admin/board.png'
 
 export const AppLogo = logo;
-
-export const AdminLogin = {
-  "Background": login_bg,
-}
 
 export const MainScreen ={
   "pc_screen": pc_screen,

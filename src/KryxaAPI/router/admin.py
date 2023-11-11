@@ -55,10 +55,10 @@ async def read_item(item_id: int):
         item = model.SaleItems.fetch_items_id(item_id)
         if item:
             return item
-        raise HTTPException(status_code=404, detail="Item id does not exist")
+        raise Exception(FileNotFoundError)
     except Exception as err:
         print(err)
-        raise HTTPException(status_code=404, detail="Item id does not exist")
+        raise HTTPException(status_code=404, details="Error not found")
 
 
 # create item and image file

@@ -55,16 +55,17 @@ async def read_item(item_id: int):
         item = model.SaleItems.fetch_items_id(item_id)
         if item:
             return item
-        raise Exception(FileNotFoundError)
-    except Exception as err:
+        raise HTTPException(status_code=404, detail="Error not found")
+    except FileNotFoundError as err:
         print(err)
-        raise HTTPException(status_code=404, details="Error not found")
+        raise HTTPException(status_code=404, detail='File not found')
+
 
 
 # create item and image file
-@adminRouter.post("/get_items", dependencies=[Depends(validateAdminToken)])
-async def create_item(item: model.SaleItems.SaleItems, file: Annotated[bytes, File()]):
-    return item, file
+# @adminRouter.post("/get_items", dependencies=[Depends(validateAdminToken)])
+# async def create_item(item: model.SaleItems.SaleItems, file: Annotated[bytes, File()]):
+#     return item, file
 
 
 @adminRouter.get("/{pc_id}", dependencies=[Depends(validateAdminToken)])

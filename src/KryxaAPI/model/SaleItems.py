@@ -32,7 +32,11 @@ def fetch_items_id(itemid: int):
     with DBService() as cur:
         try:
             items = cur.cursor().execute("SELECT * FROM SaleItem where ItemID = ?", (itemid,)).fetchone()
-            fetched = SaleItems(ItemID=itemid, Name=items[1], Price=items[2], Category=items[3], ItemStatus=items[4],
+            fetched = SaleItems(ItemID=items[0],
+                                Name=items[1],
+                                Price=items[2],
+                                Category=items[3],
+                                ItemStatus=items[4],
                                 Stock=items[5])
             return fetched
         except Exception as err:
@@ -44,5 +48,7 @@ def create_item(item: SaleItems):
         try:
             cur.cursor().execute("INSERT INTO SaleItem VALUES (?,?,?,?,?,?)",
                                  (item.ItemID, item.Name, item.Price, item.Category, item.ItemStatus, item.Stock,))
+            cur.commit()
         except Exception as err:
-            print(err)
+            cur.rollback()
+            raise err

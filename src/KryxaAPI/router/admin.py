@@ -5,7 +5,7 @@ import model.PC
 from auth import checkAdminAccount, generate_token, validateAdminToken, AccountDTO
 import model.SaleItems
 import array as arr
-from model.PC import Pc, fetch_pc_by_id, insert_pc, PcDTO
+from model.PC import Pc, fetch_pc_by_id, insert_pc, PcDTO, update_pc_by_id
 
 adminRouter = APIRouter(tags=["admin"])
 
@@ -98,10 +98,10 @@ async def create_pc(new_pc: Pc):
         raise HTTPException(status_code=400, detail="Error create Pc")
 
 
-# @adminRouter.post("/pc/{pc_id}", dependencies=[Depends(validateAdminToken)])
-# async def edit_pc(pc_info: PcDTO):
-#     try:
-#         return update_pc_by_id(pc_info)
-#     except Exception as err:
-#         print(err)
-#         raise HTTPException(status_code=404, detail="PC not found")
+@adminRouter.put("/pc/{pc_id}", dependencies=[Depends(validateAdminToken)])
+async def edit_pc(pc_info: PcDTO):
+    try:
+        return update_pc_by_id(pc_info)
+    except Exception as err:
+        print(err)
+        raise HTTPException(status_code=404, detail="PC not found")

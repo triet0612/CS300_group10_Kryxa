@@ -27,7 +27,9 @@
 
 </script>
 
-<div class="flex flex-row h-screen bg-gradient-to-b from-black to-[#352900] overflow-y-scroll">
+<div 
+    class="flex flex-row h-screen bg-cover overflow-y-scroll"
+    style="background-image: url({MainScreen['Background4']});">
     <div class="flex flex-col">
         <AdminNav />
     </div>
@@ -38,37 +40,37 @@
                 alt = "banner"
             />
         </div>
-        <div class = "bg-stone-500 rounded-lg w-2/3 h-1/2 m-auto mt-10">
+        <div class = "bg-white/5 backdrop-blur-md rounded-lg w-2/3 h-1/2 m-auto mt-10">
             <div class="flex flex-row">
-                <div class = "basis-3/5 gap-5 grid ml-5 text-amber-700 text-3xl " >
+                <div class = "basis-3/5 gap-5 grid ml-10 text-amber-700 text-3xl " >
 
-                    <div class ="mt-10 h-10 bg-stone-200 rounded" >
+                    <div class ="mt-10 h-10 bg-violet-900/50 rounded font-BlackOpsOne"  >
                         {pc_info.PcID}
     
                     </div>
-                    <input class ="h-10 bg-stone-200 rounded" 
+                    <input class ="h-10  bg-violet-900/50 rounded font-BlackOpsOne" 
                         placeholder={pc_info.MAC}
                         bind:value = {pc_info.MAC}
                     >
-                    <input class ="h-10 bg-stone-200 rounded" 
+                    <input class ="h-10  bg-violet-900/50 rounded font-BlackOpsOne" 
                         placeholder={pc_info.IPv4}
                         bind:value={pc_info.IPv4}
                     >
                     
                     <div class ="flex flex-row">
-                        <input class ="w-10 h-10 bg-stone-200 rounded" type ="number">
-                        <div class ="ml-3 text-amber-400">
+                        <input class ="w-10 h-10 bg-violet-900/50 rounded font-BlackOpsOne" type ="number">
+                        <div class ="ml-3 text-amber-300 font-BlackOpsOne">
                             x30m    
                         </div>
                         <button on:click={async () => click()}
-                            class = "ml-10  h-10 w-2/3 h-10 rounded-lg hover:bg-amber-600 active:bg-black  bg-stone-200 text-amber-700">
+                            class = "ml-10  h-10 w-2/3 h-10 rounded-lg hover:bg-amber-600 active:bg-black  bg-violet-900/50 text-amber-700 font-BlackOpsOne">
                             Save
                         </button>
                     </div>
                 </div>
                 <div class="flex flex-col basis-2/5 text-amber-700 text-3xl">
                     <div class ="">
-                        <button class = "ml-10 mt-10 h-10 w-2/3 rounded-lg hover:bg-amber-600 active:bg-black  bg-stone-200">
+                        <button class = "ml-10 mt-10 h-10 w-2/3 rounded-lg hover:bg-amber-600 active:bg-black  bg-violet-900/50 font-BlackOpsOne">
                             Bill
                         </button>
                     </div>
@@ -81,7 +83,7 @@
                         />
                     </div>
 
-                    <button class = "ml-10  h-10 w-2/3 h-10 rounded-lg hover:bg-amber-600 active:bg-black  bg-stone-200 text-amber-700">
+                    <button class = "ml-10  h-10 w-2/3 h-10 rounded-lg hover:bg-amber-600 active:bg-black  bg-violet-900/50 text-amber-700 font-BlackOpsOne">
                         Open
                     </button>
                 </div>

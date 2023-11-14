@@ -3,6 +3,7 @@
     import { Banner } from "$lib/Assets.js";
     import { MainScreen } from "$lib/Assets.js";
     import {Pc} from "$lib/Pc.js";
+    import {updateThisPcByID} from "$lib/Pc.js";
     import { onMount } from "svelte";
     
     let pc_info = new Pc()
@@ -11,10 +12,17 @@
         console.log("Requested PC ID: "+urlSearchParams)
         pc_info = await pc_info.getPcByID(urlSearchParams).then(res=>res)
     })
-    // function saveNewInfo(event){
-    //     const urlSearchParams = new URLSearchParams(window.location.search).get("pc_id");
-    //     pc_info = updatePcByID(urlSearchParams).then(res=>res)
-    // }
+
+    async function click() {
+        const urlSearchParams = new URLSearchParams(window.location.search).get("pc_id");
+        let statcode =await updateThisPcByID(pc_info,urlSearchParams).then(res=>res)
+        console.log(statcode)
+        if (statcode !== 200) {
+            alert("Failed updating Pc")
+
+        }
+        location.reload()
+    }
 
 
 </script>
@@ -52,7 +60,7 @@
                         <div class ="ml-3 text-amber-400">
                             x30m    
                         </div>
-                        <button
+                        <button on:click={async () => click()}
                             class = "ml-10  h-10 w-2/3 h-10 rounded-lg hover:bg-amber-600 active:bg-black  bg-stone-200 text-amber-700">
                             Save
                         </button>

@@ -50,6 +50,8 @@ export class Pc {
     console.log(pc_info)
     return pc_info
   }
+
+  
 }
 
 export async function get_Pcs(){ //Fetch all Pcs with their ID and Status
@@ -69,25 +71,27 @@ export async function get_Pcs(){ //Fetch all Pcs with their ID and Status
   return pc_list
 }
 
-// export async function updatePcByID(pc_id){
-//   let url = `http://localhost:8000/api/admin/pc/${pc_id}`
-//   let pc_info = await fetch(url,{
-//     method: "POST",
-//     body: JSON.stringify({
-//       "PcID": this.PcID,
-//       "MAC": this.MAC,
-//       "IPv4": this.IPv4,
-//     }),
-//     headers: {
-//       "Content-Type": "application/json",
-//       "Authorization": "Bearer " + localStorage.getItem("jwt")
-//     },
-//   })
-//   .then(res=>res.json())
-//   .catch(err => {
-//     console.log(err)
-//     return 500
-//   })
-//   console.log(pc_info)
-//   return pc_info
-// }
+export async function updateThisPcByID(pc_info,pc_id){
+  let url = `http://localhost:8000/api/admin/pc/${pc_id}`
+  let statcode = await fetch(url,{
+    method: "PUT",
+    body: JSON.stringify({
+      "PcID": pc_info.PcID,
+      "MAC": pc_info.MAC,
+      "IPv4": pc_info.IPv4,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + localStorage.getItem("jwt")
+    },
+  })
+  .then(res=>res.status)
+  .catch(err => {
+    console.log(err)
+    return 500
+  })
+  console.log(statcode)
+  return statcode
+}
+
+

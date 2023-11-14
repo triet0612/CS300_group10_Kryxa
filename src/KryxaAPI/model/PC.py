@@ -46,17 +46,17 @@ def fetch_pc_by_id(pc_id: int) -> Pc:
 
 
 # TODO: UpdatePCbyID(id: int)
-# def update_pc_by_id(pc_info: PcDTO) -> str:
-#     with DBService() as cur:
-#         try:
-#             cur.execute(
-#                 "UPDATE Pc SET MAC = ?, IPv4 = ? WHERE PcID = ?", [pc_info.MAC, pc_info.IPv4, pc_info.PcID]
-#             )
-#             cur.commit()
-#             return pc_info.IPv4
-#         except Exception as err:
-#             cur.rollback()
-#             raise err
+def update_pc_by_id(pc_info: PcDTO) -> str:
+    with DBService() as cur:
+        try:
+            cur.execute(
+                "UPDATE Pc SET MAC = ?, IPv4 = ? WHERE PcID = ?", [pc_info.MAC, pc_info.IPv4, pc_info.PcID]
+            )
+            cur.commit()
+            return pc_info.IPv4
+        except Exception as err:
+            cur.rollback()
+            raise err
 
 def insert_pc(new_pc: Pc):
     with DBService() as cur:

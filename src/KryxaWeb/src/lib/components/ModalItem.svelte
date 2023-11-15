@@ -5,11 +5,8 @@
     export let status = "close";
 
     let newItem = new Item();
-    let img="";
-    $:{
-        img = img.substring(12,img.length)
-        console.log(img)
-    }
+    let files = undefined;
+    
     let dialog;
 
     $: if (status === "open" && dialog) {
@@ -24,6 +21,10 @@
         if (statcode !== 200) {
             alert("Failed create new Item")
         }
+        let stat = await createImage(files,newItem.ItemID).then(res => res)
+        if (stat !== 200) {
+            alert("Failed insert image")
+        }
         location.reload()
     }
 </script>
@@ -36,14 +37,8 @@
                 <input bind:value={newItem.Name} class="p-3 my-1 mx-1 bg-white rounded-xl text-left" type="text" placeholder="Name">
                 <input bind:value={newItem.Price} class="p-3 my-1 mx-1 bg-white rounded-xl text-left" type="text" placeholder="Price">
                 <input bind:value={newItem.Category} class="p-3 my-1 mx-1 bg-white rounded-xl text-left" type="text" placeholder="Category">
-                <input bind:value={newItem.Status} class="p-3 my-1 mx-1 bg-white rounded-xl text-left" type="text" placeholder="Status">
-                <input bind:value={newItem.Stock} class="p-3 my-1 mx-1 bg-white rounded-xl text-left" type="text" placeholder="Stock">
-                <input bind:value={img} class="p-3 my-1 mx-1 bg-white rounded-xl text-left" type="file" accept="image/png, image/jpg">
-                <button on:click={ async() => {
-                    await click();
-                    createImage(img)
-                    }} 
-                    class="p-2 px-10 m-1 mx-10 bg-white rounded-xl hover:bg-gray-300 active:bg-gray-500">
+                <input bind:files class="p-3 my-1 mx-1 bg-white rounded-xl text-left" type="file" accept="image/png, image/jpeg">
+                <button on:click={async () => click()} class="p-2 px-10 m-1 mx-10 bg-white rounded-xl hover:bg-gray-300 active:bg-gray-500">
                     Create
                 </button>
             </div>

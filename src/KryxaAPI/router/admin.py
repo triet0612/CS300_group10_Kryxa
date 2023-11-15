@@ -78,14 +78,9 @@ async def create_item(item: SaleItems):
 
 # post image
 @adminRouter.post("/uploadfile/")
-async def create_upload_file(file: UploadFile = File(...)):
+async def create_upload_file(file: Annotated[bytes, File()], item_id: int):
     try:
-        # Read the uploaded image and get its byte stream
-        image_byte_stream = file.file.read()
-        # Save the image using FileManager
-        file_manager.create_image(file.filename, image_byte_stream)
-
-        return {"filename": file.filename}
+        file_manager.create_image(str(item_id), file)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

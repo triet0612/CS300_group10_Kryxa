@@ -1,10 +1,9 @@
 export class Item {
-    constructor(ItemID, Name,Price,Category,ItemStatus,Stock) {
+    constructor(ItemID, Name,Price,Category,Stock) {
       this.ItemID = ItemID
       this.Name = Name
       this.Price = Price
       this.Category = Category
-      this.ItemStatus = ItemStatus
       this.Stock = Stock
     }
 
@@ -13,6 +12,7 @@ export class Item {
         let item = await fetch(url, {
             method: "GET",
             headers: {
+                "Content-Type": "application/json",
                 "Authorization": "Bearer " + localStorage.getItem("jwt")
             },
         })
@@ -26,7 +26,8 @@ export class Item {
     }
 
     async createItem() {
-        let url = "http://localhost:8000/api/admin/items"
+        let url = "http://localhost:8000/api/admin/item"
+        
         let statcode = await fetch(url, {
             method: "POST",
             body: JSON.stringify({
@@ -34,8 +35,7 @@ export class Item {
             "Name": this.Name,
             "Price": this.Price,
             "Category": this.Category,
-            "ItemStatus": "On sale",
-            "Stock": this.Stock,
+            "Stock": 0,
             }),
             headers: {
             "Content-Type": "application/json",
@@ -96,16 +96,23 @@ export async function fetch_category(category,name){
     return items
 }
 
-export async function createImage(filename) {
-    let url = "http://localhost:8000/api/admin/uploadfile/"
+export async function createImage(file,id) {
+    
+    let url = `http://localhost:8000/api/admin/uploadfile/?item_id=${id}`
+    let data = new FormData()
+
+    data.append(
+        'file',file[0]
+    )
+    console.log(data)
+    
     let statcode = await fetch(url, {
         method: "POST",
-        body: JSON.stringify({
-        "filename": filename
-        }),
+        body: data,
         headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + localStorage.getItem("jwt")
+        // "Content-Type": "multipart/form-data",
+        "Accept": "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("jwt"),
         },
     })
     .then(res => res.status)

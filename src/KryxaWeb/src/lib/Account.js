@@ -12,7 +12,6 @@ export class Account {
     let creds = await fetch(url, {
       method: "POST",
       body: JSON.stringify({
-        ID: Number(this.ID),
         Password: this.Password
       }),
       headers: {

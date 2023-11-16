@@ -38,7 +38,7 @@ CREATE TABLE "Bill" (
 INSERT INTO Admin VALUES (0, "Default Admin", "(+84)1234567", "1234");
 INSERT INTO Pc VALUES (0, "123", "11-22-33-44-55-66", "192.168.0.2", 0, "Available");
 INSERT INTO SaleItem VALUES (1,"Com ga 1",50000,"Food",2);
-INSERT INTO SaleItem VALUES (2,"Com ga 2",50000,"Food",1);
+
 
 
 

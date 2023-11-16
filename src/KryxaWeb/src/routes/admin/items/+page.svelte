@@ -1,6 +1,6 @@
 <script>
   import AdminNav from "$lib/components/AdminNav.svelte";
-  import {ImageItem} from '$lib/Assets.js';
+
   import {fetch_all,fetch_category} from '$lib/Item.js';
   import { onMount } from "svelte";
   import {MainScreen} from '$lib/Assets.js';
@@ -43,7 +43,7 @@ style="background-image: url({MainScreen['Background2']});">
     <!-- View Page -->
     <div class="flex flex-col ml-72 h-screen">
       <!-- Search bar -->
-      <div class="fixed z-10">
+      <div class="fixed z-10 ml-5">
         <div class="flex flex-row">
           <!-- Input type check -->
           <input 
@@ -73,20 +73,19 @@ style="background-image: url({MainScreen['Background2']});">
             <div class="">Add Item</div>
           </div>
           {#each list_items as list_item}
-            <li class="w-56 h-56 flex-row text-white justify-center text-center border-2 items-center backdrop-blur-2xl">
+            <li class="w-56 h-56 flex-row text-white justify-center text-center border-2 items-center backdrop-blur-2xl rounded-lg ">
               <a href="/admin/items/detail?item_id={list_item.ItemID}">
-                <div class="min-w-52 min-h-48 bg-gray-600 ml-1.5">
-                  <img src = {
-                    ImageItem[list_item.Name]}
-                    alt="screen"
-                    class="bg-contain w-56 h-48 justify-center"
+                <div class="min-w-56 min-h-48 rounded-lg">
+                  <!-- svelte-ignore a11y-missing-attribute -->
+                  <img style = "screen" src="http://localhost:8000/api/admin/getfile/{list_item.ItemID}" sizes="(max-width:224px)"
+                    class="bg-contain w-56 h-48 rounded-lg"
                     />
                 </div>
               </a>
-              <p id ="image"class="justify-center" value={list_item.Name}>{list_item.Name} : {list_item.Price}</p>
+              <p id ="image"class="justify-center" value={list_item.Name}>{list_item.Name} | {parseInt(list_item.Price/1000)}.000</p>
             </li>
           {/each}
-          </ul>
+          </ul> 
       </div>
     </div>
   </div>

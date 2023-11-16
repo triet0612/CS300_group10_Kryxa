@@ -16,6 +16,7 @@
     }
 
     async function click() {
+        
         let statcode = await newItem.createItem().then(res => res)
         status = "close"
         if (statcode !== 200) {

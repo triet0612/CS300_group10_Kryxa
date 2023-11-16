@@ -123,25 +123,4 @@ export async function createImage(file,id) {
     return statcode
 }
 
-export async function loadImage(imgname) {
-    let url = "http://localhost:8000/api/admin/getfile/"
-    if(imgname !==undefined){
-        url+=imgname
-    }
-    let str = await fetch(url, {
-        method: "GET",
-        body: JSON.stringify({
-        "filename": filename
-        }),
-        headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + localStorage.getItem("jwt")
-        },
-    })
-    .then(res => res.json())
-    .then(res => res)
-    .catch(err => {console.log(err); return [];})
-    console.log(str)
-    return str
-}
 

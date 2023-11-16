@@ -2,10 +2,12 @@ from fastapi import APIRouter, HTTPException, Response, Depends, File
 from typing import Annotated
 
 import model.PC
-from auth import checkAdminAccount, generate_token, validateAdminToken, AccountDTO
+from auth import checkAdminAccount, generate_admin_token, validateAdminToken, AccountDTO
 import model.SaleItems
 import array as arr
 from model.PC import Pc, fetch_pc_by_id, insert_pc, PcDTO, update_pc_by_id
+from model.Admin import Admin
+
 
 adminRouter = APIRouter(tags=["admin"])
 
@@ -16,12 +18,12 @@ adminRouter = APIRouter(tags=["admin"])
 
 
 @adminRouter.post("/login")
-async def login(acc: AccountDTO, res: Response) -> str:
+async def login(acc: Admin, res: Response) -> str:
     try:
         valid = checkAdminAccount(acc)
         if valid is False:
             raise HTTPException(status_code=401, detail="Wrong password or id")
-        res.headers.append("Authorization", generate_token(acc))
+        res.headers.append("Authorization", generate_admin_token(acc))
         return "Login successful"
     except Exception as err:
         print(err)

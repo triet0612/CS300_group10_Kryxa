@@ -7,6 +7,11 @@ export class Item {
       this.Stock = Stock
     }
 
+    isAvailable(){
+        if (this.Stock >0)  return true
+        else return false
+    }
+
     async getItemByID(input_id) {
         let url = `http://localhost:8000/api/admin/items/${input_id}`
         let item = await fetch(url, {

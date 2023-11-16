@@ -1,7 +1,7 @@
 <script>
   import AdminNav from "$lib/components/AdminNav.svelte";
 
-  import {fetch_all,fetch_category} from '$lib/Item.js';
+  import {Item,fetch_all,fetch_category} from '$lib/Item.js';
   import { onMount } from "svelte";
   import {MainScreen} from '$lib/Assets.js';
   import ModalItem from "$lib/components/ModalItem.svelte";
@@ -73,7 +73,9 @@ style="background-image: url({MainScreen['Background2']});">
             <div class="">Add Item</div>
           </div>
           {#each list_items as list_item}
-            <li class="w-56 h-56 flex-row text-white justify-center text-center border-2 items-center backdrop-blur-2xl rounded-lg ">
+            <li class="w-56 h-56 flex-row text-white justify-center text-center border-2 items-center backdrop-blur-2xl rounded-lg {list_item.Stock >0
+            ? 'bg-green-600 bg-opacity-75'
+            :'bg-red-600 bg-opacity-75'}">
               <a href="/admin/items/detail?item_id={list_item.ItemID}">
                 <div class="min-w-56 min-h-48 rounded-lg">
                   <!-- svelte-ignore a11y-missing-attribute -->

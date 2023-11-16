@@ -1,18 +1,15 @@
-from io import BytesIO
-
-from fastapi import APIRouter, HTTPException, Response, Depends, UploadFile, File
-from fastapi.responses import StreamingResponse
+from fastapi import APIRouter, HTTPException, Response, Depends, File
 from typing import Annotated
 
 import model.PC
-from auth import checkAdminAccount, generate_token, validateAdminToken, AccountDTO
+from auth import checkAdminAccount, generate_admin_token, validateAdminToken, AccountDTO
 import model.SaleItems
-from model.SaleItems import SaleItems, create_item
+import array as arr
 from model.PC import Pc, fetch_pc_by_id, insert_pc, PcDTO
-from service.file import get_file
+from model.Admin import Admin
 
 adminRouter = APIRouter(tags=["admin"])
-file_manager = get_file()
+
 
 # @adminRouter.get("/")
 # async def home_admin(acc: Annotated[AccountDTO, Depends(validateAdminToken)]):
@@ -20,12 +17,12 @@ file_manager = get_file()
 
 
 @adminRouter.post("/login")
-async def login(acc: AccountDTO, res: Response) -> str:
+async def login(acc: Admin, res: Response) -> str:
     try:
         valid = checkAdminAccount(acc)
         if valid is False:
             raise HTTPException(status_code=401, detail="Wrong password or id")
-        res.headers.append("Authorization", generate_token(acc))
+        res.headers.append("Authorization", generate_admin_token(acc))
         return "Login successful"
     except Exception as err:
         print(err)
@@ -65,41 +62,14 @@ async def read_item(item_id: int):
         raise HTTPException(status_code=404, detail='File not found')
 
 
-# create item
-@adminRouter.post("/item", dependencies=[Depends(validateAdminToken)], )
-async def create_item(item: SaleItems):
-    try:
-        model.SaleItems.create_item(item)
-        return item
-    except AssertionError as err:
-        print(err)
-        raise HTTPException(status_code=400, detail="Error create Item")
+
+# create item and image file
+# @adminRouter.post("/get_items", dependencies=[Depends(validateAdminToken)])
+# async def create_item(item: model.SaleItems.SaleItems, file: Annotated[bytes, File()]):
+#     return item, file
 
 
-# post image
-@adminRouter.post("/uploadfile/")
-async def create_upload_file(file: Annotated[bytes, File()], item_id: int):
-    try:
-        file_manager.create_image(str(item_id), file)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@adminRouter.get("/getfile/{filename}")
-async def get_file(filename: str):
-    try:
-        # Read the image using FileManager
-        image_byte_stream = file_manager.read_image(filename)
-
-        # Return the image as a streaming response
-        return StreamingResponse(BytesIO(image_byte_stream), media_type="image/jpeg")
-    except ValueError as ve:
-        raise HTTPException(status_code=400, detail=str(ve))
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@adminRouter.get("/pc/{pc_id}", dependencies=[Depends(validateAdminToken)])
+@adminRouter.get("/pc/{pc_id}",dependencies=[Depends(validateAdminToken)])
 async def fetch_pc_id(pc_id: int) -> Pc:
     try:
         pc_info = fetch_pc_by_id(pc_id)
@@ -109,7 +79,7 @@ async def fetch_pc_id(pc_id: int) -> Pc:
         raise HTTPException(status_code=404, detail="No pc with that id")
 
 
-@adminRouter.get("/pc", dependencies=[Depends(validateAdminToken)])
+@adminRouter.get("/pc" ,dependencies=[Depends(validateAdminToken)])
 async def view_pcs():
     try:
         list_pc = model.PC.fetch_All_Pcs()
@@ -127,6 +97,7 @@ async def create_pc(new_pc: Pc):
     except Exception as err:
         print(err)
         raise HTTPException(status_code=400, detail="Error create Pc")
+
 
 # @adminRouter.post("/pc/{pc_id}", dependencies=[Depends(validateAdminToken)])
 # async def edit_pc(pc_info: PcDTO):

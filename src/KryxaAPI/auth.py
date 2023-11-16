@@ -5,6 +5,7 @@ from pydantic import BaseModel, Field
 from db.database import DBService
 from fastapi.security import HTTPBearer
 from fastapi import Depends, HTTPException
+from model.Admin import Admin
 
 HASH_ALGORITHM = 'HS256'
 JWT_SECRET = 'secret'
@@ -19,21 +20,16 @@ class AccountDTO(BaseModel):
     Password: str
 
 
-def generate_token(acc: AccountDTO) -> str:
-    to_encode = {
-        "ID": acc.ID, "Password": acc.Password
-    }
+def generate_admin_token(acc: Admin) -> str:
+    to_encode = {"Password": acc.Password}
     encoded_jwt = jwt.encode(to_encode, JWT_SECRET, algorithm=HASH_ALGORITHM)
     return encoded_jwt
 
 
-def checkAdminAccount(acc: AccountDTO) -> bool:
+def checkAdminAccount(acc: Admin) -> bool:
     with DBService() as cur:
         try:
-            row = cur.cursor().execute(
-                "SELECT Password FROM Admin WHERE AdminID=?",
-                [acc.ID]
-            ).fetchone()
+            row = cur.cursor().execute("SELECT Password FROM Admin").fetchone()
             if acc.Password == row[0]:
                 return True
             return False
@@ -43,10 +39,10 @@ def checkAdminAccount(acc: AccountDTO) -> bool:
             return False
 
 
-def validateAdminToken(creds=Depends(jwt_auth)) -> AccountDTO:
+def validateAdminToken(creds=Depends(jwt_auth)) -> Admin:
     try:
         payload = jwt.decode(creds.credentials, JWT_SECRET, algorithms=[HASH_ALGORITHM])
-        acc = AccountDTO(ID=payload["ID"], Password=payload["Password"])
+        acc = Admin(Password=payload["Password"])
         if not checkAdminAccount(acc):
             raise HTTPException(status_code=401, detail='Token unauthorized')
         return acc

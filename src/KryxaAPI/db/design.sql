@@ -1,18 +1,12 @@
-
 CREATE TABLE "Admin" (
-    "AdminID" INTEGER NOT NULL CHECK("AdminID" >= 0) UNIQUE,
-    "Fullname" TEXT NOT NULL,
-    "Phone" TEXT NOT NULL,
-    "Password" TEXT NOT NULL,
-    PRIMARY KEY("AdminID")
+    "Password" TEXT NOT NULL
 );
 CREATE TABLE "Pc" (
     "PcID" INTEGER NOT NULL CHECK("PcID" >= 0) UNIQUE,
+    "EndTime" TEXT,
     "Password" TEXT NOT NULL CHECK(LENGTH("Password") == 3),
-    "MAC" TEXT NOT NULL UNIQUE,
     "IPv4" TEXT NOT NULL UNIQUE,
     "TimeUsage" INTEGER NOT NULL DEFAULT 0,
-    "Status" TEXT NOT NULL CHECK("Status" IN ("Available", "Unavailable","Maintenance")),
     PRIMARY KEY("PcID")
 );
 CREATE TABLE "SaleItem" (
@@ -24,21 +18,15 @@ CREATE TABLE "SaleItem" (
     PRIMARY KEY("ItemID")
 );
 CREATE TABLE "Bill" (
+    "BillID" INTEGER PRIMARY KEY AUTOINCREMENT,
     "PcID" INTEGER NOT NULL,
     "Datetime" TEXT NOT NULL,
-    "AdminID" INTEGER NOT NULL,
-    "Status" TEXT NOT NULL CHECK("Status" IN ("In progress", "Completed", "Denied")),
     "Note" TEXT CHECK (LENGTH("Note") <= 100),
     "Total" REAL NOT NULL DEFAULT 0,
     "Cart" TEXT NOT NULL,
-    FOREIGN KEY("PcID") REFERENCES "Pc"("PcID"),
-    FOREIGN KEY("AdminID") REFERENCES "Admin"("AdminID"),
-    PRIMARY KEY("PcID","Datetime")
+    FOREIGN KEY("PcID") REFERENCES "Pc"("PcID")
 );
-INSERT INTO Admin VALUES (0, "Default Admin", "(+84)1234567", "1234");
-INSERT INTO Pc VALUES (0, "123", "11-22-33-44-55-66", "192.168.0.2", 0, "Available");
+INSERT INTO Admin VALUES ("1234");
+INSERT INTO Pc VALUES (0, "2023-11-13T10:46:00", "123", "192.168.0.2", 0);
 INSERT INTO SaleItem VALUES (1,"Com ga 1",50000,"Food",2);
-
-
-
-
+I

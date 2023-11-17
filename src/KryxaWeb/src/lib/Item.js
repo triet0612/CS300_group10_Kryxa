@@ -39,7 +39,13 @@ export class Item {
                 "Authorization": "Bearer " + localStorage.getItem("jwt")
             },
         })
-        .then(res=>res.json())
+        .then(res => {
+            if (res.status === 401){
+                location.replace('/admin/login')
+                return []
+            }
+            return res.json()
+        })
         .catch(err => {
             console.log(err)
             return 500
@@ -65,7 +71,13 @@ export class Item {
             "Authorization": "Bearer " + localStorage.getItem("jwt")
             },
         })
-        .then(res => res.status)
+        .then(res => {
+            if (res.status === 401){
+                location.replace('/admin/login')
+                return res.status
+            }
+            return res.status
+        })
         .catch(err => {
             console.log(err)
             return 500
@@ -84,8 +96,13 @@ export async function fetch_all(){
         "Authorization": "Bearer " + localStorage.getItem("jwt")
     }
     })
-    .then(res => res.json())
-    .then(res => res)
+    .then(res => {
+        if (res.status === 401){
+            location.replace('/admin/login')
+            return []
+        }
+        return res.json()
+    })
     .catch(err => {console.log(err); return [];})
     console.log(items[0])
     return items
@@ -113,8 +130,13 @@ export async function fetch_category(category,name){
         "Authorization": "Bearer " + localStorage.getItem("jwt")
     }
     })
-    .then(res => res.json())
-    .then(res => res)
+    .then(res => {
+        if (res.status === 401){
+            location.replace('/admin/login')
+            return []
+        }
+        return res.json()
+    })
     .catch(err => {console.log(err); return [];})
     console.log(items[0])
     return items
@@ -139,7 +161,13 @@ export async function createImage(file,id) {
         "Authorization": "Bearer " + localStorage.getItem("jwt"),
         },
     })
-    .then(res => res.status)
+    .then(res => {
+        if (res.status === 401){
+            location.replace('/admin/login')
+            return res.status
+        }
+        return res.status
+    })
     .catch(err => {
         console.log(err)
         return 500

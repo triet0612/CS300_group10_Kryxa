@@ -1,14 +1,14 @@
+import sqlite3
 from io import BytesIO
 from fastapi.responses import StreamingResponse
 from fastapi import APIRouter, HTTPException, Response, Depends, File
 from typing import Annotated
 
-import model.PC
-from auth import checkAdminAccount, generate_admin_token, validateAdminToken, AccountDTO
+from model.PC import Pc, start_session
+from auth import checkAdminAccount, generate_admin_token, validateAdminToken
 import model.SaleItems
-from model.SaleItems import SaleItems, create_item
-import array as arr
-from model.PC import Pc, fetch_pc_by_id, insert_pc, PcDTO
+from model.SaleItems import SaleItems
+from model.PC import Pc, fetch_pc_by_id, insert_pc
 from model.Admin import Admin
 from service.file import get_file
 
@@ -141,3 +141,17 @@ async def get_file(filename: int):
         raise HTTPException(status_code=400, detail=str(ve))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@adminRouter.post("/open/", dependencies=[Depends(validateAdminToken)])
+async def open_session(PcID: int, time: int):
+    try:
+        start_session(PcID, time)
+    except HTTPException as err:
+        raise err
+    except sqlite3.Error as err:
+        print(err)
+        raise HTTPException(status_code=400, detail="Error open a session")
+    except Exception as err:
+        print(err)
+        raise HTTPException(status_code=500, detail="Unknown error")

@@ -67,14 +67,13 @@ async def read_item(item_id: int):
         raise HTTPException(status_code=404, detail='File not found')
 
 
-
 # create item and image file
 # @adminRouter.post("/get_items", dependencies=[Depends(validateAdminToken)])
 # async def create_item(item: model.SaleItems.SaleItems, file: Annotated[bytes, File()]):
 #     return item, file
 
 
-@adminRouter.get("/pc/{pc_id}",dependencies=[Depends(validateAdminToken)])
+@adminRouter.get("/pc/{pc_id}", dependencies=[Depends(validateAdminToken)])
 async def fetch_pc_id(pc_id: int) -> Pc:
     try:
         pc_info = fetch_pc_by_id(pc_id)
@@ -84,7 +83,7 @@ async def fetch_pc_id(pc_id: int) -> Pc:
         raise HTTPException(status_code=404, detail="No pc with that id")
 
 
-@adminRouter.get("/pc" ,dependencies=[Depends(validateAdminToken)])
+@adminRouter.get("/pc", dependencies=[Depends(validateAdminToken)])
 async def view_pcs():
     try:
         list_pc = model.PC.fetch_All_Pcs()
@@ -120,6 +119,8 @@ async def create_item(item: SaleItems):
     except AssertionError as err:
         print(err)
         raise HTTPException(status_code=400, detail="Error create Item")
+
+
 # post image
 @adminRouter.post("/uploadfile/")
 async def create_upload_file(file: Annotated[bytes, File()], item_id: int):
@@ -127,8 +128,10 @@ async def create_upload_file(file: Annotated[bytes, File()], item_id: int):
         file_manager.create_image(str(item_id), file)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
 @adminRouter.get("/getfile/{filename}")
-async def get_file(filename: str):
+async def get_file(filename: int):
     try:
         # Read the image using FileManager
         image_byte_stream = file_manager.read_image(filename)

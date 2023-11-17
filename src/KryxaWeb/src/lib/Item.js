@@ -53,7 +53,7 @@ export class Item {
         .then(res => {
             if (res.status === 401){
                 location.replace('/admin/login')
-                return []
+                return res.status
             }
             return res.status
         })
@@ -142,7 +142,7 @@ export async function createImage(file,id) {
     .then(res => {
         if (res.status === 401){
             location.replace('/admin/login')
-            return []
+            return res.status
         }
         return res.status
     })

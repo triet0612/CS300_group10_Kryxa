@@ -1,14 +1,19 @@
+from io import BytesIO
+from fastapi.responses import StreamingResponse
 from fastapi import APIRouter, HTTPException, Response, Depends, File
 from typing import Annotated
 
 import model.PC
 from auth import checkAdminAccount, generate_admin_token, validateAdminToken, AccountDTO
 import model.SaleItems
+from model.SaleItems import SaleItems, create_item
 import array as arr
 from model.PC import Pc, fetch_pc_by_id, insert_pc, PcDTO
 from model.Admin import Admin
+from service.file import get_file
 
 adminRouter = APIRouter(tags=["admin"])
+file_manager = get_file()
 
 
 # @adminRouter.get("/")
@@ -106,3 +111,30 @@ async def create_pc(new_pc: Pc):
 #     except Exception as err:
 #         print(err)
 #         raise HTTPException(status_code=404, detail="PC not found")
+
+@adminRouter.post("/item", dependencies=[Depends(validateAdminToken)], )
+async def create_item(item: SaleItems):
+    try:
+        model.SaleItems.create_item(item)
+        return item
+    except AssertionError as err:
+        print(err)
+        raise HTTPException(status_code=400, detail="Error create Item")
+# post image
+@adminRouter.post("/uploadfile/")
+async def create_upload_file(file: Annotated[bytes, File()], item_id: int):
+    try:
+        file_manager.create_image(str(item_id), file)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+@adminRouter.get("/getfile/{filename}")
+async def get_file(filename: str):
+    try:
+        # Read the image using FileManager
+        image_byte_stream = file_manager.read_image(filename)
+        # Return the image as a streaming response
+        return StreamingResponse(BytesIO(image_byte_stream), media_type="image/jpeg")
+    except ValueError as ve:
+        raise HTTPException(status_code=400, detail=str(ve))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

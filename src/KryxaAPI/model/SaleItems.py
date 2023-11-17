@@ -49,3 +49,19 @@ def create_item(item: SaleItems):
         except Exception as err:
             cur.rollback()
             raise err
+
+
+def update_item(new_item_data: SaleItems):
+    sql_query: str = "UPDATE SaleItem SET Name = ?, Price = ?, Category = ?, ItemStatus = ?, Stock = ? WHERE ItemID = ?"
+
+    with DBService() as cur:
+        try:
+            cur.cursor.execute(sql_query,
+                               new_item_data.Name,
+                               new_item_data.Price,
+                               new_item_data.Category,
+                               new_item_data.ItemStatus,
+                               new_item_data.Stock
+                               )
+        except Exception as err:
+            print(err)

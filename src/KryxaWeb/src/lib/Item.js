@@ -5,11 +5,30 @@ export class Item {
       this.Price = Price
       this.Category = Category
       this.Stock = Stock
-    }
 
-    isAvailable(){
-        if (this.Stock >0)  return true
-        else return false
+        // updateItem() = async function(){
+        //     let url = `http://localhost:8000/api/admin/items/${this.ItemID}`
+        //     let statcode = await fetch(url, {
+        //         method: "PUT",
+        //         body: JSON.stringify({
+        //         "ItemID": this.ItemID,
+        //         "Name": this.Name,
+        //         "Price": this.Price,
+        //         "Category": this.Category,
+        //         "Stock": 0,
+        //         }),
+        //         headers: {
+        //         "Content-Type": "application/json",
+        //         "Authorization": "Bearer " + localStorage.getItem("jwt")
+        //         },
+        //     })
+        //     .then(res => res.status)
+        //     .catch(err => {
+        //         console.log(err)
+        //         return 500
+        //     })
+        //     return statcode
+        // }
     }
 
     async getItemByID(input_id) {
@@ -17,7 +36,6 @@ export class Item {
         let item = await fetch(url, {
             method: "GET",
             headers: {
-                "Content-Type": "application/json",
                 "Authorization": "Bearer " + localStorage.getItem("jwt")
             },
         })
@@ -25,14 +43,14 @@ export class Item {
         .catch(err => {
             console.log(err)
             return 500
-          })
+          }) 
           console.log(item)
           return item
     }
 
     async createItem() {
         let url = "http://localhost:8000/api/admin/item"
-        
+
         let statcode = await fetch(url, {
             method: "POST",
             body: JSON.stringify({
@@ -54,6 +72,7 @@ export class Item {
         })
         return statcode
     }
+    
 }
 
 export async function fetch_all(){

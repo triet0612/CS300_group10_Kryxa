@@ -14,6 +14,7 @@ from service.file import get_file
 adminRouter = APIRouter(tags=["admin"])
 file_manager = get_file()
 
+
 # @adminRouter.get("/")
 # async def home_admin(acc: Annotated[AccountDTO, Depends(validateAdminToken)]):
 #     return {"message": "welcome admin ID: " + str(acc.ID)}
@@ -63,6 +64,14 @@ async def read_item(item_id: int):
     except FileNotFoundError as err:
         print(err)
         raise HTTPException(status_code=404, detail='File not found')
+
+
+@adminRouter.put("/items/{item_id}", dependencies=[Depends(validateAdminToken)])
+async def update_item(new_item_data: SaleItems):
+    try:
+        model.SaleItems.update_item(new_item_data)
+    except FileNotFoundError as err:
+        print(err)
 
 
 # create item

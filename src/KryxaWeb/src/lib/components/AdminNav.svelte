@@ -3,7 +3,7 @@
   const items = [
     ["Home", ""],
     ["Items", "items"],
-    ["Tournament", "tournament"],
+    ["Bills", "bills"],
     ["Statistics", "stats"],
     ["Account", "account"]
   ];

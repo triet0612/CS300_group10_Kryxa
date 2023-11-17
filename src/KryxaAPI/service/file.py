@@ -1,29 +1,26 @@
 import io
-
 from PIL import Image
 
 
 # Path for resources is at bin/res, create folder before proceed
 class FileManager:
     def __init__(self):
-        self.path = "./bin/res/"
+        self.path = "./bin/system/"
 
-    def read_image(self, filepath: str):
-        img = Image.open(self.path + filepath)
+    def read_image(self, item_id: int):
+        base_width = 224
+        img = Image.open(self.path + str(item_id) + ".png")
+        wpercent = (base_width / float(img.size[0]))
+        hsize = int((float(img.size[1]) * float(wpercent)))
+        img = img.resize((base_width, hsize), Image.Resampling.LANCZOS)
         img_stream = io.BytesIO()
-        sep_filename = filepath.split(".")
-        file_format = sep_filename[1]
-        if file_format == "jpg":
-            img.save(img_stream, format="JPEG")
-        elif file_format == "png":
-            img.save(img_stream, format="PNG")
-        else:
-            raise ValueError("Wrong file format")
+        img.save(img_stream, format="PNG")
         return img_stream.getvalue()
 
-    def create_image(self, filepath: str, filestream: bytes):
+    def create_image(self, item_id: id, filestream: bytes):
         img = Image.open(io.BytesIO(filestream))
-        img.save(self.path + filepath)
+        img.convert("RGBA")
+        img.save(self.path + str(item_id) + ".png")
 
 
 def get_file() -> FileManager:

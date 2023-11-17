@@ -16,6 +16,10 @@ import Com_ga_5 from '$lib/items/Com ga 5.jpg'
 import Com_ga_6 from '$lib/items/Com ga 6.jpg'
 import Com_ga_7 from '$lib/items/Com ga 7.jpg'
 import Com_ga_8 from '$lib/items/Com ga 8.jpg'
+
+import addItem from '$lib/assets/admin/addItem.jpg'
+
+
 export const AppLogo = logo;
 
 export const MainScreen ={
@@ -25,6 +29,7 @@ export const MainScreen ={
   "Background2": bg_3,
   "Background3": bg_4,
   "Background4": bg_5,
+  "addItem": addItem
 }
 
 export const PcInfo = {

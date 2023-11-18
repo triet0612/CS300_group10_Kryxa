@@ -4,6 +4,7 @@
   import { MainScreen } from "$lib/Assets.js";
   import { Pc, get_Pcs } from "$lib/Pc.js";
   import { onMount } from "svelte";
+  import { parse } from "svelte/compiler";
   let pc_list = [];
   onMount(async () => {
     pc_list = await get_Pcs().then((res) => res);
@@ -27,6 +28,8 @@
   //   { PcID: 14, Status: "Maintainance" },
   // ];
 
+  const d = new Date();
+  let real_time = d.toISOString();
 
   let status = "close";
   function close(event) {
@@ -64,9 +67,9 @@
         <li>
           <a href="/admin/pc_info/?pc_id={pc_id['PcID']}">
             <div
-              class="w-50 h-50 {pc_id['Status'] == 'Available'
+              class="w-50 h-50 {real_time > pc_id['EndTime']
                 ? 'bg-green-600 bg-opacity-75'
-                : pc_id['Status'] == 'Unavailable'
+                : real_time < pc_id['EndTime']
                 ? 'bg-red-600 bg-opacity-75'
                 : 'bg-white  bg-opacity-25'}
               backdrop-blur-2xl backdrop-brightness-200 text-black font-semibold font-NotoSans text-center flex flex-col rounded-xl justify-center"

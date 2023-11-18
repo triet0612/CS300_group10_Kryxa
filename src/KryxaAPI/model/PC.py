@@ -5,15 +5,16 @@ from db.database import DBService
 
 class Pc(BaseModel):
     PcID: Annotated[int, Field(ge=0)]
+    EndTime: str
     Password: Annotated[str, Field(max_length=3, min_length=3)]
-    MAC: str
     IPv4: str
     TimeUsage: Annotated[int, Field(default=0)]
-    Status: Literal['Available', 'Unavailable', 'Maintenance']
+
 
 class PcDTO(BaseModel):
     PcID: Annotated[int, Field(ge=0)]
-    MAC: str
+    EndTime: str
+    Password: Annotated[str, Field(max_length=3, min_length=3)]
     IPv4: str
 
 # TODO: getAllPcsForView()
@@ -50,7 +51,7 @@ def update_pc_by_id(pc_info: PcDTO) -> str:
     with DBService() as cur:
         try:
             cur.execute(
-                "UPDATE Pc SET MAC = ?, IPv4 = ? WHERE PcID = ?", [pc_info.MAC, pc_info.IPv4, pc_info.PcID]
+                "UPDATE Pc SET Password = ?, IPv4 = ? WHERE PcID = ?", [pc_info.Password, pc_info.IPv4, pc_info.PcID]
             )
             cur.commit()
             return pc_info.IPv4

@@ -77,8 +77,9 @@ export async function updateThisPcByID(pc_info,pc_id){
     method: "PUT",
     body: JSON.stringify({
       "PcID": pc_info.PcID,
-      "MAC": pc_info.MAC,
+      "Password": pc_info.Password,
       "IPv4": pc_info.IPv4,
+      
     }),
     headers: {
       "Content-Type": "application/json",

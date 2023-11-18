@@ -104,7 +104,6 @@ async def create_pc(new_pc: Pc):
         raise HTTPException(status_code=400, detail="Error create Pc")
 
 
-
 @adminRouter.put("/pc/{pc_id}", dependencies=[Depends(validateAdminToken)])
 async def edit_pc(pc_info: PcDTO):
     try:

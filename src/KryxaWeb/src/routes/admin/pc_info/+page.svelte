@@ -43,8 +43,8 @@
     
                     </div>
                     <input class ="h-15  bg-violet-900/50 rounded font-BlackOpsOne" 
-                        placeholder={pc_info.MAC}
-                        bind:value = {pc_info.MAC}
+                        placeholder={pc_info.Password}
+                        bind:value = {pc_info.Password}
                     >
                     <input class ="h-15  bg-violet-900/50 rounded font-BlackOpsOne" 
                         placeholder={pc_info.IPv4}

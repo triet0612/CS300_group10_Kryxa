@@ -5,30 +5,6 @@ export class Item {
       this.Price = Price
       this.Category = Category
       this.Stock = Stock
-
-        // updateItem() = async function(){
-        //     let url = `http://localhost:8000/api/admin/items/${this.ItemID}`
-        //     let statcode = await fetch(url, {
-        //         method: "PUT",
-        //         body: JSON.stringify({
-        //         "ItemID": this.ItemID,
-        //         "Name": this.Name,
-        //         "Price": this.Price,
-        //         "Category": this.Category,
-        //         "Stock": 0,
-        //         }),
-        //         headers: {
-        //         "Content-Type": "application/json",
-        //         "Authorization": "Bearer " + localStorage.getItem("jwt")
-        //         },
-        //     })
-        //     .then(res => res.status)
-        //     .catch(err => {
-        //         console.log(err)
-        //         return 500
-        //     })
-        //     return statcode
-        // }
     }
 
     async getItemByID(input_id) {
@@ -85,6 +61,56 @@ export class Item {
         return statcode
     }
     
+}
+
+export async function update_item(new_data){
+            let url = `http://localhost:8000/api/admin/items/${new_data.ItemID}`
+            console.log(url)
+            let statcode = await fetch(url, {
+                method: "PUT",
+                body: JSON.stringify({
+                "ItemID": new_data.ItemID,
+                "Name": new_data.Name,
+                "Price": new_data.Price,
+                "Category": new_data.Category,
+                "Stock": new_data.Stock,
+                }),
+                headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("jwt")
+                },
+            })
+            .then(res => res.status)
+            .catch(err => {
+                console.log(err)
+                return 500
+            })
+            return statcode
+        }
+
+
+export async function delete_item(input_id) {
+    let url = `http://localhost:8000/api/admin/items/${input_id}`
+
+    let statcode = await fetch(url, {
+        method: "DELETE",
+        headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("jwt")
+        },
+    })
+    .then(res => {
+        if (res.status === 401){
+            location.replace('/admin/login')
+            return res.status
+        }
+        return res.status
+    })
+    .catch(err => {
+        console.log(err)
+        return 500
+    })
+    return statcode
 }
 
 export async function fetch_all(){

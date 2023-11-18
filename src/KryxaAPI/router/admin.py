@@ -67,54 +67,33 @@ async def read_item(item_id: int):
         raise HTTPException(status_code=404, detail='File not found')
 
 
+# update item
 @adminRouter.put("/items/{item_id}", dependencies=[Depends(validateAdminToken)])
 async def update_item(new_item_data: SaleItems):
     try:
-        model.SaleItems.update_item(new_item_data)
-    except FileNotFoundError as err:
+        t = model.SaleItems.update_item(new_item_data)
+        print(t)
+    # except FileNotFoundError as err:
+    #     print(err)
+    except Exception as err:
         print(err)
 
 
-# create item
-@adminRouter.post("/item", dependencies=[Depends(validateAdminToken)], )
-async def create_item(item: SaleItems):
+# delete item
+@adminRouter.delete("/item/{item_id}", dependencies=[Depends(validateAdminToken)], )
+async def delete_item(item_id: int):
     try:
-        model.SaleItems.create_item(item)
-        return item
-    except AssertionError as err:
+        model.SaleItems.delete_item(item_id)
+    except Exception as err:
         print(err)
-        raise HTTPException(status_code=400, detail="Error create Item")
+        raise HTTPException(status_code=400, detail="Error delete Item")
 
-
-# post image
-@adminRouter.post("/uploadfile/")
-async def create_upload_file(file: Annotated[bytes, File()], item_id: int):
-    try:
-        file_manager.create_image(str(item_id), file)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@adminRouter.get("/getfile/{filename}")
-async def get_file(filename: str):
-    try:
-        # Read the image using FileManager
-        image_byte_stream = file_manager.read_image(filename)
-
-        # Return the image as a streaming response
-        return StreamingResponse(BytesIO(image_byte_stream), media_type="image/jpeg")
-    except ValueError as ve:
-        raise HTTPException(status_code=400, detail=str(ve))
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
     
 
 # create item and image file
 # @adminRouter.post("/get_items", dependencies=[Depends(validateAdminToken)])
 # async def create_item(item: model.SaleItems.SaleItems, file: Annotated[bytes, File()]):
 #     return item, file
-
-
 @adminRouter.get("/pc/{pc_id}", dependencies=[Depends(validateAdminToken)])
 async def fetch_pc_id(pc_id: int) -> Pc:
     try:

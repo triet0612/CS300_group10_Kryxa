@@ -52,16 +52,35 @@ def create_item(item: SaleItems):
 
 
 def update_item(new_item_data: SaleItems):
-    sql_query: str = "UPDATE SaleItem SET Name = ?, Price = ?, Category = ?, ItemStatus = ?, Stock = ? WHERE ItemID = ?"
+    sql_query: str = "UPDATE SaleItem SET Name = ?, Price = ?, Category = ?, Stock = ? WHERE ItemID = ?"
 
     with DBService() as cur:
         try:
-            cur.cursor.execute(sql_query,
-                               new_item_data.Name,
-                               new_item_data.Price,
-                               new_item_data.Category,
-                               new_item_data.ItemStatus,
-                               new_item_data.Stock
-                               )
+            cur.cursor().execute(sql_query,
+                                 (new_item_data.Name,
+                                  new_item_data.Price,
+                                  new_item_data.Category,
+                                  new_item_data.Stock,
+                                  new_item_data.ItemID,)
+                                 )
+            cur.commit()
+
+            t = cur.cursor().fetchone()
+            fetched = SaleItems(ItemID=t[0],
+                                Name=t[1],
+                                Price=t[2],
+                                Category=t[3],
+                                Stock=t[4])
+            return fetched
+        except Exception as err:
+            cur.rollback()
+            print(err)
+
+
+def delete_item(item_id: int):
+    sql_query: str = "DELETE FROM SaleItem WHERE ItemID = ?"
+    with DBService() as cur:
+        try:
+            cur.cursor().execute(sql_query, (item_id,))
         except Exception as err:
             print(err)

@@ -13,7 +13,6 @@ class Pc(BaseModel):
 
 class PcDTO(BaseModel):
     PcID: Annotated[int, Field(ge=0)]
-    EndTime: str
     Password: Annotated[str, Field(max_length=3, min_length=3)]
     IPv4: str
 
@@ -40,7 +39,7 @@ def fetch_pc_by_id(pc_id: int) -> Pc:
             pc = cur.cursor().execute(
                 "SELECT * FROM Pc WHERE PcId =?", [pc_id]
             ).fetchone()
-            pc_info = Pc(PcID=pc_id,Password=pc[1],MAC=pc[2],IPv4=pc[3],TimeUsage=pc[4],Status=pc[5])
+            pc_info = Pc(PcID=pc_id,EndTime=pc[1],Password=pc[2],IPv4=pc[3],TimeUsage=pc[4])
             return pc_info
         except Exception as err:
             print(err)

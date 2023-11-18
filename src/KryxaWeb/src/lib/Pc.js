@@ -1,11 +1,10 @@
 export class Pc {
-  constructor(PcID, Password, MAC, IPv4, TimeUsage, Status) {
+  constructor(PcID, EndTime, Password, IPv4, TimeUsage) {
     this.PcID = PcID
+    this.EndTime = EndTime
     this.Password = Password
-    this.MAC = MAC
     this.IPv4 = IPv4
     this.TimeUsage = TimeUsage
-    this.Status = Status
   }
 
   async createPc() {

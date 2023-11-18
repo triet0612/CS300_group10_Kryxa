@@ -8,7 +8,6 @@ class SaleItems(BaseModel):
     Name: Annotated[str, Field(max_length=20)]
     Price: float
     Category: Annotated[str, Field(max_length=20)]
-    ItemStatus: Literal['Deprecated', 'On sale']
     Stock: Annotated[int, Field(ge=0)]
 
 
@@ -23,8 +22,7 @@ def fetch_all_items():
                                        Name=item_row[1],
                                        Price=item_row[2],
                                        Category=item_row[3],
-                                       ItemStatus=item_row[4],
-                                       Stock=item_row[5]))
+                                       Stock=item_row[4]))
         return item_list
 
 
@@ -32,8 +30,11 @@ def fetch_items_id(itemid: int):
     with DBService() as cur:
         try:
             items = cur.cursor().execute("SELECT * FROM SaleItem where ItemID = ?", (itemid,)).fetchone()
-            fetched = SaleItems(ItemID=itemid, Name=items[1], Price=items[2], Category=items[3], ItemStatus=items[4],
-                                Stock=items[5])
+            fetched = SaleItems(ItemID=items[0],
+                                Name=items[1],
+                                Price=items[2],
+                                Category=items[3],
+                                Stock=items[4])
             return fetched
         except Exception as err:
             print(err)
@@ -42,7 +43,9 @@ def fetch_items_id(itemid: int):
 def create_item(item: SaleItems):
     with DBService() as cur:
         try:
-            cur.cursor().execute("INSERT INTO SaleItem VALUES (?,?,?,?,?,?)",
-                                 (item.ItemID, item.Name, item.Price, item.Category, item.ItemStatus, item.Stock,))
+            cur.cursor().execute("INSERT INTO SaleItem VALUES (?,?,?,?,?)",
+                                 (item.ItemID, item.Name, item.Price, item.Category, item.Stock,))
+            cur.commit()
         except Exception as err:
-            print(err)
+            cur.rollback()
+            raise err

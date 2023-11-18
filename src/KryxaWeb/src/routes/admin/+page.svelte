@@ -88,14 +88,14 @@
   </div>
 </div>
 
-<!-- <style>
+<style>
   #bg{
     display: flex;
   flex-direction: row;
   height: 100vh;
   background-size: cover;
   }
-</style> -->
+</style>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div on:keydown={close}>

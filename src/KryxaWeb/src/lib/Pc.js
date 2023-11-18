@@ -1,3 +1,5 @@
+import { redirect } from "@sveltejs/kit"
+
 export class Pc {
   constructor(PcID, EndTime, Password, IPv4, TimeUsage) {
     this.PcID = PcID
@@ -62,11 +64,16 @@ export async function get_Pcs(){ //Fetch all Pcs with their ID and Status
       "Authorization": "Bearer " + localStorage.getItem("jwt")
     },
   }))
-  .then(res => res.json())
+  .then(res=>{
+    if (res.status==401){
+      location.replace('/admin/login')
+      return
+    }
+    return res.json()
+  })
   .catch(err => {
     console.log(err); return [];
   })
-  console.log(pc_list[0])
   return pc_list
 }
 

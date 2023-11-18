@@ -23,10 +23,10 @@ def fetch_All_Pcs():
     with DBService() as cur:
         try:
             pc_info = cur.cursor().execute(
-                "SELECT PcID,Status FROM Pc "
+                "SELECT PcID,EndTime FROM Pc "
             ).fetchall()
             for i in pc_info:
-                list_Pc.append({'PcID': i[0], 'Status': i[1]})
+                list_Pc.append({'PcID': i[0], 'EndTime': i[1]})
             return list_Pc
         except Exception as err:
             print(err)

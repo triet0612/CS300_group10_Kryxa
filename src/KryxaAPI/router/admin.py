@@ -1,6 +1,6 @@
 from io import BytesIO
 from fastapi.responses import StreamingResponse
-from fastapi import APIRouter, HTTPException, Response, Depends, File
+from fastapi import APIRouter, HTTPException, Response, Depends, File, Query
 from typing import Annotated
 
 import model.PC
@@ -11,6 +11,7 @@ import array as arr
 from model.PC import Pc, fetch_pc_by_id, insert_pc, PcDTO
 from model.Admin import Admin
 from service.file import get_file
+from model.Bill import fetchSalesByMonth, fetchSalesByPcID
 
 adminRouter = APIRouter(tags=["admin"])
 file_manager = get_file()
@@ -111,7 +112,7 @@ async def create_pc(new_pc: Pc):
 #         print(err)
 #         raise HTTPException(status_code=404, detail="PC not found")
 
-@adminRouter.post("/item", dependencies=[Depends(validateAdminToken)], )
+@adminRouter.post("/item", dependencies=[Depends(validateAdminToken)])
 async def create_item(item: SaleItems):
     try:
         model.SaleItems.create_item(item)
@@ -141,3 +142,28 @@ async def get_file(filename: int):
         raise HTTPException(status_code=400, detail=str(ve))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@adminRouter.get("/sales", dependencies=[Depends(validateAdminToken)])
+async def get_sale(
+        month: Annotated[int | None, Query(ge=1, le=12)] = None,
+        year: Annotated[int | None, Query(ge=0)] = None
+):
+    if month is not None and year is not None:
+        try:
+            res = fetchSalesByMonth(month, year)
+            return res
+        except HTTPException as err:
+            raise err
+        except Exception as err:
+            print(err)
+            raise HTTPException(500, "Unknown error")
+    else:
+        try:
+            res = fetchSalesByPcID()
+            return res
+        except HTTPException as err:
+            raise err
+        except Exception as err:
+            print(err)
+            raise HTTPException(500, "Unknown error")

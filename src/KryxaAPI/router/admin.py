@@ -80,7 +80,7 @@ async def update_item(new_item_data: SaleItems):
 
 
 # delete item
-@adminRouter.delete("/item/{item_id}", dependencies=[Depends(validateAdminToken)], )
+@adminRouter.delete("/items/{item_id}", dependencies=[Depends(validateAdminToken)], )
 async def delete_item(item_id: int):
     try:
         model.SaleItems.delete_item(item_id)
@@ -88,7 +88,6 @@ async def delete_item(item_id: int):
         print(err)
         raise HTTPException(status_code=400, detail="Error delete Item")
 
-    
 
 # create item and image file
 # @adminRouter.post("/get_items", dependencies=[Depends(validateAdminToken)])

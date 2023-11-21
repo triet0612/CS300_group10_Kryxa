@@ -82,5 +82,7 @@ def delete_item(item_id: int):
     with DBService() as cur:
         try:
             cur.cursor().execute(sql_query, (item_id,))
+            cur.commit()
         except Exception as err:
+            cur.rollback()
             print(err)

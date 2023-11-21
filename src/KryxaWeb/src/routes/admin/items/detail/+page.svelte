@@ -58,7 +58,7 @@
                             placeholder="Name"
                             bind:value={item.Name}
                             class="h-fit w-full bg-[#160425]/75 rounded-lg whitespace-nowrap
-                            indent-2.5 text-4xl text-[#BA7000] leading-relaxed
+                            indent-2.5 text-4xl text-[#BA7000] leading-relaxed font-BlackOpsOne
                             placeholder:italic placeholder:text-[#BA7000]
                             focus:outline-none focus:ring-2 focus:ring-[#BA7000]"/>
                     </label>
@@ -75,14 +75,14 @@
                                     placeholder="Price"
                                     bind:value={item.Price}
                                     class="h-fit w-full bg-[#160425]/75 rounded-lg whitespace-nowrap
-                                    indent-2.5 text-3xl text-[#BA7000] leading-relaxed
+                                    indent-2.5 text-3xl text-[#BA7000] leading-relaxed font-BlackOpsOne
                                     placeholder:italic placeholder:text-[#BA7000]
                                     focus:outline-none focus:ring-2 focus:ring-[#BA7000]"/>
                             </label>
             
                             <label class="grid grid-flow-row h-fit w-full">
                                 <select class="h-fit w-full bg-[#160425]/75 rounded-lg whitespace-nowrap
-                                indent-2.5 text-3xl text-[#BA7000] leading-relaxed
+                                indent-2.5 text-3xl text-[#BA7000] leading-relaxed font-BlackOpsOne
                                 placeholder:italic placeholder:text-[#BA7000]
                                 focus:outline-none focus:ring-2 focus:ring-[#BA7000]"
                                  bind:value={item.Category}>
@@ -98,7 +98,7 @@
                                     placeholder="Stock"
                                     bind:value={item.Stock}
                                     class="h-fit w-full bg-[#160425]/75 rounded-lg whitespace-nowrap
-                                    indent-2.5 text-3xl text-[#BA7000] leading-relaxed
+                                    indent-2.5 text-3xl text-[#BA7000] leading-relaxed font-BlackOpsOne
                                     placeholder:italic placeholder:text-[#BA7000]
                                     focus:outline-none focus:ring-2 focus:ring-[#BA7000]"/>
                             </label>
@@ -109,14 +109,14 @@
                 <div class="flex flex-col h-fit w-full mx-14 px-4 gap-y-3 place-self-center">
                     <button class=" h-fit w-full {"bg-gradient-to-b from-[#160425] to-black"}/75
                                 rounded-lg
-                                text-3xl text-[#BA7000] leading-relaxed
+                                text-3xl text-[#BA7000] leading-relaxed font-BlackOpsOne
                                 hover:bg-gradient-to-b hover:from-[#160425] hover:to-cyan-500/75" 
                                 on:click={update_current_item}>
                         Edit
                     </button>
                     <button class=" h-fit w-full {"bg-gradient-to-b from-[#160425] to-black"}/75
                                 rounded-lg
-                                text-3xl text-[#BA7000] leading-relaxed
+                                text-3xl text-[#BA7000] leading-relaxed font-BlackOpsOne
                                 hover:bg-gradient-to-b hover:from-[#160425] hover:to-pink-500/75" 
                                 on:click={delete_current_item}>
                         Delete

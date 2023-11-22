@@ -7,10 +7,14 @@ from typing import Annotated
 from model.PC import Pc, start_session
 from auth import checkAdminAccount, generate_admin_token, validateAdminToken
 import model.SaleItems
+from model.SaleItems import SaleItems, create_item
+import array as arr
+from model.PC import Pc, fetch_pc_by_id, insert_pc, PcDTO, update_pc_by_id
 from model.SaleItems import SaleItems
 from model.PC import Pc, fetch_pc_by_id, insert_pc
 from model.Admin import Admin
 from service.file import get_file
+
 
 adminRouter = APIRouter(tags=["admin"])
 file_manager = get_file()
@@ -67,12 +71,32 @@ async def read_item(item_id: int):
         raise HTTPException(status_code=404, detail='File not found')
 
 
+# update item
+@adminRouter.put("/items/{item_id}", dependencies=[Depends(validateAdminToken)])
+async def update_item(new_item_data: SaleItems):
+    try:
+        t = model.SaleItems.update_item(new_item_data)
+        print(t)
+    # except FileNotFoundError as err:
+    #     print(err)
+    except Exception as err:
+        print(err)
+
+
+# delete item
+@adminRouter.delete("/items/{item_id}", dependencies=[Depends(validateAdminToken)], )
+async def delete_item(item_id: int):
+    try:
+        model.SaleItems.delete_item(item_id)
+    except Exception as err:
+        print(err)
+        raise HTTPException(status_code=400, detail="Error delete Item")
+
+
 # create item and image file
 # @adminRouter.post("/get_items", dependencies=[Depends(validateAdminToken)])
 # async def create_item(item: model.SaleItems.SaleItems, file: Annotated[bytes, File()]):
 #     return item, file
-
-
 @adminRouter.get("/pc/{pc_id}", dependencies=[Depends(validateAdminToken)])
 async def fetch_pc_id(pc_id: int) -> Pc:
     try:
@@ -103,13 +127,14 @@ async def create_pc(new_pc: Pc):
         raise HTTPException(status_code=400, detail="Error create Pc")
 
 
-# @adminRouter.post("/pc/{pc_id}", dependencies=[Depends(validateAdminToken)])
-# async def edit_pc(pc_info: PcDTO):
-#     try:
-#         return update_pc_by_id(pc_info)
-#     except Exception as err:
-#         print(err)
-#         raise HTTPException(status_code=404, detail="PC not found")
+@adminRouter.put("/pc/{pc_id}", dependencies=[Depends(validateAdminToken)])
+async def edit_pc(pc_info: PcDTO):
+    try:
+        return update_pc_by_id(pc_info)
+    except Exception as err:
+        print(err)
+        raise HTTPException(status_code=404, detail="PC not found")
+
 
 @adminRouter.post("/item", dependencies=[Depends(validateAdminToken)], )
 async def create_item(item: SaleItems):

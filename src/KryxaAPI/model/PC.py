@@ -17,26 +17,21 @@ class Pc(BaseModel):
 
 class PcDTO(BaseModel):
     PcID: Annotated[int, Field(ge=0)]
-    Status: Literal['Available', 'Unavailable', 'Maintenance']
-
+    Password: Annotated[str, Field(max_length=3, min_length=3)]
+    IPv4: str
 
 # TODO: getAllPcsForView()
 
 def fetch_All_Pcs():
-    list_pc = []
+    list_Pc = []
     with DBService() as cur:
         try:
             pc_info = cur.cursor().execute(
-                "SELECT PcID, EndTime FROM Pc"
+                "SELECT PcID,EndTime FROM Pc "
             ).fetchall()
             for i in pc_info:
-                pc_id = i[0]
-                end_time = i[1]
-                status = "Unavailable"
-                if datetime.fromisoformat(end_time) < datetime.now():
-                    status="Available"
-                list_pc.append(PcDTO(PcID=pc_id, Status=status))
-            return list_pc
+                list_Pc.append({'PcID': i[0], 'EndTime': i[1]})
+            return list_Pc
         except Exception as err:
             print(err)
 
@@ -48,24 +43,24 @@ def fetch_pc_by_id(pc_id: int) -> Pc:
             pc = cur.cursor().execute(
                 "SELECT * FROM Pc WHERE PcId =?", [pc_id]
             ).fetchone()
-            pc_info = Pc(PcID=pc_id, Password=pc[1], MAC=pc[2], IPv4=pc[3], TimeUsage=pc[4], Status=pc[5])
+            pc_info = Pc(PcID=pc_id,EndTime=pc[1],Password=pc[2],IPv4=pc[3],TimeUsage=pc[4])
             return pc_info
         except Exception as err:
             print(err)
 
 
 # TODO: UpdatePCbyID(id: int)
-# def update_pc_by_id(pc_info: PcDTO) -> str:
-#     with DBService() as cur:
-#         try:
-#             cur.execute(
-#                 "UPDATE Pc SET MAC = ?, IPv4 = ? WHERE PcID = ?", [pc_info.MAC, pc_info.IPv4, pc_info.PcID]
-#             )
-#             cur.commit()
-#             return pc_info.IPv4
-#         except Exception as err:
-#             cur.rollback()
-#             raise err
+def update_pc_by_id(pc_info: PcDTO) -> str:
+    with DBService() as cur:
+        try:
+            cur.execute(
+                "UPDATE Pc SET Password = ?, IPv4 = ? WHERE PcID = ?", [pc_info.Password, pc_info.IPv4, pc_info.PcID]
+            )
+            cur.commit()
+            return pc_info.IPv4
+        except Exception as err:
+            cur.rollback()
+            raise err
 
 def insert_pc(new_pc: Pc):
     with DBService() as cur:

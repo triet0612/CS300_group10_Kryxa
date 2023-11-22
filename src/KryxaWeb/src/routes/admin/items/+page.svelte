@@ -1,6 +1,5 @@
 <script>
   import AdminNav from "$lib/components/AdminNav.svelte";
-
   import {Item,fetch_all,fetch_category} from '$lib/Item.js';
   import { onMount } from "svelte";
   import {MainScreen} from '$lib/Assets.js';

@@ -2,13 +2,17 @@ from io import BytesIO
 from fastapi.responses import StreamingResponse
 from fastapi import APIRouter, HTTPException, Response, Depends, File
 from typing import Annotated
+from auth import checkAdminAccount, generate_admin_token, validateAdminToken, AccountDTO
 
 import model.PC
-from auth import checkAdminAccount, generate_admin_token, validateAdminToken, AccountDTO
+from model.PC import Pc, fetch_pc_by_id, insert_pc, PcDTO
+
 import model.SaleItems
 from model.SaleItems import SaleItems, create_item
-import array as arr
-from model.PC import Pc, fetch_pc_by_id, insert_pc, PcDTO
+
+import model.Bill
+from model.Bill import Bill, fetch_all_bills
+
 from model.Admin import Admin
 from service.file import get_file
 
@@ -32,6 +36,21 @@ async def login(acc: Admin, res: Response) -> str:
     except Exception as err:
         print(err)
         raise HTTPException(status_code=401, detail="Error validating")
+
+
+@adminRouter.get("/bills", dependencies=[Depends(validateAdminToken)])
+async def get_all_bills(Datetime: str | None = None):
+    try:
+        bill_list = model.Bill.fetch_all_bills()
+        if len(bill_list) == 0:
+            raise HTTPException(status_code=404,
+                                detail="No items")  # This should not be 404, should have a notification screen
+
+        # if Datetime:
+        #     item_list[:] = [item for item in item_list if item.Category == item_category]
+        return bill_list
+    except HTTPException:
+        pass  # ignore HTTPException
 
 
 @adminRouter.get("/items", dependencies=[Depends(validateAdminToken)])

@@ -29,4 +29,4 @@ CREATE TABLE "Bill" (
 INSERT INTO Admin VALUES ("1234");
 INSERT INTO Pc VALUES (0, "2023-11-13T10:46:00", "123", "192.168.0.2", 0);
 INSERT INTO SaleItem VALUES (1,"Com ga 1",50000,"Food",2);
-I
+INSERT INTO Bill VALUES(1,0,"2023-11-13T10:46:00","",0,"[{'Name':'Com ga`', 'Amount': 2, 'Price': 3}]");

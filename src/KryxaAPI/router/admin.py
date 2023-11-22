@@ -86,12 +86,32 @@ async def read_item(item_id: int):
         raise HTTPException(status_code=404, detail='File not found')
 
 
+# update item
+@adminRouter.put("/items/{item_id}", dependencies=[Depends(validateAdminToken)])
+async def update_item(new_item_data: SaleItems):
+    try:
+        t = model.SaleItems.update_item(new_item_data)
+        print(t)
+    # except FileNotFoundError as err:
+    #     print(err)
+    except Exception as err:
+        print(err)
+
+
+# delete item
+@adminRouter.delete("/items/{item_id}", dependencies=[Depends(validateAdminToken)], )
+async def delete_item(item_id: int):
+    try:
+        model.SaleItems.delete_item(item_id)
+    except Exception as err:
+        print(err)
+        raise HTTPException(status_code=400, detail="Error delete Item")
+
+
 # create item and image file
 # @adminRouter.post("/get_items", dependencies=[Depends(validateAdminToken)])
 # async def create_item(item: model.SaleItems.SaleItems, file: Annotated[bytes, File()]):
 #     return item, file
-
-
 @adminRouter.get("/pc/{pc_id}", dependencies=[Depends(validateAdminToken)])
 async def fetch_pc_id(pc_id: int) -> Pc:
     try:

@@ -39,77 +39,73 @@
     <div class="flex flex-col">
         <AdminNav />
     </div>
-    <div clas="flex flex-col ">
-        <div class = "bg-white/5 backdrop-blur-md rounded-lg mt-40 ml-40 m-auto w-full h-3/5 text-4xl ">
-            <div class="flex flex-row">
-                <div class = "basis-3/5 grid ml-10 text-amber-700" >
-
-                    <div class = " flex flex-row mt-10 ">
-                        <div class ="w-1/2 flex items-center  h-12 bg-violet-900/50 rounded font-BlackOpsOne"  >
-                            PC ID: {pc_info.PcID}
-                        </div>
-                        <input class ="ml-10 w-1/2 h-12  bg-violet-900/50 rounded font-BlackOpsOne" 
-                            placeholder={pc_info.Password}
-                            bind:value = {pc_info.Password}
-                        >
+    <div class = "flex flex-col bg-white/5 backdrop-blur-md rounded-lg mt-40 ml-40 m-auto w-2/3 h-3/5 text-4xl ">
+        <div class="flex flex-row">
+            <div class = "basis-3/5 grid ml-10 text-amber-400" >
+                <div class = " flex flex-row mt-10 ">
+                    <div class ="w-1/3 pl-5  flex items-center  h-16 rounded font-BlackOpsOne">
+                        PC ID: 
                     </div>
-                    
-                    <input class ="h-12  bg-violet-900/50 rounded font-BlackOpsOne" 
-                        placeholder={pc_info.IPv4}
-                        bind:value={pc_info.IPv4}
+                    <div class ="w-1/5 pl-5  flex items-center h-16 bg-violet-900/50 rounded font-BlackOpsOne"  >
+                        {pc_info.PcID}
+                    </div>
+                    <div class ="ml-10 w-1/2 pl-5  flex items-center  h-16 rounded font-BlackOpsOne">
+                        Password:
+                    </div>
+                    <input class =" w-1/4 pl-5 h-16  bg-violet-900/50 rounded font-BlackOpsOne" 
+                        placeholder={pc_info.Password}
+                        bind:value = {pc_info.Password}
                     >
-                    <div class ="flex items-center h-12  bg-violet-900/50 rounded font-BlackOpsOne">
-                        {newTime}
-                    </div>
                     
-                    
-
-                
-                    
-                    <div class ="flex flex-row">
-                        <button class = " h-12 w-2/3 h-10 rounded-lg hover:bg-amber-600 active:bg-black  bg-violet-900/50 text-amber-700 font-BlackOpsOne">
-                            Bill
-                        </button>
-                        <button on:click={async () => click()}
-                            class = "ml-10  h-12 w-2/3 h-10 rounded-lg hover:bg-amber-600 active:bg-black  bg-violet-900/50 text-amber-700 font-BlackOpsOne">
-                            Save
-                        </button>
-                        <button class = "ml-10  h-12 w-2/3 h-10 rounded-lg hover:bg-amber-600 active:bg-black  bg-violet-900/50 text-amber-700 font-BlackOpsOne">
-                            Terminate
-                        </button>
-                    </div>
                 </div>
-                <div class="flex flex-col basis-2/5 text-amber-700 text-3xl">
-                    <div class ="">
-                        <button class = "ml-16 mt-10 h-12 w-2/3 rounded-lg hover:bg-amber-600 active:bg-black  bg-violet-900/50 font-BlackOpsOne">
-                            Open
-                        </button>
+                <input class ="h-16 pl-5 bg-violet-900/50 rounded font-BlackOpsOne" 
+                    placeholder={pc_info.IPv4}
+                    bind:value={pc_info.IPv4}
+                >
+                <div class ="flex pl-5 items-center h-16  bg-violet-900/50 rounded font-BlackOpsOne">
+                    {newTime}
+                </div>
+                <div class ="flex flex-row text-amber-400">
+                    <button class = " h-12 w-2/3 h-16 rounded-full hover:bg-yellow-300 hover:text-violet-900 active:bg-black  bg-violet-900  font-BlackOpsOne">
+                        Bill
+                    </button>
+                    <button on:click={async () => click()}
+                        class = "ml-10  h-12 w-2/3 h-16 rounded-full hover:bg-amber-400 hover:text-violet-900 active:bg-black  bg-violet-900  font-BlackOpsOne">
+                        Save
+                    </button>
+                    <button class = "ml-10  h-12 w-2/3 h-16 rounded-full hover:bg-amber-400 hover:text-violet-900 active:bg-black  bg-violet-900 font-BlackOpsOne">
+                        Terminate
+                    </button>
+                </div>
+            </div>
+            <div class="flex flex-col basis-2/5 text-amber-400 text-3xl">
+                <div class ="">
+                    <button class = "ml-16 mt-10 h-16 w-2/3 rounded-full hover:bg-amber-400 hover:text-violet-900 active:bg-black  bg-violet-900 text-yellow-300 font-BlackOpsOne">
+                        Open
+                    </button>
+                </div>
+                <div class="mt-5 w-2/3 ml-16 {real_time > pc_info.EndTime
+                    ? 'bg-green-600 bg-opacity-75'
+                    : real_time < pc_info.EndTime
+                    ? 'bg-red-600 bg-opacity-75'
+                    : 'bg-white  bg-opacity-25'}
+                    rounded-xl">
+                    <img 
+                      src={MainScreen["pc_screen"]}
+                      alt="screen"
+                      class="bg-contain w-11/12 m-auto"
+                    />
+                </div>
+                
+                <div class = "ml-10 flex flex-row">
+                    <input class ="text-center mt-5 ml-10 w-24 h-16 bg-violet-900/50 rounded font-BlackOpsOne" type ="number">
+                    <div class ="mt-7 ml-3 text-amber-300 font-BlackOpsOne">
+                        x30m    
                     </div>
-                    
-                    <div class="mt-5 w-2/3 ml-16 {real_time > pc_info.EndTime
-                        ? 'bg-green-600 bg-opacity-75'
-                        : real_time < pc_info.EndTime
-                        ? 'bg-red-600 bg-opacity-75'
-                        : 'bg-white  bg-opacity-25'}
-                        rounded-xl">
-                        <img 
-                          src={MainScreen["pc_screen"]}
-                          alt="screen"
-                          class="bg-contain w-11/12 m-auto"
-                        />
-                    </div>
-
-                    
-                    <div class = "ml-10 flex flex-row">
-                        <input class ="text-center mt-5 ml-10 w-24 h-12 bg-violet-900/50 rounded font-BlackOpsOne" type ="number">
-                        <div class ="mt-7 ml-3 text-amber-300 font-BlackOpsOne">
-                            x30m    
-                        </div>
-                    </div>
-                    
                 </div>
                 
             </div>
+            
         </div>
     </div>
 </div>

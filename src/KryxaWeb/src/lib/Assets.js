@@ -7,6 +7,7 @@ import pc_screen from '$lib/assets/admin/pc_screen.png'
 import addPc from '$lib/assets/admin/addPc.png'
 import banner from '$lib/assets/banner.png'
 import board from '$lib/assets/admin/board.png'
+import billform from '$lib/assets/bill.png'
 
 import Com_ga_1 from '$lib/items/Com_ga_1.jpg'
 import Com_ga_2 from '$lib/items/Com ga 2.jpg'
@@ -29,7 +30,8 @@ export const MainScreen ={
   "Background2": bg_3,
   "Background3": bg_4,
   "Background4": bg_5,
-  "addItem": addItem
+  "addItem": addItem,
+  "Billform": billform
 }
 
 export const PcInfo = {

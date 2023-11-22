@@ -3,11 +3,43 @@
   import { MainScreen } from "$lib/Assets.js";
   import { Bill, fetch_all } from "$lib/Bill.js";
   import { onMount } from "svelte";
-  let pc_list = [];
+  let bill_list = [];
   onMount(async () => {
     bill_list = await fetch_all().then((res) => res);
-    console.log(bill_list);
   });
+  function cur(){
+    const now = new Date();
+    const currentHour = ('0' + now.getHours()).slice(-2);
+    const currentMinute = ('0' + now.getMinutes()).slice(-2);
+    const currentSecond = ('0' + now.getSeconds()).slice(-2);
+    const currentDay = ('0' + now.getDate()).slice(-2);
+    const currentMonth = ('0' + (now.getMonth() + 1)).slice(-2);
+    const currentYear = now.getFullYear();
+
+    // Displaying the current time
+    const datee = `${currentDay}/${currentMonth}/${currentYear} ${currentHour}:${currentMinute}:${currentSecond} `;
+    console.log(datee);
+    return datee;
+  }
+  function refort(str){
+
+    
+    
+    const originalDate = new Date(str);
+
+    const year = originalDate.getFullYear();
+    const month = ('0' + (originalDate.getMonth() + 1)).slice(-2); // Adding 1 because months are zero-based
+    const day = ('0' + originalDate.getDate()).slice(-2);
+    const hours = ('0' + originalDate.getHours()).slice(-2);
+    const minutes = ('0' + originalDate.getMinutes()).slice(-2);
+    const seconds = ('0' + originalDate.getSeconds()).slice(-2);
+    
+    const formattedDateString = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+
+    console.log(formattedDateString);
+
+    return formattedDateString
+  }
 </script>
 
 <!-- <div class="flex flex-row h-screen bg-gradient-to-b from-black to-[#352900]"> -->
@@ -20,21 +52,53 @@
     <AdminNav />
   </div>
   <div class="flex-col flex h-screen w-auto text-white">
-    <div class="flex-col">p</div>
+    <div id="Nav" class="flex-col">p</div>
     <div class="flex-col flex">
       <div class="grid grid-flow-col grid-cols-2 gap-5">
-        <div id="boxed" class="box-content border-2">p</div>
-        <div id="boxed" class="box-content border-2">p</div>
+        <div id="gr">
+          <ul class="grid grid-flow-row grid-cols-3 m-7 gap-5">
+            {#each bill_list as valid}
+              <li class="text-center justify-center items-center" style ="{refort(valid.Datetime) <=cur() ? 'display:none':''}">
+                <div id="bi" class="grid grid-flow-row auto-rows-max">
+                  <img src={MainScreen["Billform"]} alt="screen"/>
+                  <div class="justify-center">{valid.BillID} : {refort(valid.Datetime)}</div>
+                </div>
+              </li>
+            {/each}
+          </ul>
+        </div>
+        <div id="rd">
+          <ul class="grid grid-flow-row grid-cols-3 m-7 gap-5">
+            {#each bill_list as valid}
+              <li class="text-center justify-center items-center" style ="{refort(valid.Datetime) >cur() ? 'display:none':''}">
+                <div id="bi" class="grid grid-flow-row auto-rows-max">
+                  <img src={MainScreen["Billform"]} alt="screen"/>
+                  <div class="justify-center">{valid.BillID} : {refort(valid.Datetime)}</div>
+                </div>
+              </li>
+            {/each}
+          </ul>
+        </div>
       </div>
     </div>
   </div>
 </div>
-  
 <style>
-  #boxed{
+  #bi{
+    width: 170px;
+    height: 200px;
+  }
+  #gr{
     width: 700px;
     height: 800px;
     border-radius: 20px;
+    background-color: rgba(22, 101, 52, 0.8);
+  }
+  #rd{
+    width: 700px;
+    height: 800px;
+    border-radius: 20px;
+    background-color: rgba(153, 27, 27, 0.8);
   }
 </style>
 

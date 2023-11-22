@@ -1,78 +1,129 @@
 <script>
-    import AdminNav from "$lib/components/AdminNav.svelte";
-    import {ImageItem} from "$lib/Assets.js"
-    import {Item} from "$lib/Item.js"
-    import { onMount } from "svelte";
-    // console.log(urlSearchParams.get("item_id"))
+    import AdminNav from "$lib/components/AdminNav.svelte"
+    import {MainScreen} from '$lib/Assets.js'
+    import {Item, update_item, delete_item, createImage} from "$lib/Item.js"
+    import { onMount } from "svelte"
+    import ModalItem from "$lib/components/ModalItem.svelte"
     
     let item = new Item(-1, "", 0, "", "", 0)
+    let files = undefined
     onMount(async ()=>{
         const urlSearchParams = new URLSearchParams(window.location.search).get("item_id");
         console.log("Requested item ID: " + urlSearchParams)
         item = await item.getItemByID(urlSearchParams).then(res => res)
     })
-    console.log(item.ID)
-    console.log(item.Name)
-    console.log(item.Price)
-    console.log(item.Category)
-    console.log(item.ItemStatus)
-    console.log(item.Stock)
+
+    async function update_current_item(){
+        let upd_statcode = await update_item(item).then(res => res)
+        let upd_img_statcode = await createImage(files, item.ItemID).then(res => res)
+
+        if (upd_statcode != 200){
+            console.log("Item update failed")
+        }
+
+        if (upd_img_statcode != 200){
+            console.log("Item image update failed")
+        }
+
+        console.log(item)
+        location.reload()
+    }
+
+    async function delete_current_item(){
+        let del_statcode = await delete_item(item.ItemID).then(res => res)
+        
+        if (del_statcode != 200){
+            console.log("Item deletion failed")
+        }
+
+        console.log("Delete item called")
+        window.location.replace("/admin/items")
+    } 
 
 </script>
 
-<div class="bg-gradient-to-b from-black to-yellow-600 flex flex-row">
-    <div class="flex flex-col">
+<div 
+    class="flex flex-row h-full w-full bg-cover bg-fixed"
+    style="background-image: url({MainScreen['Background2']});">
+    <div class="w-fit">
         <AdminNav></AdminNav>
     </div>
-    <div class="w-full flex content-center">
-        <div id="detail-box" class="flex flex-row border-4 border-[#facc15] rounded-lg bg-none my-auto mx-auto h-3/4 w-3/4">
-            <div id="item-detail-box-info" class="rounded-l-lg ml-0 h-full w-2/3 text-black">
-                {#if !item.Name}
-                    <script>
-                        console.log("Svelte#if: There is no item with such ID")
-                    </script>
-                    <p class="text-white"> There is no item with such ID, please return to previous page. *This message will be updated later*</p>
-                {:else}
-                    <div class="grid grid-flow-col grid-cols-2 gap-0 items-stretch h-1/2 w-full">
-                        <div class = "h-full">
-                            <img src={ImageItem[item.Name]} alt="selected item image" class="max-w-full max-h-full"/>
+    <div class="w-full h-screen flex">
+        <div class="w-fit h-fit mx-auto place-self-center p-16 border-2 rounded-lg {"bg-gradient-to-b from-[#342267] to-black"}/30">
+            <div class="w-fit h-fit grid grid-cols-3">
+                <div class="w-full h-fit flex flex-col gap-y-3 col-span-2">
+                    <label class="grid grid-flow-row h-fit w-full pr-4">
+                        <input 
+                            type="text" 
+                            placeholder="Name"
+                            bind:value={item.Name}
+                            class="h-fit w-full bg-[#160425]/75 rounded-lg whitespace-nowrap
+                            indent-2.5 text-4xl text-[#BA7000] leading-relaxed font-BlackOpsOne
+                            placeholder:italic placeholder:text-[#BA7000]
+                            focus:outline-none focus:ring-2 focus:ring-[#BA7000]"/>
+                    </label>
+                    <div class="w-fit h-fit grid grid-flow-col">
+                        <div class="w-[255px] h-fit grid grid-flow-row gap-y-4">
+                            <!-- svelte-ignore a11y-img-redundant-alt -->
+                            <img src="http://localhost:8000/api/admin/getfile/{item.ItemID}" alt="Item Image" class="w-[255px] h-[255px]">
+                            <input bind:files class="w-full h-fit my-1 mx-1 bg-white rounded-xl text-left" type="file" accept="image/png, image/jpeg">
                         </div>
-                        <div class = "grid grid-flow-row place-content-center gap-4 h-full bg-none">
-                            <label class="grid grid-flow-row place-content-center h-fit mx-auto w-9/10">
-                                <span class="text-slate-200 text-3xl">
-                                    Item Name
-                                </span>
-                                <input type="text" value={item.Name} name="Item Name"
-                                    class="h-fit w-full border-2 border-[#facc15] rounded-lg text-2xl text-[#BA7000] whitespace-nowrap"/>
+                        <div class="h-fit grid grid-flow-row gap-y-10 mx-4">
+                            <label class="grid grid-flow-row h-fit w-full">
+                                <input 
+                                    type="number"
+                                    placeholder="Price"
+                                    bind:value={item.Price}
+                                    class="h-fit w-full bg-[#160425]/75 rounded-lg whitespace-nowrap
+                                    indent-2.5 text-3xl text-[#BA7000] leading-relaxed font-BlackOpsOne
+                                    placeholder:italic placeholder:text-[#BA7000]
+                                    focus:outline-none focus:ring-2 focus:ring-[#BA7000]"/>
                             </label>
-                            
-                            <label class="grid grid-flow-row place-content-center h-fit mx-auto w-9/10">
-                                <span class="text-slate-200 text-3xl">
-                                    Price
-                                </span>
-                                <input type="number" value={item.Price} 
-                                class="h-fit mx-auto w-full border-2 border-[#facc15] rounded-lg text-2xl text-[#BA7000] whitespace-nowrap"/>
-                            </label>
-
-                        </div>
-                    </div>
-                    <div class="grid grid-flow-row grid-cols-1 h-1/2 w-full">
-                        <label class="h-3/4 w-3/4 mt-16 mx-auto text-slate-200 text-3xl">
-                            Description
-                            <input type="text" value={item.ItemStatus} 
-                                class="h-full w-full border-2 border-[#facc15] rounded-lg text-2xl text-[#BA7000] text-start  whitespace-pre-line"/>
-                        </label>
-                        <button name="edit_item_button" type="button" value="Edit" 
-                                class="self-end mb-10 mx-auto text-orange-400 text-2xl whitespace-nowrap bg-white w-11/12 h-fit">
-                            Edit
-                        </button> 
-                    </div>
-                {/if}
-            </div>
-            <div id="item-detail-box-kryxa-img" class="rounded-r-lg bg-black mr-0 h-full w-1/3 text-white">
-                <p> Kryxa image here</p>
-            </div>
             
+                            <label class="grid grid-flow-row h-fit w-full">
+                                <select class="h-fit w-full bg-[#160425]/75 rounded-lg whitespace-nowrap
+                                indent-2.5 text-3xl text-[#BA7000] leading-relaxed font-BlackOpsOne
+                                placeholder:italic placeholder:text-[#BA7000]
+                                focus:outline-none focus:ring-2 focus:ring-[#BA7000]"
+                                 bind:value={item.Category}>
+                                    <option item.Category="Time" class="text-3xl focus:outline-none focus:ring-2 focus:ring-[#BA7000]" >Time</option>
+                                    <option item.Category="Food" class="text-3xl focus:outline-none focus:ring-2 focus:ring-[#BA7000]">Food</option>
+                                    <option item.Category="Drink" class="text-3xl focus:outline-none focus:ring-2 focus:ring-[#BA7000]">Drink</option>
+                                </select>
+                            </label>
+            
+                            <label class="grid grid-flow-row h-fit w-full">
+                                <input 
+                                    type="number"
+                                    placeholder="Stock"
+                                    bind:value={item.Stock}
+                                    class="h-fit w-full bg-[#160425]/75 rounded-lg whitespace-nowrap
+                                    indent-2.5 text-3xl text-[#BA7000] leading-relaxed font-BlackOpsOne
+                                    placeholder:italic placeholder:text-[#BA7000]
+                                    focus:outline-none focus:ring-2 focus:ring-[#BA7000]"/>
+                            </label>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="flex flex-col h-fit w-full mx-14 px-4 gap-y-3 place-self-center">
+                    <button class=" h-fit w-full {"bg-gradient-to-b from-[#160425] to-black"}/75
+                                rounded-lg
+                                text-3xl text-[#BA7000] leading-relaxed font-BlackOpsOne
+                                hover:bg-gradient-to-b hover:from-[#160425] hover:to-cyan-500/75" 
+                                on:click={update_current_item}>
+                        Edit
+                    </button>
+                    <button class=" h-fit w-full {"bg-gradient-to-b from-[#160425] to-black"}/75
+                                rounded-lg
+                                text-3xl text-[#BA7000] leading-relaxed font-BlackOpsOne
+                                hover:bg-gradient-to-b hover:from-[#160425] hover:to-pink-500/75" 
+                                on:click={delete_current_item}>
+                        Delete
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
+    
 </div>

@@ -36,4 +36,50 @@ export class Account {
       location.replace('/')
     }
   }
+
+  // async changePassword(oldPass,newPass){
+  //   let url = "http://localhost:8000/api/admin/account"
+  //   let newPass = await fetch(url,{
+  //   method: "POST",
+  //   body: JSON.stringify({
+  //     "oldPassword": oldPass,
+  //     "newPassword": newPass
+  //   }),
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //     "Authorization": "Bearer " + localStorage.getItem("jwt")
+  //   },
+  // })
+  // .then(res=>res.json())
+  // .catch(err => {
+  //   console.log(err)
+  //   return 500
+  // })
+  // console.log(newPass)
+  // return newPass
+  // }
+
+ 
+}
+
+export async function changePassword(oldPass,newPass){
+  let url = `http://localhost:8000/api/admin/account?oldPassword=${oldPass}&newPassword=${newPass}`
+  let statcode = await fetch(url,{
+    method: "POST",
+    body: JSON.stringify({
+      "oldPassword": oldPass,
+      "newPassword": newPass
+  }),
+      headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + localStorage.getItem("jwt")
+  },
+})
+.then(res=>res.json())
+.catch(err => {
+  console.log(err)
+  return 500
+})
+console.log(statcode)
+return statcode
 }

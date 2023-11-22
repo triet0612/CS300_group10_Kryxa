@@ -77,3 +77,20 @@ def validatePcToken(creds=Depends(jwt_auth)) -> AccountDTO:
     except Exception as err:
         print(err)
         raise HTTPException(status_code=401, detail='Error token')
+
+
+def change_password(oldPassword:str, newPassword:str) -> bool:
+    with DBService() as cur:
+        try:
+            row = cur.cursor().execute("SELECT Password FROM Admin").fetchone()
+            if oldPassword != row[0]:
+                return False
+            cur.execute(
+                "UPDATE Admin SET Password=?",
+                [newPassword]
+            )
+            cur.commit()
+            return True
+        except Exception as err:
+            cur.rollback()
+            print(err)

@@ -1,10 +1,9 @@
 <script>
     import Plotly from 'plotly.js-dist-min'
-    import { onMount } from 'svelte';
 
     let plot;
     const layout = {
-        title: `Sales per PC`,
+        title: `Time usage`,
         font: {
             size: 18,
             color: 'white',
@@ -21,16 +20,23 @@
         plot_bgcolor: '#424242',
         xaxis: {
             type: 'category',
-            title: {text: "PcID",standoff: 50},
+            title: {
+                text: "PcID",
+                standoff: 50,
+            },
             color: 'white'
         },
         yaxis: {
-            title: {text: "Sales",standoff: 50},
+            title: {
+                text: "Time (minute)",
+                standoff: 50,
+            },
             color: 'white'
         }
     };
+
     async function fetchStats() {
-        let sales = await fetch(`http://localhost:8000/api/admin/sales`, {
+        let sales = await fetch(`http://localhost:8000/api/admin/pc/time/`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -45,17 +51,22 @@
         }).catch(err => {console.log(err); return {}})
         let data = [{
             x: sales["pc_list"],
-            y: sales["sales"],
+            y: sales["time_usage_list"],
             type: "bar",
+            mode: "lines+markers",
             marker: {
-                color: '#B24BF3',
-            }
+                color: 'lightgreen',
+                size: 10,
+            },
+            line: {color: '#B24BF3'}
         }];
         Plotly.newPlot(plot, data, layout); 
     }
-    onMount(() => {
-        fetchStats()
-    })
+
+    $: fetchStats()
+
 </script>
 
-<div class="h-full w-full my-2" bind:this={plot}></div>
+<div class="h-full font-BlackOpsOne text-xl text-purple-300">
+    <div class="h-[95%] w-full my-2" bind:this={plot}></div>
+</div>

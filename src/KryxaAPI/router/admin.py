@@ -8,7 +8,7 @@ from auth import checkAdminAccount, generate_admin_token, validateAdminToken, Ac
 import model.SaleItems
 from model.SaleItems import SaleItems, create_item
 import array as arr
-from model.PC import Pc, fetch_pc_by_id, insert_pc, PcDTO
+from model.PC import Pc, fetch_pc_by_id, insert_pc, PcDTO, fetch_time_usage
 from model.Admin import Admin
 from service.file import get_file
 from model.Bill import fetchSalesByMonth, fetchSalesByPcID
@@ -167,3 +167,16 @@ async def get_sale(
         except Exception as err:
             print(err)
             raise HTTPException(500, "Unknown error")
+
+
+@adminRouter.get("/pc/time/", dependencies=[Depends(validateAdminToken)])
+def get_time_usage():
+    try:
+        res = fetch_time_usage()
+        return res
+    except HTTPException as err:
+        print(err)
+        raise err
+    except Exception as err:
+        print(err)
+        raise HTTPException(500, "Unknown error")

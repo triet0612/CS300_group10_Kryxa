@@ -64,7 +64,7 @@
                 color: 'yellow',
                 size: 10,
             },
-            line: {color: 'blue'}
+            line: {color: '#B24BF3'}
         }];
         Plotly.newPlot(plot, data, layout); 
     }

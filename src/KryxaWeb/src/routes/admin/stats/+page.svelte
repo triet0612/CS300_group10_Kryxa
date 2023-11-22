@@ -2,6 +2,7 @@
     import AdminNav from "$lib/components/AdminNav.svelte"
     import SaleStats from "$lib/components/SaleStats.svelte";
     import PCSales from "$lib/components/PCSales.svelte";
+    import TimeUsageStats from "$lib/components/TimeUsageStats.svelte";
 
     let chart_type;
 </script>
@@ -24,7 +25,7 @@
             {:else if chart_type === "sales_pc"}
                 <PCSales/>
             {:else if chart_type === "timeusage"}
-                <PCSales/>
+                <TimeUsageStats/>
             {/if}
         </div>
     </div>

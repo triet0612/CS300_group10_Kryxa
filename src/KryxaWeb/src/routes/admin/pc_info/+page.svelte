@@ -42,7 +42,7 @@
     <div clas="flex flex-col ">
         <div class = "bg-white/5 backdrop-blur-md rounded-lg mt-40 ml-40 m-auto w-full h-3/5 text-4xl ">
             <div class="flex flex-row">
-                <div class = "basis-3/5 grid ml-10 text-amber-700 x" >
+                <div class = "basis-3/5 grid ml-10 text-amber-700" >
 
                     <div class = " flex flex-row mt-10 ">
                         <div class ="w-1/2 flex items-center  h-12 bg-violet-900/50 rounded font-BlackOpsOne"  >

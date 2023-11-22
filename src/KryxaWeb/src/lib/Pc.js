@@ -43,7 +43,13 @@ export class Pc {
         "Authorization": "Bearer " + localStorage.getItem("jwt")
       },
     })
-    .then(res=>res.json())
+    .then(res=>{
+      if (res.status==401){
+        location.replace('/admin/login')
+        return
+      }
+      return res.json()
+    })
     .catch(err => {
       console.log(err)
       return 500
@@ -92,7 +98,13 @@ export async function updateThisPcByID(pc_info,pc_id){
       "Authorization": "Bearer " + localStorage.getItem("jwt")
     },
   })
-  .then(res=>res.status)
+  .then(res=>{
+    if (res.status === 401) {
+      alert("Not logged in")
+      location.replace("/admin/login")
+  }
+    return res.json()
+  })
   .catch(err => {
     console.log(err)
     return 500

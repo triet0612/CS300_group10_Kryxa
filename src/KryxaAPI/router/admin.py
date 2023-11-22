@@ -11,6 +11,7 @@ import array as arr
 from model.PC import Pc, fetch_pc_by_id, insert_pc, PcDTO
 from model.Admin import Admin
 from service.file import get_file
+from model.Bill import Bill, fetch_bill_byID
 
 adminRouter = APIRouter(tags=["admin"])
 file_manager = get_file()
@@ -141,3 +142,13 @@ async def get_file(filename: int):
         raise HTTPException(status_code=400, detail=str(ve))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@adminRouter.get("/bills/{bill_id}", dependencies=[Depends(validateAdminToken)])
+async def view_bill_info(bill_id: int) -> Bill:
+    try:
+        bill_info = fetch_bill_byID(bill_id)
+        return bill_info
+    except Exception as err:
+        print(err)
+        raise HTTPException(status_code=404, detail="No bill with that id")

@@ -23,9 +23,10 @@ CREATE TABLE "Bill" (
     "Datetime" TEXT NOT NULL,
     "Note" TEXT CHECK (LENGTH("Note") <= 100),
     "Total" REAL NOT NULL DEFAULT 0,
-    "Cart" TEXT NOT NULL,
+    "Cart" TEXT,
     FOREIGN KEY("PcID") REFERENCES "Pc"("PcID")
 );
 INSERT INTO Admin VALUES ("1234");
 INSERT INTO Pc VALUES (0, "2024-11-13T10:46:00", "123", "192.168.0.2", 0);
 INSERT INTO SaleItem VALUES (1,"Com ga 1",50000,"Food",2);
+INSERT INTO Bill VALUES (123,0,"2024-11-13T10:46:00","",200000,"[{'Name':'Com ga', 'Amount': 2, 'Price': 200000}]");

@@ -63,7 +63,8 @@ export class Account {
 }
 
 export async function changePassword(oldPass,newPass){
-  let url = `http://localhost:8000/api/admin/account?oldPassword=${oldPass}&newPassword=${newPass}`
+  // let url = `http://localhost:8000/api/admin/account?oldPassword=${oldPass}&newPassword=${newPass}`
+  let url = "http://localhost:8000/api/admin/account"
   let statcode = await fetch(url,{
     method: "POST",
     body: JSON.stringify({

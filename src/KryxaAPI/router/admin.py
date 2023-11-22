@@ -4,7 +4,7 @@ from fastapi import APIRouter, HTTPException, Response, Depends, File
 from typing import Annotated
 
 import model.PC
-from auth import checkAdminAccount, generate_admin_token, validateAdminToken, AccountDTO, change_password
+from auth import checkAdminAccount, generate_admin_token, validateAdminToken, AccountDTO, ChangePassword, change_password
 import model.SaleItems
 from model.SaleItems import SaleItems, create_item
 import array as arr
@@ -144,9 +144,9 @@ async def get_file(filename: int):
 
 
 @adminRouter.post("/account")
-async def get_new_password(oldPassword:str, newPassword:str):
+async def get_new_password(item: ChangePassword):
     try:
-        return change_password(oldPassword, newPassword)
+        return change_password(item)
     except Exception as e:
         print(e)
         raise HTTPException(status_code=400, detail="Error saving password")

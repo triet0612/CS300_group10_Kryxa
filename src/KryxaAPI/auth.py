@@ -19,6 +19,9 @@ class AccountDTO(BaseModel):
     ID: Annotated[int, Field(ge=0)]
     Password: str
 
+class ChangePassword(BaseModel):
+    oldPassword:str
+    newPassword:str
 
 def generate_admin_token(acc: Admin) -> str:
     to_encode = {"Password": acc.Password}
@@ -79,15 +82,15 @@ def validatePcToken(creds=Depends(jwt_auth)) -> AccountDTO:
         raise HTTPException(status_code=401, detail='Error token')
 
 
-def change_password(oldPassword:str, newPassword:str) -> bool:
+def change_password(item:ChangePassword) -> bool:
     with DBService() as cur:
         try:
             row = cur.cursor().execute("SELECT Password FROM Admin").fetchone()
-            if oldPassword != row[0]:
+            if item.oldPassword != row[0]:
                 return False
             cur.execute(
                 "UPDATE Admin SET Password=?",
-                [newPassword]
+                [item.newPassword]
             )
             cur.commit()
             return True

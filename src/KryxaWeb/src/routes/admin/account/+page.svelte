@@ -17,7 +17,7 @@
             changePassword(oldPassword,newPassword).then(res=>res)
             
         }
-        location.reload()
+        // location.reload()
     }
 </script>
 

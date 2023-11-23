@@ -164,8 +164,18 @@ async def get_file(filename: int):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @adminRouter.post("/account")
+async def check_password(acc: Admin) -> str:
+    try:
+        valid = checkAdminAccount(acc)
+        if valid is False:
+            raise HTTPException(status_code=401, detail="Wrong password ")
+        return "Check password successful"
+    except Exception as err:
+        print(err)
+        raise HTTPException(status_code=401, detail="Error validating")
+
+@adminRouter.put("/account")
 async def get_new_password(item: ChangePassword):
     try:
         return change_password(item)

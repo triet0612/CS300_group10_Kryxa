@@ -1,8 +1,12 @@
 import json
+import sqlite3
 from datetime import datetime
 from pydantic import BaseModel, Field, field_serializer
 from typing import Annotated
 from db.database import DBService
+from typing import Annotated, Literal
+from db.database import DBService
+from fastapi import HTTPException
 
 
 class Bill(BaseModel):
@@ -28,3 +32,38 @@ def fetch_all_bills():
                 Bill(BillID=item_row[0], PcID=item_row[1], Datetime=item_row[2], Note=item_row[3], Total=item_row[4],
                      Cart=list(eval(item_row[5]))),)
         return item_list
+
+
+def fetchSalesByMonth(month, year):
+    sales_list = []
+    month_list = []
+    with (DBService() as cur):
+        try:
+            rows = cur.cursor().execute(
+                '''SELECT date("Datetime") as "day", sum("Total") as "sales" FROM "Bill"
+WHERE strftime('%m', "Datetime") = ? 
+AND strftime('%Y', "Datetime") = ?
+GROUP BY strftime('%d', "Datetime")''', [str(month), str(year)]
+            ).fetchall()
+            for r in rows:
+                sales_list.append(int(r[1]))
+                month_list.append(r[0])
+            return {"sales": sales_list, "month": month_list}
+        except sqlite3.Error as err:
+            print(err)
+            raise HTTPException(500, "Database error")
+
+
+def fetchSalesByPcID():
+    sales_list = []
+    pc_list = []
+    with (DBService() as cur):
+        try:
+            rows = cur.cursor().execute('SELECT "PcID", sum("Total") as "Sales" FROM "Bill" GROUP BY "PcID"').fetchall()
+            for r in rows:
+                pc_list.append(r[0])
+                sales_list.append(int(r[1]))
+            return {"sales": sales_list, "pc_list": pc_list}
+        except sqlite3.Error as err:
+            print(err)
+            raise HTTPException(500, "Database error")

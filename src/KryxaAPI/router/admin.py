@@ -1,6 +1,6 @@
 from io import BytesIO
 from fastapi.responses import StreamingResponse
-from fastapi import APIRouter, HTTPException, Response, Depends, File
+from fastapi import APIRouter, HTTPException, Response, Depends, File, Query
 from typing import Annotated
 from auth import checkAdminAccount, generate_admin_token, validateAdminToken, AccountDTO
 
@@ -14,9 +14,10 @@ import model.Bill
 from model.Bill import Bill, fetch_all_bills
 
 import array as arr
-from model.PC import Pc, fetch_pc_by_id, insert_pc, PcDTO, update_pc_by_id
+from model.PC import Pc, fetch_pc_by_id, insert_pc, PcDTO, fetch_time_usage, update_pc_by_id
 from model.Admin import Admin
 from service.file import get_file
+from model.Bill import fetchSalesByMonth, fetchSalesByPcID
 
 adminRouter = APIRouter(tags=["admin"])
 file_manager = get_file()
@@ -151,7 +152,7 @@ async def edit_pc(pc_info: PcDTO):
         raise HTTPException(status_code=404, detail="PC not found")
 
 
-@adminRouter.post("/item", dependencies=[Depends(validateAdminToken)], )
+@adminRouter.post("/item", dependencies=[Depends(validateAdminToken)])
 async def create_item(item: SaleItems):
     try:
         model.SaleItems.create_item(item)
@@ -181,3 +182,41 @@ async def get_file(filename: int):
         raise HTTPException(status_code=400, detail=str(ve))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@adminRouter.get("/sales", dependencies=[Depends(validateAdminToken)])
+async def get_sale(
+        month: Annotated[int | None, Query(ge=1, le=12)] = None,
+        year: Annotated[int | None, Query(ge=0)] = None
+):
+    if month is not None and year is not None:
+        try:
+            res = fetchSalesByMonth(month, year)
+            return res
+        except HTTPException as err:
+            raise err
+        except Exception as err:
+            print(err)
+            raise HTTPException(500, "Unknown error")
+    else:
+        try:
+            res = fetchSalesByPcID()
+            return res
+        except HTTPException as err:
+            raise err
+        except Exception as err:
+            print(err)
+            raise HTTPException(500, "Unknown error")
+
+
+@adminRouter.get("/pc/time/", dependencies=[Depends(validateAdminToken)])
+def get_time_usage():
+    try:
+        res = fetch_time_usage()
+        return res
+    except HTTPException as err:
+        print(err)
+        raise err
+    except Exception as err:
+        print(err)
+        raise HTTPException(500, "Unknown error")

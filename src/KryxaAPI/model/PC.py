@@ -1,6 +1,8 @@
 import random
 import sqlite3
 from typing import Annotated, Literal
+
+from fastapi import HTTPException
 from pydantic import BaseModel, Field
 from db.database import DBService
 from datetime import datetime
@@ -73,6 +75,21 @@ def insert_pc(new_pc: Pc):
         except Exception as err:
             cur.rollback()
             raise err
+
+
+def fetch_time_usage():
+    pc_list = []
+    time_usage_list = []
+    with DBService() as cur:
+        try:
+            rows = cur.cursor().execute('SELECT "PcID", "TimeUsage" FROM "Pc"').fetchall()
+            for r in rows:
+                pc_list.append(r[0])
+                time_usage_list.append(r[1])
+            return {"pc_list": pc_list, "time_usage_list": time_usage_list}
+        except sqlite3.Error as err:
+            print(err)
+            raise HTTPException(500, "Database error")
 
 
 def start_session(pc_id: int, time_pack: int):

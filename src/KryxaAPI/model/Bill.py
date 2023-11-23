@@ -1,6 +1,9 @@
+import sqlite3
 from datetime import datetime
 from pydantic import BaseModel, Field, field_serializer
-from typing import Annotated
+from typing import Annotated, Literal
+from db.database import DBService
+from fastapi import HTTPException
 
 
 class Bill(BaseModel):
@@ -14,3 +17,38 @@ class Bill(BaseModel):
     @field_serializer('Datetime')
     def serialize_datetime(self, d: datetime):
         return d.astimezone().isoformat()
+
+
+def fetchSalesByMonth(month, year):
+    sales_list = []
+    month_list = []
+    with (DBService() as cur):
+        try:
+            rows = cur.cursor().execute(
+                '''SELECT date("Datetime") as "day", sum("Total") as "sales" FROM "Bill"
+WHERE strftime('%m', "Datetime") = ? 
+AND strftime('%Y', "Datetime") = ?
+GROUP BY strftime('%d', "Datetime")''', [str(month), str(year)]
+            ).fetchall()
+            for r in rows:
+                sales_list.append(int(r[1]))
+                month_list.append(r[0])
+            return {"sales": sales_list, "month": month_list}
+        except sqlite3.Error as err:
+            print(err)
+            raise HTTPException(500, "Database error")
+
+
+def fetchSalesByPcID():
+    sales_list = []
+    pc_list = []
+    with (DBService() as cur):
+        try:
+            rows = cur.cursor().execute('SELECT "PcID", sum("Total") as "Sales" FROM "Bill" GROUP BY "PcID"').fetchall()
+            for r in rows:
+                pc_list.append(r[0])
+                sales_list.append(int(r[1]))
+            return {"sales": sales_list, "pc_list": pc_list}
+        except sqlite3.Error as err:
+            print(err)
+            raise HTTPException(500, "Database error")

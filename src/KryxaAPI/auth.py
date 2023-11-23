@@ -16,7 +16,7 @@ jwt_auth = HTTPBearer(
 
 
 class AccountDTO(BaseModel):
-    ID: Annotated[int, Field(ge=0)]
+    PcID: Annotated[int, Field(ge=0)]
     Password: str
 
 
@@ -56,7 +56,7 @@ def checkPcAccount(acc: AccountDTO) -> bool:
         try:
             row = cur.cursor().execute(
                 "SELECT Password FROM Pc WHERE PcID=?",
-                [acc.ID]
+                [acc.PcID]
             ).fetchone()
             if acc.Password == row[0]:
                 return True
@@ -70,10 +70,16 @@ def checkPcAccount(acc: AccountDTO) -> bool:
 def validatePcToken(creds=Depends(jwt_auth)) -> AccountDTO:
     try:
         payload = jwt.decode(creds.credentials, JWT_SECRET, algorithms=[HASH_ALGORITHM])
-        acc = AccountDTO(ID=payload["ID"], Password=payload["Password"])
+        acc = AccountDTO(PcID=payload["PcID"], Password=payload["Password"])
         if not checkPcAccount(acc):
             raise HTTPException(status_code=401, detail='Token unauthorized')
         return acc
     except Exception as err:
         print(err)
         raise HTTPException(status_code=401, detail='Error token')
+
+
+def generate_pc_token(acc: AccountDTO) -> str:
+    to_encode = {"PcID": acc.PcID, "Password": acc.Password}
+    encoded_jwt = jwt.encode(to_encode, JWT_SECRET, algorithm=HASH_ALGORITHM)
+    return encoded_jwt

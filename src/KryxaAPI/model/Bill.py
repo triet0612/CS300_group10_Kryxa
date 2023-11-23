@@ -1,12 +1,11 @@
-import json
 import sqlite3
 from datetime import datetime
-from pydantic import BaseModel, Field, field_serializer
 from typing import Annotated
-from db.database import DBService
-from typing import Annotated, Literal
-from db.database import DBService
+
 from fastapi import HTTPException
+from pydantic import BaseModel, Field, field_serializer
+
+from db.database import DBService
 
 
 class Bill(BaseModel):
@@ -41,10 +40,10 @@ def fetchSalesByMonth(month, year):
         try:
             rows = cur.cursor().execute(
                 '''SELECT date("Datetime") as "day", sum("Total") as "sales" FROM "Bill"
-WHERE strftime('%m', "Datetime") = ? 
-AND strftime('%Y', "Datetime") = ?
-GROUP BY strftime('%d', "Datetime")''', [str(month), str(year)]
-            ).fetchall()
+                WHERE strftime('%m', "Datetime") = ? 
+                AND strftime('%Y', "Datetime") = ?
+                GROUP BY strftime('%d', "Datetime")''', [str(month), str(year)]
+                ).fetchall()
             for r in rows:
                 sales_list.append(int(r[1]))
                 month_list.append(r[0])

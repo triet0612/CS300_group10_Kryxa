@@ -1,23 +1,18 @@
 from io import BytesIO
-from fastapi.responses import StreamingResponse
-from fastapi import APIRouter, HTTPException, Response, Depends, File, Query
 from typing import Annotated
-from auth import checkAdminAccount, generate_admin_token, validateAdminToken, AccountDTO
 
-import model.PC
-from model.PC import Pc, fetch_pc_by_id, insert_pc, PcDTO
-
-import model.SaleItems
-from model.SaleItems import SaleItems, create_item
+from fastapi import APIRouter, HTTPException, Response, Depends, File, Query
+from fastapi.responses import StreamingResponse
 
 import model.Bill
-from model.Bill import Bill, fetch_all_bills
-
-import array as arr
-from model.PC import Pc, fetch_pc_by_id, insert_pc, PcDTO, fetch_time_usage, update_pc_by_id
+import model.PC
+import model.SaleItems
+from auth import checkAdminAccount, generate_admin_token, validateAdminToken
 from model.Admin import Admin
-from service.file import get_file
 from model.Bill import fetchSalesByMonth, fetchSalesByPcID
+from model.PC import Pc, fetch_pc_by_id, insert_pc, PcDTO, fetch_time_usage, update_pc_by_id
+from model.SaleItems import SaleItems
+from service.file import get_file
 
 adminRouter = APIRouter(tags=["admin"])
 file_manager = get_file()

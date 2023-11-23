@@ -48,8 +48,6 @@ async def get_all_bills(Datetime: str | None = None):
             raise HTTPException(status_code=404,
                                 detail="No items")  # This should not be 404, should have a notification screen
 
-        # if Datetime:
-        #     item_list[:] = [item for item in item_list if item.Category == item_category]
         return bill_list
     except HTTPException:
         pass  # ignore HTTPException

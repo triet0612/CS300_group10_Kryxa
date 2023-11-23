@@ -172,10 +172,12 @@ export async function createImage(file,id) {
     
     let url = `http://localhost:8000/api/admin/uploadfile/?item_id=${id}`
     let data = new FormData()
-
-    data.append(
-        'file',file[0]
-    )
+    if (file != undefined){
+        data.append(
+            'file',file[0]
+        )
+    }
+    
     console.log(data)
     
     let statcode = await fetch(url, {

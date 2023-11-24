@@ -15,8 +15,7 @@ from model.SaleItems import SaleItems
 from model.PC import Pc, fetch_pc_by_id, insert_pc
 from model.Admin import Admin
 from service.file import get_file
-from model.Bill import fetchSalesByMonth, fetchSalesByPcID
-
+from model.Bill import fetchSalesByMonth, fetchSalesByPcID, checkBillRequireConfirm
 
 adminRouter = APIRouter(tags=["admin"])
 file_manager = get_file()
@@ -189,6 +188,8 @@ async def session(PcID: int | None = None, time: int | None = None):
         except Exception as err:
             print(err)
             raise HTTPException(status_code=500, detail="Unknown error")
+
+
 @adminRouter.get("/sales", dependencies=[Depends(validateAdminToken)])
 async def get_sale(
         month: Annotated[int | None, Query(ge=1, le=12)] = None,
@@ -236,6 +237,21 @@ async def open_session(PcID: int, time: int):
     except sqlite3.Error as err:
         print(err)
         raise HTTPException(status_code=400, detail="Error open a session")
+    except Exception as err:
+        print(err)
+        raise HTTPException(status_code=500, detail="Unknown error")
+
+
+@adminRouter.get("/bill_notif")
+async def bill_notif():
+    try:
+        ans = checkBillRequireConfirm()
+        return {"Message": str(ans)}
+    except HTTPException as err:
+        raise err
+    except sqlite3.Error as err:
+        print(err)
+        raise HTTPException(status_code=400, detail="Error checking")
     except Exception as err:
         print(err)
         raise HTTPException(status_code=500, detail="Unknown error")

@@ -7,6 +7,7 @@ import pc_screen from '$lib/assets/admin/pc_screen.png'
 import addPc from '$lib/assets/admin/addPc.png'
 import banner from '$lib/assets/banner.png'
 import board from '$lib/assets/admin/board.png'
+import notif_audio from '$lib/assets/call-to-attention-123107.mp3'
 
 import addItem from '$lib/assets/admin/addItem.jpg'
 
@@ -30,3 +31,5 @@ export const PcInfo = {
 
 export const Banner = banner;
 export const Board = board;
+
+export const notif = notif_audio;

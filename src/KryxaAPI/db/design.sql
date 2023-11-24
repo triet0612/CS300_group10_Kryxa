@@ -23,11 +23,17 @@ CREATE TABLE "Bill" (
     "Datetime" TEXT NOT NULL,
     "Note" TEXT CHECK (LENGTH("Note") <= 100),
     "Total" REAL NOT NULL DEFAULT 0,
-    "Cart" TEXT,
+    "Cart" TEXT NOT NULL,
     FOREIGN KEY("PcID") REFERENCES "Pc"("PcID")
 );
 INSERT INTO Admin VALUES ("1234");
 INSERT INTO Pc VALUES (0, "2024-11-13T10:46:00", "123", "192.168.0.2", 0);
 INSERT INTO Pc VALUES (1, "2023-11-13T10:46:00", "124", "192.168.0.3", 0);
 INSERT INTO SaleItem VALUES (1,"Com ga 1",50000,"Food",2);
-INSERT INTO Bill VALUES (123,0,"2024-11-13T10:46:00","",800000,"[{'id':1, 'Name':'Com ga', 'Amount': 2, 'Price': 200000},{'id':2, 'Name':'Com ga', 'Amount': 2, 'Price': 200000}]");
+INSERT INTO Bill VALUES(1,0,"2023-11-13T10:46:00","",0,"[{'Name':'Com ga`', 'Amount': 2, 'Price': 3}]");
+INSERT INTO Bill VALUES(2,0,"2023-11-13T10:46:00","",0,"[{'Name':'Com ga`', 'Amount': 2, 'Price': 3}]");
+INSERT INTO Bill VALUES(3,0,"2023-11-13T10:46:00","",0,"[{'Name':'Com ga`', 'Amount': 2, 'Price': 3}]");
+INSERT INTO Bill VALUES(4,0,"2023-11-23T10:46:00","",0,"[{'Name':'Com ga`', 'Amount': 2, 'Price': 3}]");
+INSERT INTO Bill VALUES(5,0,"2023-11-23T10:46:00","",0,"[{'Name':'Com ga`', 'Amount': 2, 'Price': 3}]");
+INSERT INTO Bill VALUES(6,0,"2023-11-23T10:46:00","",0,"[{'Name':'Com ga`', 'Amount': 2, 'Price': 3}]");
+INSERT INTO Bill VALUES(7,0,"2023-11-23T10:46:00","",0,"[{'Name':'Com ga`', 'Amount': 2, 'Price': 3}]");

@@ -1,15 +1,22 @@
+import datetime
+from datetime import datetime
 from io import BytesIO
 from fastapi.responses import StreamingResponse
 from fastapi import APIRouter, HTTPException, Response, Depends, File
 from typing import Annotated
 
+from fastapi import APIRouter, HTTPException, Response, Depends, File, Query
+from fastapi.responses import StreamingResponse
+
+import model.Bill
 import model.PC
 from auth import checkAdminAccount, generate_admin_token, validateAdminToken, AccountDTO
 import model.SaleItems
-from model.SaleItems import SaleItems, create_item
-import array as arr
-from model.PC import Pc, fetch_pc_by_id, insert_pc, PcDTO, update_pc_by_id
+from auth import checkAdminAccount, generate_admin_token, validateAdminToken
 from model.Admin import Admin
+from model.Bill import fetchSalesByMonth, fetchSalesByPcID
+from model.PC import Pc, fetch_pc_by_id, insert_pc, PcDTO, fetch_time_usage, update_pc_by_id
+from model.SaleItems import SaleItems
 from service.file import get_file
 from model.Bill import Bill, fetch_bill_byID
 
@@ -34,6 +41,36 @@ async def login(acc: Admin, res: Response) -> str:
     except Exception as err:
         print(err)
         raise HTTPException(status_code=401, detail="Error validating")
+
+
+@adminRouter.get("/bills", dependencies=[Depends(validateAdminToken)])
+async def get_all_bills(
+        bill_id: int| None = None,
+        day: Annotated[int, Query(ge=1, le=31)] = None,
+        month: Annotated[int, Query(ge=1, le=12)] = None,
+        year: Annotated[int, Query(ge=0)] = None, ):
+    try:
+        bill_list = model.Bill.fetch_all_bills()
+        if len(bill_list) == 0:
+            raise HTTPException(status_code=404, detail="No items")
+        if day and month and year:
+            time_obj = datetime.strptime(f'{year}-{month}-{day}', "%Y-%m-%d")
+            bill_list[:] = [bill for bill in bill_list if time_obj.date() == bill.Datetime.date()]
+        if bill_id:
+            bill_list[:] = [bill for bill in bill_list if bill.BillID == bill_id]
+        return bill_list
+    except HTTPException:
+        pass
+
+
+@adminRouter.get("/bills/{bill_id}", dependencies=[Depends(validateAdminToken)])
+async def view_bill_info(bill_id: int):
+    try:
+        bill_info = model.Bill.fetch_bill_by_id(bill_id)
+        return bill_info
+    except Exception as err:
+        print(err)
+        raise HTTPException(status_code=404, detail="No bill with that id")
 
 
 @adminRouter.get("/items", dependencies=[Depends(validateAdminToken)])
@@ -164,6 +201,44 @@ async def get_file(filename: int):
         raise HTTPException(status_code=400, detail=str(ve))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@adminRouter.get("/sales", dependencies=[Depends(validateAdminToken)])
+async def get_sale(
+        month: Annotated[int | None, Query(ge=1, le=12)] = None,
+        year: Annotated[int | None, Query(ge=0)] = None
+):
+    if month is not None and year is not None:
+        try:
+            res = fetchSalesByMonth(month, year)
+            return res
+        except HTTPException as err:
+            raise err
+        except Exception as err:
+            print(err)
+            raise HTTPException(500, "Unknown error")
+    else:
+        try:
+            res = fetchSalesByPcID()
+            return res
+        except HTTPException as err:
+            raise err
+        except Exception as err:
+            print(err)
+            raise HTTPException(500, "Unknown error")
+
+
+@adminRouter.get("/pc/time/", dependencies=[Depends(validateAdminToken)])
+def get_time_usage():
+    try:
+        res = fetch_time_usage()
+        return res
+    except HTTPException as err:
+        print(err)
+        raise err
+    except Exception as err:
+        print(err)
+        raise HTTPException(500, "Unknown error")
 
 
 @adminRouter.get("/bills/{bill_id}", dependencies=[Depends(validateAdminToken)])

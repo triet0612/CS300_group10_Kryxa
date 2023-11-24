@@ -8,7 +8,6 @@ export class Bill {
       this.Cart = Cart
     }
 }
-
 export async function fetch_all(bill_id,day,month,year){
     let url = 'http://localhost:8000/api/admin/bills'
     if (bill_id !=undefined){

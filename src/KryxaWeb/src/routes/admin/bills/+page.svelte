@@ -4,10 +4,24 @@
   import { fetch_all } from "$lib/Bill.js";
   import { getPcByID, Pc} from "$lib/Pc.js";
   import { onMount } from "svelte";
+  import ModalBill from "$lib/components/ModalBill.svelte";
+
   let bill_list = [];
   let item_pc = new Pc();
   let input_bill_id;
   let input_date="";
+  let status = "close";
+
+  // pop up
+  function close(event) {
+    if (event.key === "Escape") {
+      status = "close";
+    }
+  }
+  function openModal(event) {
+    status = "open";
+  }
+
   onMount(async () => {
     bill_list = await fetch_all().then((res) => res);
   });
@@ -74,7 +88,7 @@
   </div>
   <div class="flex-col flex h-full w-auto">
     <div class="h-[70px] font-BlackOpsOne text-xl text-purple-300 justify-start items-center flex flex-row my-2 ">
-        <input type="number" min=0 placeholder="PC ID"  class="px-5 h-[50px] rounded-3xl bg-purple-900" bind:value = {input_bill_id} on:change={UpdateBill} />
+        <input type="number" min=0 placeholder="PC ID"  class="px-5 h-[50px] rounded-3xl bg-purple-900" bind:value = {input_bill_id}  />
         <p class="px-5">Pick Date:</p>
         <input type="date" bind:value={input_date} on:change={UpdateBill} class="bg-purple-900" />
     </div>
@@ -84,7 +98,9 @@
           <ul class="grid grid-flow-row grid-cols-3 m-7 gap-5">
             {#each bill_list as valid}
               <li class="text-center justify-center items-center" style ="{validate(valid.Datetime,valid.PcID)!=0? 'display:none':''}">
-                <div id="bi" class="grid grid-flow-row auto-rows-max">
+                <!-- svelte-ignore a11y-interactive-supports-focus -->
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <div id="bi" class="grid grid-flow-row auto-rows-max" role="button" on:click={openModal}>
                   <img src={validate(valid.Datetime,valid.PcID)==1? MainScreen["RedForm"]:MainScreen["GreenForm"]} alt="screen"/>
                   <div class="justify-center">{valid.BillID}</div>
                   <div class="justify-center">{refort(valid.Datetime)}</div>
@@ -97,7 +113,9 @@
           <ul class="grid grid-flow-row grid-cols-3 m-7 gap-5">
             {#each bill_list as valid}
               <li class="text-center justify-center items-center font-medium" style ="{validate(valid.Datetime,valid.PcID)==0? 'display:none':''}">
-                <div id="bi" class="grid grid-flow-row auto-rows-max">
+                <!-- svelte-ignore a11y-interactive-supports-focus -->
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <div id="bi" class="grid grid-flow-row auto-rows-max" role="button" on:click={openModal}>
                   <img src={MainScreen["RedForm"]} alt="screen"/>
                   <div class="justify-center">{valid.BillID}</div>
                   <div class="justify-center">{refort(valid.Datetime)}</div>
@@ -123,3 +141,7 @@
   }
 </style>
 
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<div on:keydown={close}>
+  <ModalBill {status} on:keydown={close} />
+</div>

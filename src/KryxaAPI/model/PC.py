@@ -22,6 +22,7 @@ class PcDTO(BaseModel):
     Password: Annotated[str, Field(max_length=3, min_length=3)]
     IPv4: str
 
+
 # TODO: getAllPcsForView()
 
 def fetch_All_Pcs():
@@ -45,7 +46,7 @@ def fetch_pc_by_id(pc_id: int) -> Pc:
             pc = cur.cursor().execute(
                 "SELECT * FROM Pc WHERE PcId =?", [pc_id]
             ).fetchone()
-            pc_info = Pc(PcID=pc_id,EndTime=pc[1],Password=pc[2],IPv4=pc[3],TimeUsage=pc[4])
+            pc_info = Pc(PcID=pc_id, EndTime=pc[1], Password=pc[2], IPv4=pc[3], TimeUsage=pc[4])
             return pc_info
         except Exception as err:
             print(err)
@@ -63,6 +64,7 @@ def update_pc_by_id(pc_info: PcDTO) -> str:
         except Exception as err:
             cur.rollback()
             raise err
+
 
 def insert_pc(new_pc: Pc):
     with DBService() as cur:
@@ -96,6 +98,7 @@ def start_session(pc_id: int, time_pack: int):
     with DBService() as cur:
         try:
             end_time = datetime.now() + timedelta(minutes=time_pack * 30)
+            end_time = end_time.replace(microsecond=0)
             password = random.randrange(100, 999, 1)
             cur.execute(
                 "UPDATE Pc SET EndTime=?, Password=? WHERE PcID=?",
@@ -104,6 +107,25 @@ def start_session(pc_id: int, time_pack: int):
             cur.execute(
                 '''INSERT INTO "Bill" ("PcID", "Datetime", "Note", "Total", "Cart") VALUES(?, ?, ?, ?, ?)''',
                 [pc_id, "", "", 0, "[]"]
+            )
+            cur.commit()
+        except sqlite3.Error as err:
+            cur.rollback()
+            raise err
+
+
+def terminate_session(pc_id: int):
+    with DBService() as cur:
+        try:
+            end_time = datetime.now()
+            end_time = end_time.replace(microsecond=0)
+            cur.execute(
+                "UPDATE Pc SET EndTime=? WHERE PcID=?",
+                [end_time.isoformat(), pc_id]
+            )
+            cur.execute(
+                'DELETE FROM "Bill" WHERE "PcID" = ? AND "Datetime" = ""',
+                [pc_id]
             )
             cur.commit()
         except sqlite3.Error as err:

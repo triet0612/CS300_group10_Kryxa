@@ -4,12 +4,13 @@ from fastapi.responses import StreamingResponse
 from fastapi import APIRouter, HTTPException, Response, Depends, File, Query
 from typing import Annotated
 
-from model.PC import Pc, start_session
+from model.PC import Pc, start_session, terminate_session
 from auth import checkAdminAccount, generate_admin_token, validateAdminToken
 import model.SaleItems
 from model.SaleItems import SaleItems, create_item
 import array as arr
 from model.PC import Pc, fetch_pc_by_id, insert_pc, PcDTO, update_pc_by_id, fetch_time_usage
+from model.PC import PcDTO, update_pc_by_id
 from model.SaleItems import SaleItems
 from model.PC import Pc, fetch_pc_by_id, insert_pc
 from model.Admin import Admin
@@ -19,11 +20,6 @@ from model.Bill import fetchSalesByMonth, fetchSalesByPcID
 
 adminRouter = APIRouter(tags=["admin"])
 file_manager = get_file()
-
-
-# @adminRouter.get("/")
-# async def home_admin(acc: Annotated[AccountDTO, Depends(validateAdminToken)]):
-#     return {"message": "welcome admin ID: " + str(acc.ID)}
 
 
 @adminRouter.post("/login")
@@ -169,6 +165,30 @@ async def get_file(filename: int):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@adminRouter.post("/session", dependencies=[Depends(validateAdminToken)])
+async def session(PcID: int | None = None, time: int | None = None):
+    if PcID is not None and time is not None:
+        try:
+            start_session(PcID, time)
+        except HTTPException as err:
+            raise err
+        except sqlite3.Error as err:
+            print(err)
+            raise HTTPException(status_code=400, detail="Error open a session")
+        except Exception as err:
+            print(err)
+            raise HTTPException(status_code=500, detail="Unknown error")
+    elif PcID is not None:
+        try:
+            terminate_session(PcID)
+        except HTTPException as err:
+            raise err
+        except sqlite3.Error as err:
+            print(err)
+            raise HTTPException(status_code=400, detail="Error termination session")
+        except Exception as err:
+            print(err)
+            raise HTTPException(status_code=500, detail="Unknown error")
 @adminRouter.get("/sales", dependencies=[Depends(validateAdminToken)])
 async def get_sale(
         month: Annotated[int | None, Query(ge=1, le=12)] = None,

@@ -21,7 +21,7 @@
         
         }
         else if(newPassword==confirmNewPassword){
-            changePassword(oldPassword,newPassword).then(res=>res)
+            changePassword(newPassword).then(res=>res)
             logout()
             
         }
@@ -30,32 +30,49 @@
 
     async function showAllFields(){
         let statcode = await checkPassword(oldPassword).then(res=>res)
-        if(statcode!==200){
+        if(statcode!=="Check password successful"){
             console.log(statcode)
-            // alert("Wrong password")
-            // location.reload()
+            alert("Wrong password")
+            location.reload()
         }
         else{
-            // var newPass = document.getElementById("newPass")
-            // var cfNewPass = document.getElementById("cfNewPass")
-            // var saveButton = document.getElementById("saveButton")
-            // var loginButton = document.getElementById("loginButton")
-        
-            // newPass.style.display = "block"
-            // cfNewPass.style.display = "block"
-            // saveButton.style.display = "block"
-            // loginButton.style.display = "none"
-        }
-        var newPass = document.getElementById("newPass")
+            var newPass = document.getElementById("newPass")
             var cfNewPass = document.getElementById("cfNewPass")
             var saveButton = document.getElementById("saveButton")
             var loginButton = document.getElementById("loginButton")
         
+            oldPass.style.display = "none"
             newPass.style.display = "block"
             cfNewPass.style.display = "block"
             saveButton.style.display = "block"
             loginButton.style.display = "none"
+        }
+            // var oldPass = document.getElementById("oldPass")
+            // var newPass = document.getElementById("newPass")
+            // var cfNewPass = document.getElementById("cfNewPass")
+            // var saveButton = document.getElementById("saveButton")
+            // var loginButton = document.getElementById("loginButton")
+
+            // oldPass.style.display = "none"
+            // newPass.style.display = "block"
+            // cfNewPass.style.display = "block"
+            // saveButton.style.display = "block"
+            // loginButton.style.display = "none"
         
+    }
+
+    async function showPassword(){
+        var oldPass = document.getElementById("oldPass")
+        var newPass = document.getElementById("newPass")
+        var cfNewPass = document.getElementById("cfNewPass")
+        var hideButton = document.getElementById("hideButton")
+
+        oldPass.type = oldPass.type == "text"?"password":"text"
+        newPass.type = newPass.type == "text"?"password":"text"
+        cfNewPass.type = cfNewPass.type == "text"?"password":"text"
+        hideButton.textContent=hideButton.textContent == "SHOW"?"HIDE":"SHOW"
+  
+
     }
 </script>
 
@@ -69,9 +86,13 @@
         <img src="{AppLogo}" alt="" width="30%" class=" absolute mx-auto right-0 left-0 top-[-200px] border-[#E3A052]">
         <div class="">
             <div class = "gap-7 mt-20 grid text-amber-400 font-BlackOpsOne " >
-                <input class="m-auto w-2/3 h-16 bg-violet-900/50 rounded text-center" type="text" placeholder="Old password" bind:value={oldPassword}>
-                <input id ="newPass"class="none bg-violet-900/50 m-auto w-2/3 h-16 bg-gray-500 rounded text-center" type="text" placeholder="New password" bind:value={newPassword}>
-                <input id ="cfNewPass"class="none bg-violet-900/50 m-auto w-2/3 h-16 bg-gray-500 rounded text-center" type="text" placeholder="Confirm new password" bind:value={confirmNewPassword}>
+                
+                <input id = "oldPass" class="m-auto w-2/3 h-16 bg-violet-900/50 rounded text-center" type="password" placeholder="Old password" bind:value={oldPassword}>
+                <input id ="newPass"class="none bg-violet-900/50 m-auto w-2/3 h-16 bg-gray-500 rounded text-center" type="password" placeholder="New password" bind:value={newPassword}>
+                <input id ="cfNewPass"class="none bg-violet-900/50 m-auto w-2/3 h-16 bg-gray-500 rounded text-center" type="password" placeholder="Confirm new password" bind:value={confirmNewPassword}>
+                <button id ="hideButton" on:click={async () => {await showPassword()}} class = " bg-violet-900/50 h-12 mx-auto hover:bg-amber-400 hover:text-violet-900 w-1/4 rounded-3xl">
+                    SHOW
+                </button>
                 <button id ="saveButton" on:click={async () => {await checkSamePassword()}} class = " bg-violet-900/50 h-12 m-auto hover:bg-amber-400 hover:text-violet-900 w-1/2 rounded-3xl">
                     SAVE
                 </button>

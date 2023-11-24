@@ -54,11 +54,8 @@ export class Pc {
       console.log(err)
       return 500
     })
-    console.log(pc_info)
     return pc_info
   }
-
-  
 }
 
 export async function get_Pcs(){ //Fetch all Pcs with their ID and Status
@@ -109,7 +106,6 @@ export async function updateThisPcByID(pc_info,pc_id){
     console.log(err)
     return 500
   })
-  console.log(statcode)
   return statcode
 }
 

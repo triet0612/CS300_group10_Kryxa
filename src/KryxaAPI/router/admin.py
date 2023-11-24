@@ -41,12 +41,20 @@ async def get_all_bills(Datetime: str | None = None):
     try:
         bill_list = model.Bill.fetch_all_bills()
         if len(bill_list) == 0:
-            raise HTTPException(status_code=404,
-                                detail="No items")  # This should not be 404, should have a notification screen
-
+            raise HTTPException(status_code=404, detail="No items")
         return bill_list
     except HTTPException:
-        pass  # ignore HTTPException
+        pass
+
+
+@adminRouter.get("/bills/{bill_id}", dependencies=[Depends(validateAdminToken)])
+async def view_bill_info(bill_id: int):
+    try:
+        bill_info = model.Bill.fetch_bill_by_id(bill_id)
+        return bill_info
+    except Exception as err:
+        print(err)
+        raise HTTPException(status_code=404, detail="No bill with that id")
 
 
 @adminRouter.get("/items", dependencies=[Depends(validateAdminToken)])
@@ -55,7 +63,7 @@ async def get_all_items(item_name: str | None = None, item_category: str | None 
         item_list = model.SaleItems.fetch_all_items()
         if len(item_list) == 0:
             raise HTTPException(status_code=404,
-                                detail="No items")  # This should not be 404, should have a notification screen
+                                detail="No items")
 
         if item_category:
             item_list[:] = [item for item in item_list if item.Category == item_category]

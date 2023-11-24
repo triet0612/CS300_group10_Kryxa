@@ -1,20 +1,29 @@
 <script>
   import AdminNav from "$lib/components/AdminNav.svelte";
   import { MainScreen } from "$lib/Assets.js";
-  import { Bill, fetch_all } from "$lib/Bill.js";
-  import { Pc, get_Pcs } from "$lib/Pc.js";
+  import { fetch_all,fetch_by_id } from "$lib/Bill.js";
+  import { Pc} from "$lib/Pc.js";
   import { onMount } from "svelte";
   let bill_list = [];
+  let item_pc = new Pc();
+  let input_bill_id;
   onMount(async () => {
     bill_list = await fetch_all().then((res) => res);
+    console.log(bill_list)
   });
 
+  async function UpdateBill(){
+    bill_list = await fetch_by_id(input_bill_id);
+    console.log(bill_list)
+  }
+
   async function validate(str,pc_id){
+    item_pc = await item_pc.getPcByID(pc_id).then((res)=>res)
     if(refort(str)!=""){
       return 0;
     }
     else{
-      if(refort(pc_id.EndTime)<=cur()){
+      if(refort(item_pc.EndTime)<=cur()){
         return 1;
       }
       else{
@@ -22,6 +31,7 @@
       }
     }
   }
+
   function cur(){
     const now = new Date();
     const currentHour = ('0' + now.getHours()).slice(-2);
@@ -31,15 +41,11 @@
     const currentMonth = ('0' + (now.getMonth() + 1)).slice(-2);
     const currentYear = now.getFullYear();
 
-    // Displaying the current time
-    const datee = `${currentDay}/${currentMonth}/${currentYear} ${currentHour}:${currentMinute}:${currentSecond} `;
-    console.log(datee);
+    const datee = `${currentDay}/${currentMonth}/${currentYear} ${currentHour}:${currentMinute}:${currentSecond}`;
     return datee;
   }
-  function refort(str){
 
-    
-    
+  function refort(str){
     const originalDate = new Date(str);
 
     const year = originalDate.getFullYear();
@@ -50,24 +56,21 @@
     const seconds = ('0' + originalDate.getSeconds()).slice(-2);
     
     const formattedDateString = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
-
-    console.log(formattedDateString);
-
     return formattedDateString
   }
 </script>
 
-<!-- <div class="flex flex-row h-screen bg-gradient-to-b from-black to-[#352900]"> -->
-<div
-  id="bg"
-  class="flex flex-row h-screen bg-cover"
-  style="background-image: url({MainScreen['Background4']});"
->
-  <div class="flex flex-col ">
+
+<div id="bg" class="flex flex-row h-screen bg-cover" style="background-image: url({MainScreen['Background4']});">
+  <div class="flex flex-col">
     <AdminNav />
   </div>
-  <div class="flex-col flex h-screen w-auto text-white">
-    <div id="Nav" class="flex-col">p</div>
+  <div class="flex-col flex h-full w-auto">
+    <div class="h-[70px] font-BlackOpsOne text-xl text-purple-300 justify-start items-center flex flex-row my-2 ">
+        <input type="number" min=0 placeholder="PC ID"  class="px-5 h-[50px] rounded-3xl bg-purple-900" bind:value = {input_bill_id} on:change={UpdateBill} />
+        <p class="px-5">Pick Date:</p>
+        <input type="date" value="" class="bg-purple-900" />
+    </div>
     <div class="flex-col flex">
       <div class="grid grid-flow-col grid-cols-2 gap-5">
         <div id="bo">
@@ -111,6 +114,5 @@
     border-radius: 20px;
     background-color: rgba(62, 26, 90, 0.8);
   }
-  
 </style>
 

@@ -22,12 +22,10 @@
   //Auto pull db
   onMount(async () => {
       list_items = await fetch_all().then(res => res);
-      console.log(list_items);
   })
   // pull data on request
   async function search_al(){
     list_items = await fetch_category(category_filter,text_input)
-    console.log(list_items)
   }
 
 </script>

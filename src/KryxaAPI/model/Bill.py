@@ -21,6 +21,38 @@ class Bill(BaseModel):
         return d.astimezone().isoformat()
 
 
+def fetch_bill_by_id(bill_id: int) -> Bill:
+    with DBService() as cur:
+        try:
+            bill_info=[]
+            bill = cur.cursor().execute(
+                "SELECT * FROM Bill WHERE BillID =?", [bill_id]
+            ).fetchone()
+            bill_info.append(Bill(BillID=bill[0], PcID=bill[1], Datetime=bill[2], Note=bill[3], Total=bill[4],
+                             Cart=list(eval(bill[5]))))
+            return bill_info
+        except Exception as err:
+            print(err)
+
+
+def fetch_bill_by_date(day, month, year):
+    with (DBService() as cur):
+        bill_list = []
+        try:
+            rows = cur.cursor().execute(
+                '''SELECT * FROM "Bill"
+                WHERE strftime('%m', "Datetime") = ? 
+                AND strftime('%Y', "Datetime") = ?
+                AND strftime('%d', "Datetime") = ?''', [str(day), str(month), str(year)]
+            ).fetchall()
+            for r in rows:
+                bill_list.append(
+                    Bill(BillID=r[0], PcID=r[1], Datetime=r[2], Note=r[3], Total=r[4], Cart=list(eval(r[5]))), )
+        except sqlite3.Error as err:
+            print(err)
+            raise HTTPException(500, "Database error")
+
+
 def fetch_all_bills():
     sql_query: str = "SELECT * FROM Bill"
     with DBService() as cur:
@@ -29,7 +61,7 @@ def fetch_all_bills():
         for item_row in items:  # Convert Row objects to SaleItems objects
             item_list.append(
                 Bill(BillID=item_row[0], PcID=item_row[1], Datetime=item_row[2], Note=item_row[3], Total=item_row[4],
-                     Cart=list(eval(item_row[5]))),)
+                     Cart=list(eval(item_row[5]))), )
         return item_list
 
 
@@ -43,7 +75,7 @@ def fetchSalesByMonth(month, year):
                 WHERE strftime('%m', "Datetime") = ? 
                 AND strftime('%Y', "Datetime") = ?
                 GROUP BY strftime('%d', "Datetime")''', [str(month), str(year)]
-                ).fetchall()
+            ).fetchall()
             for r in rows:
                 sales_list.append(int(r[1]))
                 month_list.append(r[0])

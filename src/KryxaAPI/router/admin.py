@@ -4,7 +4,7 @@ from fastapi import APIRouter, HTTPException, Response, Depends, File
 from typing import Annotated
 
 import model.PC
-from auth import checkAdminAccount, generate_admin_token, validateAdminToken, AccountDTO, ChangePassword, change_password
+from auth import checkAdminAccount, generate_admin_token, validateAdminToken, AccountDTO, change_password
 import model.SaleItems
 from model.SaleItems import SaleItems, create_item
 import array as arr
@@ -176,9 +176,9 @@ async def check_password(acc: Admin) -> str:
         raise HTTPException(status_code=401, detail="Error validating")
 
 @adminRouter.put("/account")
-async def get_new_password(item: ChangePassword):
+async def get_new_password(acc: Admin):
     try:
-        return change_password(item)
+        return change_password(acc)
     except Exception as e:
         print(e)
         raise HTTPException(status_code=400, detail="Error saving password")

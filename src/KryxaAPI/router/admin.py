@@ -1,3 +1,5 @@
+import datetime
+from datetime import datetime
 from io import BytesIO
 from typing import Annotated
 
@@ -37,11 +39,20 @@ async def login(acc: Admin, res: Response) -> str:
 
 
 @adminRouter.get("/bills", dependencies=[Depends(validateAdminToken)])
-async def get_all_bills(Datetime: str | None = None):
+async def get_all_bills(
+        bill_id: int| None = None,
+        day: Annotated[int, Query(ge=1, le=31)] = None,
+        month: Annotated[int, Query(ge=1, le=12)] = None,
+        year: Annotated[int, Query(ge=0)] = None, ):
     try:
         bill_list = model.Bill.fetch_all_bills()
         if len(bill_list) == 0:
             raise HTTPException(status_code=404, detail="No items")
+        if day and month and year:
+            time_obj = datetime.strptime(f'{year}-{month}-{day}', "%Y-%m-%d")
+            bill_list[:] = [bill for bill in bill_list if time_obj.date() == bill.Datetime.date()]
+        if bill_id:
+            bill_list[:] = [bill for bill in bill_list if bill.BillID == bill_id]
         return bill_list
     except HTTPException:
         pass

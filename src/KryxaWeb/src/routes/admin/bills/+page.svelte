@@ -1,24 +1,31 @@
 <script>
   import AdminNav from "$lib/components/AdminNav.svelte";
   import { MainScreen } from "$lib/Assets.js";
-  import { fetch_all,fetch_by_id } from "$lib/Bill.js";
-  import { Pc} from "$lib/Pc.js";
+  import { fetch_all } from "$lib/Bill.js";
+  import { getPcByID, Pc} from "$lib/Pc.js";
   import { onMount } from "svelte";
   let bill_list = [];
   let item_pc = new Pc();
   let input_bill_id;
+  let input_date="";
   onMount(async () => {
     bill_list = await fetch_all().then((res) => res);
-    console.log(bill_list)
   });
 
   async function UpdateBill(){
-    bill_list = await fetch_by_id(input_bill_id);
-    console.log(bill_list)
+    bill_list = await fetch_all(input_bill_id);
+    if(input_date != ""){
+      const refort_date = new Date(input_date);
+      const year = refort_date.getFullYear();
+      const month = ('0' + (refort_date.getMonth() + 1)).slice(-2);
+      const day = ('0' + refort_date.getDate()).slice(-2);
+
+      bill_list = await fetch_all(input_bill_id,day,month,year)
+    }
   }
 
   async function validate(str,pc_id){
-    item_pc = await item_pc.getPcByID(pc_id).then((res)=>res)
+    item_pc = await getPcByID(pc_id)
     if(refort(str)!=""){
       return 0;
     }
@@ -69,7 +76,7 @@
     <div class="h-[70px] font-BlackOpsOne text-xl text-purple-300 justify-start items-center flex flex-row my-2 ">
         <input type="number" min=0 placeholder="PC ID"  class="px-5 h-[50px] rounded-3xl bg-purple-900" bind:value = {input_bill_id} on:change={UpdateBill} />
         <p class="px-5">Pick Date:</p>
-        <input type="date" value="" class="bg-purple-900" />
+        <input type="date" bind:value={input_date} on:change={UpdateBill} class="bg-purple-900" />
     </div>
     <div class="flex-col flex">
       <div class="grid grid-flow-col grid-cols-2 gap-5">

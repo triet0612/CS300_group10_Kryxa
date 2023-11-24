@@ -1,6 +1,6 @@
 import sqlite3
 from datetime import datetime
-from typing import Annotated
+from typing import Annotated, List
 
 from fastapi import HTTPException
 from pydantic import BaseModel, Field, field_serializer
@@ -21,36 +21,18 @@ class Bill(BaseModel):
         return d.astimezone().isoformat()
 
 
-def fetch_bill_by_id(bill_id: int) -> Bill:
+def fetch_bill_by_id(bill_id: int) -> list[Bill]:
     with DBService() as cur:
         try:
-            bill_info=[]
+            bill_info = []
             bill = cur.cursor().execute(
                 "SELECT * FROM Bill WHERE BillID =?", [bill_id]
             ).fetchone()
             bill_info.append(Bill(BillID=bill[0], PcID=bill[1], Datetime=bill[2], Note=bill[3], Total=bill[4],
-                             Cart=list(eval(bill[5]))))
+                                  Cart=list(eval(bill[5]))))
             return bill_info
         except Exception as err:
             print(err)
-
-
-def fetch_bill_by_date(day, month, year):
-    with (DBService() as cur):
-        bill_list = []
-        try:
-            rows = cur.cursor().execute(
-                '''SELECT * FROM "Bill"
-                WHERE strftime('%m', "Datetime") = ? 
-                AND strftime('%Y', "Datetime") = ?
-                AND strftime('%d', "Datetime") = ?''', [str(day), str(month), str(year)]
-            ).fetchall()
-            for r in rows:
-                bill_list.append(
-                    Bill(BillID=r[0], PcID=r[1], Datetime=r[2], Note=r[3], Total=r[4], Cart=list(eval(r[5]))), )
-        except sqlite3.Error as err:
-            print(err)
-            raise HTTPException(500, "Database error")
 
 
 def fetch_all_bills():

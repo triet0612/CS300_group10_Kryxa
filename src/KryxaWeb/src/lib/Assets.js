@@ -19,6 +19,10 @@ import Com_ga_8 from '$lib/items/Com ga 8.jpg'
 
 import addItem from '$lib/assets/admin/addItem.jpg'
 
+import user_items_bg from '$lib/user/user_items_bg.png'
+import user_logo from '$lib/user/logo.png'
+import user_cart_icon from "$lib/user/cart.png"
+
 
 export const AppLogo = logo;
 
@@ -48,10 +52,8 @@ export const ImageItem={
   "Com ga 8": Com_ga_8
 }
 
-
-
-
-
-
-export const Banner = banner;
-export const Board = board;
+export const UserAssets={
+  "UserLogo": user_logo,
+  "ItemsBackground": user_items_bg,
+  "CartIcon": user_cart_icon
+}

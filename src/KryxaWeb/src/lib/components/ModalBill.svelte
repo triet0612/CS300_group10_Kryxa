@@ -143,9 +143,9 @@
           </div>
           <div class="w-[235px] h-[40px] text-center">
             <div
-              class="w-[230px] h-[30px] text-white bg-green-600 font-bold mr-[20px] mt-[5px]"
+              class="w-[230px] h-[30px] text-white text-xl bg-green-600 font-bold mr-[20px] mt-[4px]"
             >
-              Total
+              Total : {bill_info[0].Total}
             </div>
           </div>
         </div>

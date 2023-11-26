@@ -20,7 +20,6 @@ from model.SaleItems import SaleItems
 from service.file import get_file
 from model.Bill import Bill, fetch_bill_byID
 
-
 adminRouter = APIRouter(tags=["admin"])
 file_manager = get_file()
 
@@ -43,9 +42,9 @@ async def login(acc: Admin, res: Response) -> str:
         raise HTTPException(status_code=401, detail="Error validating")
 
 
-@adminRouter.get("/bills", dependencies=[Depends(validateAdminToken)])
+@adminRouter.get("/bills/", dependencies=[Depends(validateAdminToken)])
 async def get_all_bills(
-        bill_id: int| None = None,
+        bill_id: Annotated[int, Query(ge=1)] = None,
         day: Annotated[int, Query(ge=1, le=31)] = None,
         month: Annotated[int, Query(ge=1, le=12)] = None,
         year: Annotated[int, Query(ge=0)] = None, ):
@@ -61,16 +60,6 @@ async def get_all_bills(
         return bill_list
     except HTTPException:
         pass
-
-
-@adminRouter.get("/bills/{bill_id}", dependencies=[Depends(validateAdminToken)])
-async def view_bill_info(bill_id: int):
-    try:
-        bill_info = model.Bill.fetch_bill_by_id(bill_id)
-        return bill_info
-    except Exception as err:
-        print(err)
-        raise HTTPException(status_code=404, detail="No bill with that id")
 
 
 @adminRouter.get("/items", dependencies=[Depends(validateAdminToken)])

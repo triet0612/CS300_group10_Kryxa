@@ -9,6 +9,7 @@ export default {
       },
       backgroundImage: {
         'login-bg': "url('$lib/assets/admin/login-bg.png')",
+        'main-bg': "url('$lib/assets/admin/bg_5.png')"
       }
     },
   },

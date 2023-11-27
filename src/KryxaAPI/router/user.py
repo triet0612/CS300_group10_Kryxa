@@ -1,7 +1,14 @@
+import sqlite3
+from io import BytesIO
+
+from service.file import get_file
+
 from fastapi import APIRouter, Response, HTTPException, Depends
+from fastapi.responses import StreamingResponse
 from auth import AccountDTO, checkPcAccount, generate_pc_token, validatePcToken
 from typing import Annotated
 from model.SaleItems import SaleItems, fetch_all_items
+from model.PC import fetch_pc_by_id
 
 userRouter = APIRouter(tags=["user"])
 
@@ -52,3 +59,31 @@ async def get_all_items(item_name: str | None = None, item_category: str | None 
 
     except HTTPException:
         pass  # ignore HTTPException
+
+
+@userRouter.get("/time")
+async def get_time_remaining(acc: Annotated[AccountDTO, Depends(validatePcToken)]):
+    try:
+        pc = fetch_pc_by_id(acc.PcID)
+        return {"EndTime": pc.EndTime}
+    except HTTPException as err:
+        raise err
+    except sqlite3.Error as err:
+        print(err)
+        raise HTTPException(status_code=400, detail="Error fetching time")
+    except Exception as err:
+        raise HTTPException(status_code=500, detail="Unknown error")
+
+
+file_manager = get_file()
+@userRouter.get("/getfile/{filename}")
+async def get_file(filename: int):
+    try:
+        # Read the image using FileManager
+        image_byte_stream = file_manager.read_image(filename)
+        # Return the image as a streaming response
+        return StreamingResponse(BytesIO(image_byte_stream), media_type="image/jpeg")
+    except ValueError as ve:
+        raise HTTPException(status_code=400, detail=str(ve))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

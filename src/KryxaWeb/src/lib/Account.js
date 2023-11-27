@@ -36,4 +36,30 @@ export class Account {
       location.replace('/')
     }
   }
+  async user_login() {
+    let url = 'http://localhost:8000/api/login'
+    let creds = await fetch(url, {
+      method: "POST",
+      body: JSON.stringify({
+        PcID: this.ID,
+        Password: this.Password
+      }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then(res => {
+      if (res.status === 200) {
+        return res.headers.get("Authorization")
+      } else {
+        return ""
+      }
+    })
+    .catch(err => {console.log(err); return "";})
+    if (creds === "") {
+      return
+    }
+    localStorage.setItem("jwt", creds)
+    location.replace('/')
+  }
 }

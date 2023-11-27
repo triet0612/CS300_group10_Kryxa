@@ -201,29 +201,6 @@ export async function createImage(file,id) {
     return statcode
 }
 
-// USER PATHS
-export async function user_fetch_all(){
-    let url = 'http://localhost:8000/api/items'
-    let items = await fetch(url, {
-    method: "GET",
-    headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + localStorage.getItem("jwt")
-    }
-    })
-    .then(res => {
-        if (res.status === 401){
-            // Commented this for FE debug
-            // location.replace('/user/login')
-            return []
-        }
-        return res.json()
-    })
-    .catch(err => {console.log(err); return [];})
-    console.log(items[0])
-    return items
-}
-
 export async function user_fetch_category(category,name){
     let url = 'http://localhost:8000/api/items'
 
@@ -248,13 +225,11 @@ export async function user_fetch_category(category,name){
     })
     .then(res => {
         if (res.status === 401){
-            // Commented this for FE debug
-            // location.replace('/user/login')
+            location.replace('/login')
             return []
         }
         return res.json()
     })
     .catch(err => {console.log(err); return [];})
-    console.log(items[0])
     return items
 }

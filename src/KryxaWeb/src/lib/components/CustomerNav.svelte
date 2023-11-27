@@ -1,19 +1,34 @@
 <script>
   import {UserAssets} from "$lib/Assets.js";
-  import { writable } from "svelte/store";
-  import { get } from "svelte/store";
-  import {onMount } from "svelte";
+  import { onMount } from "svelte";
   import { tweened } from 'svelte/motion';
 
-const items = [
+  const items = [
     "All",
     "Food",
     "Drink",
     "Time"
   ];
 
+  let endtime;
+
   let original = 120 * 60; // 5 min
-	let timer = tweened(original)
+	let timer;
+
+  onMount(async () => {
+    let response = await fetch("http://localhost:8000/api/time", {
+      method: "GET",
+      headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + localStorage.getItem("jwt")
+      }
+    }).then(res => res.json()).catch(err => err)
+    endtime = new Date(response["EndTime"])
+    let time_diff = endtime - new Date()
+    if (time_diff > 0) {
+      timer = tweened((time_diff / 1000))
+    }
+  })
 
   setInterval(() => {
     if ($timer > 0) $timer--;
@@ -35,6 +50,12 @@ const items = [
     minimumIntegerDigits: 2,
     useGrouping: false
   });
+
+  export let filter_value;
+
+  $: {
+    console.log(filter_value)
+  }
 </script>
 
 
@@ -49,15 +70,19 @@ const items = [
         <div h-fit w-fit class="justify-self-center my-2
                                 text-center text-3xl leading-relaxed
                                 ring-4 ring-[#BD7BFF] rounded-lg">
-          <span class="hours">{formattedHours} :</span>
-          <span class="mins">{formattedMinutes} :</span>
-          <span class="secs">{formattedSeconds}</span>
+          {#if timer === undefined}
+            Ended
+          {:else}
+            <span class="hours">{formattedHours} :</span>
+            <span class="mins">{formattedMinutes} :</span>
+            <span class="secs">{formattedSeconds}</span>
+          {/if}
         </div>
       </li>
       {#each items as it}
         <div class="flex my-2">
           <li class="flex p-2 hover:bg-purple-300 hover:text-black">
-            <button class="text-2xl">{it}</button>
+            <button class="text-2xl" on:click={() => {filter_value=it}}>{it}</button>
           </li>
         </div>
       {/each}

@@ -1,6 +1,6 @@
 <script>
   import { AppLogo } from "$lib/Assets.js";
-  import { Bill, fetch_all } from "$lib/Bill.js";
+  import { Bill, fetch_all, update_bill } from "$lib/Bill.js";
   import { onMount } from "svelte";
 
   export let status = "close";
@@ -32,10 +32,11 @@
   // });
   async function fetchbills(bill_id) {
     try {
-      console.log("billID", bill_id);
+      // console.log("billID", bill_id);
       bill_info = await fetch_all(bill_id);
-      console.log("bill_info", bill_info); // Log the bill_info array
-      console.log("bill_info[0]", bill_info[0]); // Log the first element of the array
+      console.log("before update", bill_info[0]);
+      // console.log("bill_info", bill_info); // Log the bill_info array
+      // console.log("bill_info[0]", bill_info[0]); // Log the first element of the array
     } catch (error) {
       console.error("Error fetching bills:", error);
     }
@@ -54,6 +55,16 @@
     formattedDateString = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
     console.log("formattedDateString", formattedDateString);
   }
+
+  async function update_current_bill(bill_data) {
+    let statcode = await update_bill(bill_data).then((res) => res);
+    if (statcode != 200) {
+      console.log("failed to update bill");
+    }
+    console.log("after update", bill_data);
+    location.reload();
+  }
+
   let dialog;
 
   $: if (status === "open" && dialog) {
@@ -101,6 +112,7 @@
             <div class="mr-5 mt-2 font-semibold text-right">Note :</div>
             <textarea
               class="w-[200px] h-[100px] border-black border resize-none"
+              bind:value={bill_info[0].Note}
             ></textarea>
           </div>
         </div>
@@ -138,7 +150,7 @@
           <div class="w-[235px] h-[40px">
             <button
               class="w-[200px] h-[40px] bg-[#FFC52F] font-bold mx-[10px] shadow-lg shadow-slate-400"
-              >Complete</button
+              on:click={update_current_bill(bill_info[0])}>Complete</button
             >
           </div>
           <div class="w-[235px] h-[40px] text-center">

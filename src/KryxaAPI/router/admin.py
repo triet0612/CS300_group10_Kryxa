@@ -238,3 +238,14 @@ async def view_bill_info(bill_id: int) -> Bill:
     except Exception as err:
         print(err)
         raise HTTPException(status_code=404, detail="No bill with that id")
+
+
+@adminRouter.put("/bills/{bill_id}", dependencies=[Depends(validateAdminToken)])
+async def update_bill(new_bill_data: Bill):
+    try:
+        bill_info = model.Bill.update_bill(new_bill_data)
+        print(bill_info)
+    # except FileNotFoundError as err:
+    #     print(err)
+    except Exception as err:
+        print(err)

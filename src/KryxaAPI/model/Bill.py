@@ -1,3 +1,4 @@
+import json
 import sqlite3
 from datetime import datetime
 from typing import Annotated, List
@@ -93,4 +94,26 @@ def fetch_bill_byID(bill_id: int) -> Bill:
             print(bill_info)
             return bill_info
         except Exception as err:
+            print(err)
+
+
+def update_bill(new_bill_data: Bill):
+    sql_query: str = "UPDATE Bill SET Datetime = ?, Note = ?, Total = ?, Cart = ? WHERE BillID = ?"
+
+    with DBService() as cur:
+        try:
+            cart_json = json.dumps(new_bill_data.Cart)
+
+            cur.cursor().execute(sql_query,
+                                 (
+                                     new_bill_data.Datetime,
+                                     new_bill_data.Note,
+                                     new_bill_data.Total,
+                                     cart_json,
+                                     new_bill_data.BillID,
+                                 )
+                                 )
+            cur.commit()
+        except Exception as err:
+            cur.rollback()
             print(err)

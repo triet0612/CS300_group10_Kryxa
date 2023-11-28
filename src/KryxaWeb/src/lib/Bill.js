@@ -3,7 +3,7 @@
 export class Bill{
     constructor(BillID, PcID, Datetime, Note, Total, Cart){
         this.BillID=BillID
-        this.PcId=PcID
+        this.PcID=PcID
         this.Datetime=Datetime
         this.Note=Note
         this.Total=Total
@@ -67,5 +67,28 @@ export async function fetch_all(bill_id,day,month,year){
 //     return bill_info
 // }
 
-
-
+export async function update_bill(new_data){
+    let url = `http://localhost:8000/api/admin/bills/${new_data.BillID}`
+    console.log(new_data.Cart);
+    let statcode = await fetch(url, {
+        method: "PUT",
+        body: JSON.stringify({
+        "BillID": new_data.BillID,
+        "PcID" : new_data.PcID,
+        "Datetime": new_data.Datetime,
+        "Note": new_data.Note,
+        "Total": new_data.Total,
+        "Cart": new_data.Cart,
+        }),
+        headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("jwt")
+        },
+    })
+    .then(res => res.status)
+    .catch(err => {
+        console.log(err)
+        return 500
+    })
+    return statcode
+}

@@ -23,7 +23,6 @@
     console.log("id of selected bill: ", billID);
     status = "open";
     bill_id = billID;
-    console.log("bill_id: ", bill_id);
   }
 
   onMount(async () => {

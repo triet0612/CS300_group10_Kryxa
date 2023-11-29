@@ -14,7 +14,7 @@
 
   let bill_info = [];
   let formattedDateString = "newTime";
-  let hoveredItem;
+
   // onMount(async () => {
   //   bill_id = 1;
   //   bill_info = await fetch_all(bill_id).then((res)=>res);
@@ -145,6 +145,7 @@
                     ? 'bg-white'
                     : 'bg-slate-200'} cursor-pointer transition-colors duration-300 hover:bg-red-500"
                   on:click={() => remove_item(item["id"])}
+                  title="Click to remove"
                 >
                   <td class="w-[250px] pl-2">{item["name"]}</td><td
                     class="w-[50px]">{item["qt"]}</td

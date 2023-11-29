@@ -14,7 +14,7 @@
 
   let bill_info = [];
   let formattedDateString = "newTime";
-  let mybill;
+  let hoveredItem;
   // onMount(async () => {
   //   bill_id = 1;
   //   bill_info = await fetch_all(bill_id).then((res)=>res);
@@ -63,6 +63,17 @@
     }
     console.log("after update", bill_data);
     location.reload();
+  }
+
+  async function remove_item(item_id) {
+    console.log("Removing item with ID:", item_id);
+    bill_info[0].Cart = bill_info[0].Cart.filter((item) => item.id !== item_id);
+    //Update bill's order
+    bill_info[0].Cart.forEach((item, index) => {
+      item.id = index + 1;
+    });
+
+    console.log("Updated Cart:", bill_info[0].Cart);
   }
 
   let dialog;
@@ -132,7 +143,8 @@
                 <tr
                   class=" h-[40px] {item['id'] % 2 == 0
                     ? 'bg-white'
-                    : 'bg-slate-200'}"
+                    : 'bg-slate-200'} cursor-pointer transition-colors duration-300 hover:bg-red-500"
+                  on:click={() => remove_item(item["id"])}
                 >
                   <td class="w-[250px] pl-2">{item["name"]}</td><td
                     class="w-[50px]">{item["qt"]}</td

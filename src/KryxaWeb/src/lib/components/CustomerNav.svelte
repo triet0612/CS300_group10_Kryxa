@@ -12,7 +12,6 @@
 
   let endtime;
 
-  let original = 120 * 60; // 5 min
 	let timer;
 
   onMount(async () => {
@@ -67,9 +66,7 @@
     <ul class="flex flex-col text-2xl text-[#FF9900] font-BlackOpsOne">
       <li><img src={UserAssets["UserLogo"]} alt="Logo" /></li>
       <li>
-        <div h-fit w-fit class="justify-self-center my-2
-                                text-center text-3xl leading-relaxed
-                                ring-4 ring-[#BD7BFF] rounded-lg">
+        <div h-fit w-fit class="justify-self-center my-2 text-center text-3xl leading-relaxed ring-4 ring-[#BD7BFF] rounded-lg">
           {#if timer === undefined}
             Ended
           {:else}

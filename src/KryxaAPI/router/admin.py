@@ -4,10 +4,9 @@ from fastapi import APIRouter, HTTPException, Response, Depends, File, Query
 from typing import Annotated
 
 import model.PC
-from auth import checkAdminAccount, generate_admin_token, validateAdminToken, AccountDTO
+from service.auth import checkAdminAccount, generate_admin_token, validateAdminToken
 import model.SaleItems
-from model.SaleItems import SaleItems, create_item
-import array as arr
+from model.SaleItems import SaleItems
 from model.PC import Pc, fetch_pc_by_id, insert_pc, PcDTO, fetch_time_usage, update_pc_by_id
 from model.Admin import Admin
 from service.file import get_file

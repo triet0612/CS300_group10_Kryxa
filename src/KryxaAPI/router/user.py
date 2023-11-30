@@ -5,9 +5,9 @@ from service.file import get_file
 
 from fastapi import APIRouter, Response, HTTPException, Depends
 from fastapi.responses import StreamingResponse
-from auth import AccountDTO, checkPcAccount, generate_pc_token, validatePcToken
+from service.auth import AccountDTO, checkPcAccount, generate_pc_token, validatePcToken
 from typing import Annotated
-from model.SaleItems import SaleItems, fetch_all_items
+from model.SaleItems import fetch_all_items
 from model.PC import fetch_pc_by_id
 
 userRouter = APIRouter(tags=["user"])

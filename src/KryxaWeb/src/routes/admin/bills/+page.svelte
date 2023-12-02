@@ -97,7 +97,7 @@
       <input
         type="number"
         min="0"
-        placeholder="PC ID"
+        placeholder="Bill ID"
         class="px-5 h-[50px] rounded-3xl bg-purple-900"
         bind:value={input_bill_id}
         on:change={UpdateBill}

@@ -64,9 +64,13 @@
               </li>
           {/if}
         {/each}
-      </ul> 
+      </ul>
     </div>
+     
   </div>
+  <div id ="cartPage"class="flex flex-row w-1/3 bg-white">
+    
+  </div>  
 </div>
   
 <!-- svelte-ignore a11y-no-static-element-interactions -->

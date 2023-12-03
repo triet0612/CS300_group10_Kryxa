@@ -1,6 +1,8 @@
 import datetime
 from datetime import datetime
 from io import BytesIO
+from fastapi.responses import StreamingResponse
+from fastapi import APIRouter, HTTPException, Response, Depends, File
 from typing import Annotated
 
 from fastapi import APIRouter, HTTPException, Response, Depends, File, Query
@@ -8,6 +10,7 @@ from fastapi.responses import StreamingResponse
 
 import model.Bill
 import model.PC
+from auth import checkAdminAccount, generate_admin_token, validateAdminToken, AccountDTO, change_password
 import model.SaleItems
 from auth import checkAdminAccount, generate_admin_token, validateAdminToken
 from model.Admin import Admin
@@ -15,6 +18,7 @@ from model.Bill import fetchSalesByMonth, fetchSalesByPcID
 from model.PC import Pc, fetch_pc_by_id, insert_pc, PcDTO, fetch_time_usage, update_pc_by_id
 from model.SaleItems import SaleItems
 from service.file import get_file
+from model.Bill import Bill, fetch_bill_byID
 
 adminRouter = APIRouter(tags=["admin"])
 file_manager = get_file()
@@ -38,9 +42,9 @@ async def login(acc: Admin, res: Response) -> str:
         raise HTTPException(status_code=401, detail="Error validating")
 
 
-@adminRouter.get("/bills", dependencies=[Depends(validateAdminToken)])
+@adminRouter.get("/bills/", dependencies=[Depends(validateAdminToken)])
 async def get_all_bills(
-        bill_id: int| None = None,
+        bill_id: Annotated[int, Query(ge=1)] = None,
         day: Annotated[int, Query(ge=1, le=31)] = None,
         month: Annotated[int, Query(ge=1, le=12)] = None,
         year: Annotated[int, Query(ge=0)] = None, ):
@@ -58,23 +62,13 @@ async def get_all_bills(
         pass
 
 
-@adminRouter.get("/bills/{bill_id}", dependencies=[Depends(validateAdminToken)])
-async def view_bill_info(bill_id: int):
-    try:
-        bill_info = model.Bill.fetch_bill_by_id(bill_id)
-        return bill_info
-    except Exception as err:
-        print(err)
-        raise HTTPException(status_code=404, detail="No bill with that id")
-
-
 @adminRouter.get("/items", dependencies=[Depends(validateAdminToken)])
 async def get_all_items(item_name: str | None = None, item_category: str | None = None):
     try:
         item_list = model.SaleItems.fetch_all_items()
         if len(item_list) == 0:
             raise HTTPException(status_code=404,
-                                detail="No items")
+                                detail="No items")  # This should not be 404, should have a notification screen
 
         if item_category:
             item_list[:] = [item for item in item_list if item.Category == item_category]
@@ -166,7 +160,7 @@ async def edit_pc(pc_info: PcDTO):
         raise HTTPException(status_code=404, detail="PC not found")
 
 
-@adminRouter.post("/item", dependencies=[Depends(validateAdminToken)])
+@adminRouter.post("/item", dependencies=[Depends(validateAdminToken)], )
 async def create_item(item: SaleItems):
     try:
         model.SaleItems.create_item(item)
@@ -196,6 +190,25 @@ async def get_file(filename: int):
         raise HTTPException(status_code=400, detail=str(ve))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@adminRouter.post("/account")
+async def check_password(acc: Admin) -> str:
+    try:
+        valid = checkAdminAccount(acc)
+        if valid is False:
+            raise HTTPException(status_code=401, detail="Wrong password ")
+        return "Check password successful"
+    except Exception as err:
+        print(err)
+        raise HTTPException(status_code=401, detail="Error validating")
+
+@adminRouter.put("/account")
+async def get_new_password(acc: Admin):
+    try:
+        return change_password(acc)
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=400, detail="Error saving password")
 
 
 @adminRouter.get("/sales", dependencies=[Depends(validateAdminToken)])
@@ -234,3 +247,24 @@ def get_time_usage():
     except Exception as err:
         print(err)
         raise HTTPException(500, "Unknown error")
+
+
+@adminRouter.get("/bills/{bill_id}", dependencies=[Depends(validateAdminToken)])
+async def view_bill_info(bill_id: int) -> Bill:
+    try:
+        bill_info = fetch_bill_byID(bill_id)
+        return bill_info
+    except Exception as err:
+        print(err)
+        raise HTTPException(status_code=404, detail="No bill with that id")
+
+
+@adminRouter.put("/bills/{bill_id}", dependencies=[Depends(validateAdminToken)])
+async def update_bill(new_bill_data: Bill):
+    try:
+        bill_info = model.Bill.update_bill(new_bill_data)
+        print(bill_info)
+    # except FileNotFoundError as err:
+    #     print(err)
+    except Exception as err:
+        print(err)

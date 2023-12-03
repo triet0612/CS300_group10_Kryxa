@@ -1,10 +1,11 @@
+import json
 import sqlite3
 from datetime import datetime
 from typing import Annotated, List
 
 from fastapi import HTTPException
 from pydantic import BaseModel, Field, field_serializer
-
+from typing import Annotated, Literal
 from db.database import DBService
 
 
@@ -80,3 +81,39 @@ def fetchSalesByPcID():
         except sqlite3.Error as err:
             print(err)
             raise HTTPException(500, "Database error")
+
+
+def fetch_bill_byID(bill_id: int) -> Bill:
+    with DBService() as cur:
+        try:
+            bill = cur.cursor().execute(
+                "SELECT * FROM Bill WHERE BillID =?", [bill_id]
+            ).fetchone()
+            bill_info = Bill(BillID=bill[0], PcID=bill[1], Datetime=bill[2], Note=bill[3], Total=bill[4],
+                             Cart=list(eval(bill[5])))
+            print(bill_info)
+            return bill_info
+        except Exception as err:
+            print(err)
+
+
+def update_bill(new_bill_data: Bill):
+    sql_query: str = "UPDATE Bill SET Datetime = ?, Note = ?, Total = ?, Cart = ? WHERE BillID = ?"
+
+    with DBService() as cur:
+        try:
+            cart_json = json.dumps(new_bill_data.Cart)
+
+            cur.cursor().execute(sql_query,
+                                 (
+                                     new_bill_data.Datetime,
+                                     new_bill_data.Note,
+                                     new_bill_data.Total,
+                                     cart_json,
+                                     new_bill_data.BillID,
+                                 )
+                                 )
+            cur.commit()
+        except Exception as err:
+            cur.rollback()
+            print(err)

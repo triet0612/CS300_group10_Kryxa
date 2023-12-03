@@ -4,6 +4,7 @@
   import { fetch_all } from "$lib/Bill.js";
   import { getPcByID, Pc } from "$lib/Pc.js";
   import { onMount } from "svelte";
+  import ModalBill from "$lib/components/ModalBill.svelte"
   let bill_list = [];
   let item_pc = new Pc();
   let input_bill_id;
@@ -39,14 +40,18 @@
     }
   }
 
-  async function validate(str, pc_id) {
+  async function validate(str, pc_id, bill_ID) {
     item_pc = await getPcByID(pc_id);
-    if (refort(str) != "") {
+    if (str != undefined) {
+      console.log(str, bill_ID, 0)
       return 0;
-    } else {
-      if (refort(item_pc.EndTime) <= cur()) {
+    } 
+    else {
+      if (Date(refort(item_pc.EndTime)) <= Date(cur())) {
+        console.log(str, bill_ID, 1)
         return 1;
       } else {
+        console.log(str, bill_ID, 2)
         return 2;
       }
     }
@@ -66,6 +71,10 @@
   }
 
   function refort(str) {
+    if (str == undefined){
+      return 'None'
+    }
+      
     const originalDate = new Date(str);
 
     const year = originalDate.getFullYear();
@@ -115,7 +124,7 @@
             {#each bill_list as valid}
               <li
                 class="text-center justify-center items-center"
-                style={validate(valid.Datetime, valid.PcID) != 0
+                style={validate(valid.Datetime, valid.PcID, valid.BillID) !== 0
                   ? "display:none"
                   : ""}
               >
@@ -128,7 +137,7 @@
                   on:click={openModal(valid.BillID)}
                 >
                   <img
-                    src={validate(valid.Datetime, valid.PcID) == 1
+                    src={validate(valid.Datetime, valid.PcID, valid.BillID) === 1
                       ? MainScreen["RedForm"]
                       : MainScreen["GreenForm"]}
                     alt="screen"
@@ -145,7 +154,7 @@
             {#each bill_list as valid}
               <li
                 class="text-center justify-center items-center font-medium"
-                style={validate(valid.Datetime, valid.PcID) == 0
+                style={validate(valid.Datetime, valid.PcID, valid.BillID) === 0
                   ? "display:none"
                   : ""}
               >

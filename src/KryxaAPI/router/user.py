@@ -50,10 +50,10 @@ async def get_all_items(item_name: str | None = None, item_category: str | None 
                                 detail="No items")  # This should not be 404, should have a notification screen
 
         if item_category:
-            item_list[:] = [item for item in item_list if item.Category == item_category]
+            item_list[:] = [item for item in item_list if item.Category.lower() == item_category.lower()]
 
         if item_name:
-            item_list[:] = [item for item in item_list if item_name in item.Name]
+            item_list[:] = [item for item in item_list if item_name.lower() in item.Name.lower()]
 
         return item_list
 

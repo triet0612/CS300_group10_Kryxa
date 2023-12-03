@@ -26,6 +26,7 @@
 
   onMount(async () => {
     bill_list = await fetch_all().then((res) => res);
+    console.log(bill_list)
   });
 
   async function UpdateBill() {
@@ -42,50 +43,32 @@
 
   async function validate(str, pc_id, bill_ID) {
     item_pc = await getPcByID(pc_id);
-    if (str != undefined) {
+    if (str !== undefined && str !== null) {
       console.log(str, bill_ID, 0)
       return 0;
     } 
     else {
-      if (Date(refort(item_pc.EndTime)) <= Date(cur())) {
-        console.log(str, bill_ID, 1)
+      if (new Date(refort(item_pc.EndTime)) - new Date(cur()) <= 0) {
+        // console.log(str, bill_ID, 1)
         return 1;
-      } else {
-        console.log(str, bill_ID, 2)
-        return 2;
       }
+      console.log(str, bill_ID, 2)
+      console.log(2)
+      return 2;
     }
   }
 
   function cur() {
     const now = new Date();
-    const currentHour = ("0" + now.getHours()).slice(-2);
-    const currentMinute = ("0" + now.getMinutes()).slice(-2);
-    const currentSecond = ("0" + now.getSeconds()).slice(-2);
-    const currentDay = ("0" + now.getDate()).slice(-2);
-    const currentMonth = ("0" + (now.getMonth() + 1)).slice(-2);
-    const currentYear = now.getFullYear();
-
-    const datee = `${currentDay}/${currentMonth}/${currentYear} ${currentHour}:${currentMinute}:${currentSecond}`;
-    return datee;
+    return now.toLocaleString('vi-VI')
   }
 
   function refort(str) {
     if (str == undefined){
       return 'None'
     }
-      
     const originalDate = new Date(str);
-
-    const year = originalDate.getFullYear();
-    const month = ("0" + (originalDate.getMonth() + 1)).slice(-2); // Adding 1 because months are zero-based
-    const day = ("0" + originalDate.getDate()).slice(-2);
-    const hours = ("0" + originalDate.getHours()).slice(-2);
-    const minutes = ("0" + originalDate.getMinutes()).slice(-2);
-    const seconds = ("0" + originalDate.getSeconds()).slice(-2);
-
-    const formattedDateString = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
-    return formattedDateString;
+    return originalDate.toLocaleString('vi-VI');
   }
 </script>
 
@@ -122,55 +105,61 @@
         <div id="bo">
           <ul class="grid grid-flow-row grid-cols-3 m-7 gap-5 text-white">
             {#each bill_list as valid}
-              <li
-                class="text-center justify-center items-center"
-                style={validate(valid.Datetime, valid.PcID, valid.BillID) !== 0
-                  ? "display:none"
-                  : ""}
-              >
-                <!-- svelte-ignore a11y-interactive-supports-focus -->
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
-                <div
-                  id="bi"
-                  class="grid grid-flow-row auto-rows-max"
-                  role="button"
-                  on:click={openModal(valid.BillID)}
-                >
-                  <img
-                    src={validate(valid.Datetime, valid.PcID, valid.BillID) === 1
-                      ? MainScreen["RedForm"]
-                      : MainScreen["GreenForm"]}
-                    alt="screen"
-                  />
-                  <div class="justify-center">{valid.BillID}</div>
-                  <div class="justify-center">{refort(valid.Datetime)}</div>
-                </div>
-              </li>
+              {#await validate(valid.Datetime, valid.PcID, valid.BillID)}
+                asd
+              {:then res} 
+                {#if res === 1 || res === 2}
+                  <li
+                    class="text-center justify-center items-center"
+                  >
+                    <!-- svelte-ignore a11y-interactive-supports-focus -->
+                    <!-- svelte-ignore a11y-click-events-have-key-events -->
+                    <div
+                      id="bi"
+                      class="grid grid-flow-row auto-rows-max"
+                      role="button"
+                      on:click={openModal(valid.BillID)}
+                    >
+                      <img
+                        src={validate(valid.Datetime, valid.PcID, valid.BillID) === 1
+                          ? MainScreen["RedForm"]
+                          : MainScreen["GreenForm"]}
+                        alt="screen"
+                      />
+                      <div class="justify-center">{valid.BillID}</div>
+                      <div class="justify-center">{refort(valid.Datetime)}</div>
+                    </div>
+                  </li>
+                {/if}
+              {/await}
             {/each}
           </ul>
         </div>
         <div id="bo">
           <ul class="grid grid-flow-row grid-cols-3 m-7 gap-5 text-white">
             {#each bill_list as valid}
-              <li
-                class="text-center justify-center items-center font-medium"
-                style={validate(valid.Datetime, valid.PcID, valid.BillID) === 0
-                  ? "display:none"
-                  : ""}
-              >
-                <!-- svelte-ignore a11y-interactive-supports-focus -->
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
-                <div
-                  id="bi"
-                  class="grid grid-flow-row auto-rows-max"
-                  role="button"
-                  on:click={openModal(valid.BillID)}
-                >
-                  <img src={MainScreen["RedForm"]} alt="screen" />
-                  <div class="justify-center">{valid.BillID}</div>
-                  <div class="justify-center">{refort(valid.Datetime)}</div>
-                </div>
-              </li>
+              {#await validate(valid.Datetime, valid.PcID, valid.BillID)}
+                asd
+              {:then res}
+                {#if res === 0}
+                  <li
+                    class="text-center justify-center items-center font-medium"
+                  >
+                    <!-- svelte-ignore a11y-interactive-supports-focus -->
+                    <!-- svelte-ignore a11y-click-events-have-key-events -->
+                    <div
+                      id="bi"
+                      class="grid grid-flow-row auto-rows-max"
+                      role="button"
+                      on:click={openModal(valid.BillID)}
+                    >
+                      <img src={MainScreen["RedForm"]} alt="screen" />
+                      <div class="justify-center">{valid.BillID}</div>
+                      <div class="justify-center">{refort(valid.Datetime)}</div>
+                    </div>
+                  </li>
+                {/if}
+              {/await}
             {/each}
           </ul>
         </div>

@@ -10,7 +10,7 @@ from fastapi.responses import StreamingResponse
 
 import model.Bill
 import model.PC
-from auth import checkAdminAccount, generate_admin_token, validateAdminToken, AccountDTO
+from auth import checkAdminAccount, generate_admin_token, validateAdminToken, AccountDTO, change_password
 import model.SaleItems
 from auth import checkAdminAccount, generate_admin_token, validateAdminToken
 from model.Admin import Admin
@@ -190,6 +190,25 @@ async def get_file(filename: int):
         raise HTTPException(status_code=400, detail=str(ve))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@adminRouter.post("/account")
+async def check_password(acc: Admin) -> str:
+    try:
+        valid = checkAdminAccount(acc)
+        if valid is False:
+            raise HTTPException(status_code=401, detail="Wrong password ")
+        return "Check password successful"
+    except Exception as err:
+        print(err)
+        raise HTTPException(status_code=401, detail="Error validating")
+
+@adminRouter.put("/account")
+async def get_new_password(acc: Admin):
+    try:
+        return change_password(acc)
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=400, detail="Error saving password")
 
 
 @adminRouter.get("/sales", dependencies=[Depends(validateAdminToken)])

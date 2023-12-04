@@ -7,13 +7,13 @@ from typing import Annotated
 
 
 import model.PC
-from service.auth import checkAdminAccount, generate_admin_token, validateAdminToken
+from service.auth import checkAdminAccount, generate_admin_token, validateAdminToken,change_password
 import model.SaleItems
 from model.SaleItems import SaleItems
 from model.PC import Pc, fetch_pc_by_id, insert_pc, PcDTO, fetch_time_usage, update_pc_by_id
 from model.Admin import Admin
 from service.file import get_file
-from model.Bill import fetchSalesByMonth, fetchSalesByPcID
+from model.Bill import Bill,fetchSalesByMonth, fetchSalesByPcID
 from fastapi import APIRouter, HTTPException, Response, Depends, File, Query
 from fastapi.responses import StreamingResponse
 

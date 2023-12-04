@@ -20,8 +20,6 @@ import user_cart_icon from "$lib/assets/user/cart.png"
 
 
 
-import addItem from '$lib/assets/admin/addItem.jpg'
-
 
 export const AppLogo = logo;
 
@@ -49,6 +47,6 @@ export const UserAssets={
   "CartIcon": user_cart_icon
 }
 
-export const Banner = banner;
+// export const Banner = banner;
 export const Board = board;
 

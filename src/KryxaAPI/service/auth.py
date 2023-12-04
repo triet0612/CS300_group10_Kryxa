@@ -79,22 +79,7 @@ def validatePcToken(creds=Depends(jwt_auth)) -> AccountDTO:
         raise HTTPException(status_code=401, detail='Error token')
 
 
-
 def generate_pc_token(acc: AccountDTO) -> str:
     to_encode = {"PcID": acc.PcID, "Password": acc.Password}
     encoded_jwt = jwt.encode(to_encode, JWT_SECRET, algorithm=HASH_ALGORITHM)
     return encoded_jwt
-
-def change_password(acc:Admin) -> bool:
-    with DBService() as cur:
-        try:
-            cur.execute(
-                "UPDATE Admin SET Password=?",
-                [acc.Password]
-            )
-            cur.commit()
-            return True
-        except Exception as err:
-            cur.rollback()
-            print(err)
-

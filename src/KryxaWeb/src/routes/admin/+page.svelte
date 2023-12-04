@@ -11,9 +11,25 @@
     console.log(pc_list);
   });
 
+  // let pc_list = [
+  //   { PcID: 1, Status: "Unavailable" },
+  //   { PcID: 2, Status: "Available" },
+  //   { PcID: 3, Status: "Available" },
+  //   { PcID: 4, Status: "Available" },
+  //   { PcID: 5, Status: "Maintainance" },
+  //   { PcID: 6, Status: "Maintainance" },
+  //   { PcID: 7, Status: "Maintainance" },
+  //   { PcID: 8, Status: "Maintainance" },
+  //   { PcID: 9, Status: "Maintainance" },
+  //   { PcID: 10, Status: "Maintainance" },
+  //   { PcID: 11, Status: "Maintainance" },
+  //   { PcID: 12, Status: "Maintainance" },
+  //   { PcID: 13, Status: "Maintainance" },
+  //   { PcID: 14, Status: "Maintainance" },
+  // ];
 
   const d = new Date();
-  let real_time = d.toLocaleString();
+  let real_time = d.toISOString();
 
   let status = "close";
   function close(event) {
@@ -75,16 +91,16 @@
   </div>
 </div>
 
+<style>
+  #bg{
+    display: flex;
+  flex-direction: row;
+  height: 100vh;
+  background-size: cover;
+  }
+</style>
+
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div on:keydown={close}>
   <ModalPc {status} on:keydown={close} />
 </div>
-
-<style>
-  #bg {
-    display: flex;
-    flex-direction: row;
-    height: 100vh;
-    background-size: cover;
-  }
-</style>

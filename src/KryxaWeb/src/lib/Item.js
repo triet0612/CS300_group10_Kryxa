@@ -130,6 +130,7 @@ export async function fetch_all(){
         return res.json()
     })
     .catch(err => {console.log(err); return [];})
+    console.log(items[0])
     return items
 }
 
@@ -147,6 +148,7 @@ export async function fetch_category(category,name){
             url+= '?item_category='+category
         }
     }
+    console.log(url)
     let items = await fetch(url, {
     method: "GET",
     headers: {
@@ -162,6 +164,7 @@ export async function fetch_category(category,name){
         return res.json()
     })
     .catch(err => {console.log(err); return [];})
+    console.log(items[0])
     return items
 }
 
@@ -169,12 +172,10 @@ export async function createImage(file,id) {
     
     let url = `http://localhost:8000/api/admin/uploadfile/?item_id=${id}`
     let data = new FormData()
-    if (file != undefined){
-        data.append(
-            'file',file[0]
-        )
-    }
-    
+
+    data.append(
+        'file',file[0]
+    )
     console.log(data)
     
     let statcode = await fetch(url, {

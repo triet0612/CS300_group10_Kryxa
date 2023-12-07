@@ -16,7 +16,7 @@ import addItem from '$lib/assets/admin/addItem.jpg'
 import user_items_bg from '$lib/assets/user/user_items_bg.png'
 import user_logo from '$lib/assets/user/logo.png'
 import user_cart_icon from "$lib/assets/user/cart.png"
-
+import trash from "$lib/assets/clear.png"
 
 
 
@@ -50,3 +50,4 @@ export const UserAssets={
 // export const Banner = banner;
 export const Board = board;
 
+export const Trash = trash;

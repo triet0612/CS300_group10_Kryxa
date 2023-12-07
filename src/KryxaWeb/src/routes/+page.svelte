@@ -67,17 +67,17 @@
         totalPrice = totalPrice + info.Price * item.quantity
         listCartHTML.appendChild(newItem);
         newItem.innerHTML = `
-                <div class = "flex flex-row bg-white/80 rounded-3xl h-1/2 mt-5 h-20 w-11/12 mx-auto">
+                <div class = "flex flex-row bg-white/80 border-b-2 h-1/2 h-20 w-11/12 mx-auto">
                   <img style="screen" src="http://localhost:8000/api/getfile/${
                     info.ItemID
                   }" sizes="(max-width:20px)"
                       class="bg-contain rounded-full ml-5 h-14 my-auto w-14"
                     />
                   <div class = "flex flex-col ml-3 mt-2 w-32">
-                    <div class="text-violet-900 text-xl font-BlackOpsOne">
+                    <div class="text-[#FF9900] text-xl font-BlackOpsOne">
                     ${info.Name}
                     </div>
-                    <div class="text-violet-900 text-xl font-BlackOpsOne mt-3">$${
+                    <div class="text-[#FF9900] text-xl font-BlackOpsOne mt-3">$${
                       info.Price * item.quantity
                     }</div>
                   </div>
@@ -90,8 +90,8 @@
             `;
       });
     }
-    total_price.textContent = 'Total price: $'+totalPrice
-    total_quantity.textContent = 'Total item: '+totalQuantity + ' items'
+    total_price.textContent = totalPrice+'đ'
+    total_quantity.textContent = totalQuantity + ' items'
   }
 
   
@@ -205,7 +205,7 @@
           {#if list_item.Stock > 0}
             <button on:click={addItem(list_item.ItemID)}>
               <li
-                class="w-56 h-56 bg-gray-600 flex-rowtext-white justify-center text-center border-2 items-center rounded-lg hover:scale-105"
+                class="w-56 h-56 bg-green-600 bg-opacity-75 flex-rowtext-white justify-center text-center border-2 items-center rounded-lg hover:scale-105"
               >
                 <div class="min-w-56 min-h-48 rounded-lg">
                   <!-- svelte-ignore a11y-missing-attribute -->
@@ -216,7 +216,7 @@
                     class="bg-contain w-56 h-48"
                   />
                 </div>
-                <p id="image" class="justify-center font-BlackOpsOne text-xl">
+                <p id="image" class="justify-center font-NotoSans text-xl text-white">
                   {list_item.Name} | {list_item.Price.toLocaleString()}
                 </p>
               </li>
@@ -228,7 +228,7 @@
   </div>
   <div id="cartPage" class="flex flex-col w-1/3 bg-white rounded-xl">
     <div class = "flex flex-row">
-      <p class="text-violet-900 text-4xl font-BlackOpsOne mx-auto h-14 mt-5">
+      <p class="text-[#FF9900] text-4xl border-b-2 font-BlackOpsOne mx-auto h-14 mt-5">
         My cart
       </p>
       <button on:click={clearCart} class = "w-10">
@@ -236,17 +236,35 @@
       </button>
     </div>
     
-    <div id="cart_list" class="overflow-auto bg-gray-300 h-2/3 rounded-3xl"></div>
-    <p id = "total_quantity" class = "text-violet-900 text-2xl font-BlackOpsOne mt-8 ml-5 ">
-      0 items
-    </p>
-    <p id="total_price" class = "text-violet-900 text-2xl font-BlackOpsOne mt-4 ml-5 ">
-      $0
-    </p>
+    <div id="cart_list" class="overflow-auto h-2/3"></div>
+    <div class = "bg-gray-400 w-11/12 mx-auto rounded-3xl">
+      <div class = "border-b-4 border-black">
+        <div class ="flex flex-row">
+          <div id = "" class = " text-2xl font-NotoSans mt-8 ml-3 ">
+            Total items: 
+          </div>
+          <div id = "total_quantity" class = "text-2xl font-NotoSans mt-8 ">
+            0 items
+          </div>
+        </div>
+        <div class ="flex flex-row">
+          <p id="" class = "text-2xl font-NotoSans mt-4 ml-3 ">
+            Total price: 
+          </p>
+          <p id="total_price" class = "text-green-900 text-2xl font-NotoSans mt-4 ml-5 ">
+            $0
+          </p>
+        </div>
+        
+      </div>
+      
+      <button class="bg-amber-400 h-20 mb-5 rounded-xl flex flex-col items-center justify-center mx-auto w-11/12 text-3xl mt-3 font-NotoSans font-bold">
+        Check Out
+      </button>
+    </div>
     
-    <button class="bg-violet-900 h-20 rounded-full w-full text-3xl text-[#FF9900] font-BlackOpsOne">
-      Check Out
-    </button>
+    
+    
     
   </div>
 </div>

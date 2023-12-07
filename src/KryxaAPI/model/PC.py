@@ -70,8 +70,8 @@ def insert_pc(new_pc: Pc):
     with DBService() as cur:
         try:
             cur.execute(
-                "INSERT INTO Pc VALUES (?, ?, ?, ?, 0, ?)",
-                [new_pc.PcID, new_pc.Password, new_pc.MAC, new_pc.IPv4, new_pc.Status]
+                "INSERT INTO Pc VALUES (?, ?, ?, ?, 0)",
+                [new_pc.PcID, new_pc.EndTime, new_pc.Password, new_pc.IPv4]
             )
             cur.commit()
         except Exception as err:

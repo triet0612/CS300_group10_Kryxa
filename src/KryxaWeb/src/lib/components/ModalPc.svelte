@@ -28,7 +28,6 @@
             <img src="{AppLogo}" alt="" width="50%" class=" absolute top-[-115px] border-[#E3A052]">
             <div class="flex flex-col w-64">
                 <input bind:value={newPC.PcID} class="p-3 my-1 mx-1 bg-white rounded-xl text-left" type="number" placeholder="PcID">
-                <input bind:value={newPC.MAC} class="p-3 my-1 mx-1 bg-white rounded-xl text-left" type="text" placeholder="MAC">
                 <input bind:value={newPC.IPv4} class="p-3 my-1 mx-1 bg-white rounded-xl text-left" type="text" placeholder="IPv4">
                 <button on:click={async () => click()} class="p-2 px-10 m-1 mx-10 bg-white rounded-xl hover:bg-gray-300 active:bg-gray-500">
                     Create

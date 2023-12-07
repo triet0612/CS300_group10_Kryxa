@@ -15,11 +15,10 @@ export class Pc {
       method: "POST",
       body: JSON.stringify({
         "PcID": this.PcID,
+        "EndTime": new Date().toISOString(),
         "Password": "123",
-        "MAC": this.MAC,
         "IPv4": this.IPv4,
         "TimeUsage": 0,
-        "Status": "Available"
       }),
       headers: {
         "Content-Type": "application/json",
@@ -91,7 +90,6 @@ export async function updateThisPcByID(pc_info,pc_id){
       "PcID": pc_info.PcID,
       "Password": pc_info.Password,
       "IPv4": pc_info.IPv4,
-      
     }),
     headers: {
       "Content-Type": "application/json",
@@ -102,8 +100,8 @@ export async function updateThisPcByID(pc_info,pc_id){
     if (res.status === 401) {
       alert("Not logged in")
       location.replace("/admin/login")
-  }
-    return res.json()
+    }
+    return res.status
   })
   .catch(err => {
     console.log(err)

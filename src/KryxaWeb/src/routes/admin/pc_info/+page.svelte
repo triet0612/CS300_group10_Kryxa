@@ -7,30 +7,55 @@
     let pc_info = new Pc()
     let newTime = "newTime"
     const d = new Date();
-    let real_time = d.toISOString();
+    let real_time = d.toLocaleString();
     onMount(async()=>{
         const urlSearchParams = new URLSearchParams(window.location.search).get("pc_id");
-        console.log("Requested PC ID: "+urlSearchParams)
         pc_info = await pc_info.getPcByID(urlSearchParams).then(res=>res)
 
-        const dateTimeArray = pc_info.EndTime.split("T")
-        const dateArray = dateTimeArray[0].split("-")
-        newTime = dateArray[2]+"/"+dateArray[1]+"/"+dateArray[0]+"  "+dateTimeArray[1]
+        newTime = new Date(pc_info.EndTime).toLocaleString()
     })
 
     async function click() {
         const urlSearchParams = new URLSearchParams(window.location.search).get("pc_id");
-        let statcode =await updateThisPcByID(pc_info,urlSearchParams).then(res=>res)
+        let statcode = await updateThisPcByID(pc_info,urlSearchParams).then(res=>res)
         console.log(statcode)
         if (statcode !== 200) {
             alert("Failed updating Pc")
-
         }
         location.reload()
     }
+    let session_time = 0;
+    async function openSession() {
+        let res = await fetch(`http://localhost:8000/api/admin/session?PcID=${pc_info.PcID}&time=${session_time}`,{
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("jwt")
+            },
+        }).then(r => r.status !== 200? "": r.statusText)
+        .catch(err => {console.log(err); return ""})
+        if (res === "") {
+            alert("A bill in progress or error open")
+        } else {
+            location.reload()
+        }
+    }
 
-
-
+    async function terminateSession() {
+        let res = await fetch(`http://localhost:8000/api/admin/session?PcID=${pc_info.PcID}`,{
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("jwt")
+            },
+        }).then(r => r.status !== 200? "": r.statusText)
+        .catch(err => {console.log(err); return ""})
+        if (res === "") {
+            alert("Error closing")
+        } else {
+            location.reload()
+        }
+    }
 </script>
 
 <div 
@@ -56,37 +81,37 @@
                         placeholder={pc_info.Password}
                         bind:value = {pc_info.Password}
                     >
-                    
                 </div>
                 <input class ="h-16 pl-5 bg-violet-900/50 rounded font-BlackOpsOne" 
                     placeholder={pc_info.IPv4}
                     bind:value={pc_info.IPv4}
                 >
-                <div class ="flex pl-5 items-center h-16  bg-violet-900/50 rounded font-BlackOpsOne">
+                <div class ="flex pl-5 items-center h-16 bg-violet-900/50 rounded font-BlackOpsOne">
                     {newTime}
                 </div>
                 <div class ="flex flex-row text-amber-400">
-                    <button class = " h-12 w-2/3 h-16 rounded-full hover:bg-yellow-300 hover:text-violet-900 active:bg-black  bg-violet-900  font-BlackOpsOne">
+                    <button class = "w-2/3 h-16 rounded-full hover:bg-yellow-300 hover:text-violet-900 active:bg-black  bg-violet-900  font-BlackOpsOne">
                         Bill
                     </button>
                     <button on:click={async () => click()}
-                        class = "ml-10  h-12 w-2/3 h-16 rounded-full hover:bg-amber-400 hover:text-violet-900 active:bg-black  bg-violet-900  font-BlackOpsOne">
+                        class = "ml-10 w-2/3 h-16 rounded-full hover:bg-amber-400 hover:text-violet-900 active:bg-black  bg-violet-900  font-BlackOpsOne">
                         Save
                     </button>
-                    <button class = "ml-10  h-12 w-2/3 h-16 rounded-full hover:bg-amber-400 hover:text-violet-900 active:bg-black  bg-violet-900 font-BlackOpsOne">
+                    <button on:click={terminateSession} class = "ml-10 w-2/3 h-16 rounded-full hover:bg-amber-400 hover:text-violet-900 active:bg-black  bg-violet-900 font-BlackOpsOne">
                         Terminate
                     </button>
                 </div>
             </div>
             <div class="flex flex-col basis-2/5 text-amber-400 text-3xl">
                 <div class ="">
-                    <button class = "ml-16 mt-10 h-16 w-2/3 rounded-full hover:bg-amber-400 hover:text-violet-900 active:bg-black  bg-violet-900 text-yellow-300 font-BlackOpsOne">
+                    <button class = "ml-16 mt-10 h-16 w-2/3 rounded-full hover:bg-amber-400 hover:text-violet-900 active:bg-black  bg-violet-900 text-yellow-300 font-BlackOpsOne"
+                        on:click={openSession}>
                         Open
                     </button>
                 </div>
-                <div class="mt-5 w-2/3 ml-16 {real_time > pc_info.EndTime
+                <div class="mt-5 w-2/3 ml-16 { new Date(real_time) > new Date(pc_info.EndTime)
                     ? 'bg-green-600 bg-opacity-75'
-                    : real_time < pc_info.EndTime
+                    : new Date(real_time) < new Date(pc_info.EndTime)
                     ? 'bg-red-600 bg-opacity-75'
                     : 'bg-white  bg-opacity-25'}
                     rounded-xl">
@@ -96,16 +121,13 @@
                       class="bg-contain w-11/12 m-auto"
                     />
                 </div>
-                
                 <div class = "ml-10 flex flex-row">
-                    <input class ="text-center mt-5 ml-10 w-24 h-16 bg-violet-900/50 rounded font-BlackOpsOne" type ="number">
+                    <input class ="text-center mt-5 ml-10 w-24 h-16 bg-violet-900/50 rounded font-BlackOpsOne" type ="number" bind:value={session_time}>
                     <div class ="mt-7 ml-3 text-amber-300 font-BlackOpsOne">
                         x30m    
                     </div>
                 </div>
-                
             </div>
-            
         </div>
     </div>
 </div>

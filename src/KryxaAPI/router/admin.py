@@ -1,3 +1,4 @@
+import sqlite3
 import datetime
 from datetime import datetime
 from io import BytesIO
@@ -6,26 +7,26 @@ from fastapi import APIRouter, HTTPException, Response, Depends, File
 from typing import Annotated
 
 
-import model.PC
-from service.auth import checkAdminAccount, generate_admin_token, validateAdminToken,change_password
-import model.SaleItems
-from model.SaleItems import SaleItems
-from model.PC import Pc, fetch_pc_by_id, insert_pc, PcDTO, fetch_time_usage, update_pc_by_id
-from model.Admin import Admin
-from service.file import get_file
-from model.Bill import Bill,fetchSalesByMonth, fetchSalesByPcID
+from model.PC import Pc, start_session, terminate_session
 from fastapi import APIRouter, HTTPException, Response, Depends, File, Query
 from fastapi.responses import StreamingResponse
 
+import model.Bill
+import model.PC
+from service.auth import checkAdminAccount, generate_admin_token, validateAdminToken, AccountDTO, change_password
+import model.SaleItems
+
+
+from model.Admin import Admin
+from model.Bill import fetchSalesByMonth, fetchSalesByPcID
+from model.PC import Pc, fetch_pc_by_id, insert_pc, PcDTO, fetch_time_usage, update_pc_by_id
+from model.SaleItems import SaleItems
+from service.file import get_file
+from model.Bill import Bill, fetch_bill_byID
 
 
 adminRouter = APIRouter(tags=["admin"])
 file_manager = get_file()
-
-
-# @adminRouter.get("/")
-# async def home_admin(acc: Annotated[AccountDTO, Depends(validateAdminToken)]):
-#     return {"message": "welcome admin ID: " + str(acc.ID)}
 
 
 @adminRouter.post("/login")
@@ -159,7 +160,7 @@ async def edit_pc(pc_info: PcDTO):
         raise HTTPException(status_code=404, detail="PC not found")
 
 
-@adminRouter.post("/item", dependencies=[Depends(validateAdminToken)], )
+@adminRouter.post("/item", dependencies=[Depends(validateAdminToken)])
 async def create_item(item: SaleItems):
     try:
         model.SaleItems.create_item(item)
@@ -210,6 +211,30 @@ async def get_new_password(acc: Admin):
         raise HTTPException(status_code=400, detail="Error saving password")
 
 
+@adminRouter.post("/session", dependencies=[Depends(validateAdminToken)])
+async def session(PcID: int | None = None, time: int | None = None):
+    if PcID is not None and time is not None:
+        try:
+            start_session(PcID, time)
+        except HTTPException as err:
+            raise err
+        except sqlite3.Error as err:
+            print(err)
+            raise HTTPException(status_code=400, detail="Error open a session")
+        except Exception as err:
+            print(err)
+            raise HTTPException(status_code=500, detail="Unknown error")
+    elif PcID is not None:
+        try:
+            terminate_session(PcID)
+        except HTTPException as err:
+            raise err
+        except sqlite3.Error as err:
+            print(err)
+            raise HTTPException(status_code=400, detail="Error termination session")
+        except Exception as err:
+            print(err)
+            raise HTTPException(status_code=500, detail="Unknown error")
 @adminRouter.get("/sales", dependencies=[Depends(validateAdminToken)])
 async def get_sale(
         month: Annotated[int | None, Query(ge=1, le=12)] = None,
@@ -267,3 +292,17 @@ async def update_bill(new_bill_data: Bill):
     #     print(err)
     except Exception as err:
         print(err)
+
+
+@adminRouter.post("/open/", dependencies=[Depends(validateAdminToken)])
+async def open_session(PcID: int, time: int):
+    try:
+        start_session(PcID, time)
+    except HTTPException as err:
+        raise err
+    except sqlite3.Error as err:
+        print(err)
+        raise HTTPException(status_code=400, detail="Error open a session")
+    except Exception as err:
+        print(err)
+        raise HTTPException(status_code=500, detail="Unknown error")

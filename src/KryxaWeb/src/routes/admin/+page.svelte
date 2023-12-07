@@ -72,16 +72,16 @@
   </div>
 </div>
 
-<style>
-  #bg{
-    display: flex;
-  flex-direction: row;
-  height: 100vh;
-  background-size: cover;
-  }
-</style>
-
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div on:keydown={close}>
   <ModalPc {status} on:keydown={close} />
 </div>
+
+<style>
+  #bg {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    background-size: cover;
+  }
+</style>

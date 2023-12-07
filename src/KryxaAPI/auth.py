@@ -77,3 +77,17 @@ def validatePcToken(creds=Depends(jwt_auth)) -> AccountDTO:
     except Exception as err:
         print(err)
         raise HTTPException(status_code=401, detail='Error token')
+
+
+def change_password(acc:Admin) -> bool:
+    with DBService() as cur:
+        try:
+            cur.execute(
+                "UPDATE Admin SET Password=?",
+                [acc.Password]
+            )
+            cur.commit()
+            return True
+        except Exception as err:
+            cur.rollback()
+            print(err)

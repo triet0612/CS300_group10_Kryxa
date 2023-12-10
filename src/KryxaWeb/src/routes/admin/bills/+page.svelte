@@ -42,14 +42,15 @@
   }
 
   async function validate(str, pc_id, bill_ID) {
-    item_pc = await getPcByID(pc_id);
-    if (str !== undefined && str !== null) {
+    item_pc = await item_pc.getPcByID(pc_id).then(res => res);
+    console.log(str)
+    if (str !== undefined && str !== null && str !== "") {
       console.log(str, bill_ID, 0)
       return 0;
-    } 
-    else {
+    } else {
       if (new Date(refort(item_pc.EndTime)) - new Date(cur()) <= 0) {
         // console.log(str, bill_ID, 1)
+        console.log(item_pc)
         return 1;
       }
       console.log(str, bill_ID, 2)
@@ -121,9 +122,7 @@
                       on:click={openModal(valid.BillID)}
                     >
                       <img
-                        src={validate(valid.Datetime, valid.PcID, valid.BillID) === 1
-                          ? MainScreen["RedForm"]
-                          : MainScreen["GreenForm"]}
+                        src={res === 1? MainScreen["RedForm"]: MainScreen["GreenForm"]}
                         alt="screen"
                       />
                       <div class="justify-center">{valid.BillID}</div>

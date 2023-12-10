@@ -9,6 +9,6 @@ class PageServer(StaticFiles):
             return await super().get_response(path, scope)
         except (HTTPException, StarletteHTTPException) as err:
             if err.status_code == 404:
-                return await super().get_response('index.html', scope)
+                return await super().get_response('.', scope)
             else:
                 raise err

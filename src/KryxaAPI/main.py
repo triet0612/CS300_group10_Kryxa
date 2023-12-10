@@ -2,7 +2,6 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from model.SaleItems import fetch_all_items
 from router.admin import adminRouter
 from service.page import PageServer
 

@@ -2,7 +2,7 @@
   import AdminNav from "$lib/components/AdminNav.svelte";
   import { MainScreen } from "$lib/Assets.js";
   import { fetch_all } from "$lib/Bill.js";
-  import { getPcByID, Pc } from "$lib/Pc.js";
+  import { Pc } from "$lib/Pc.js";
   import { onMount } from "svelte";
   import ModalBill from "$lib/components/ModalBill.svelte"
   let bill_list = [];

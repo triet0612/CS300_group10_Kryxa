@@ -38,9 +38,10 @@ BEGIN
 	END;
 END;
 INSERT INTO Admin VALUES ("1234");
+INSERT INTO SaleItem VALUES (1,"Time package", 10000, "Time", 9999);
 INSERT INTO Pc VALUES (0, "2024-11-13T10:46:00", "123", "192.168.0.2", 0);
 INSERT INTO Pc VALUES (1, "2023-11-13T10:46:00", "124", "192.168.0.3", 0);
-INSERT INTO SaleItem VALUES (1,"Com ga 1",50000,"Food",2);
+INSERT INTO SaleItem VALUES (2,"Com ga 1",50000,"Food",2);
 INSERT INTO Bill VALUES(1,0,"2023-11-13T10:46:00","",0,"[{'id': 1, 'name': 'com chien duong chau', 'qt': 2, 'price': 20000, 'amount': 40000},{'id': 2, 'name': 'com chien duong chau', 'qt': 2, 'price': 20000, 'amount': 40000}]");
 INSERT INTO Bill VALUES(2,0,"2023-11-13T10:46:00","",0,"[{'id': 1, 'name': 'com chien duong chau', 'qt': 2, 'price': 20000, 'amount': 40000}]");
 INSERT INTO Bill VALUES(3,0,"2023-11-13T10:46:00","",0,"[{'id': 1, 'name': 'com chien duong chau', 'qt': 2, 'price': 20000, 'amount': 40000}]");

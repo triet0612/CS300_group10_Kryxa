@@ -7,6 +7,7 @@ from pydantic import BaseModel, Field
 from db.database import DBService
 from datetime import datetime
 from datetime import timedelta
+import json
 
 
 class Pc(BaseModel):
@@ -104,9 +105,15 @@ def start_session(pc_id: int, time_pack: int):
                 "UPDATE Pc SET EndTime=?, Password=? WHERE PcID=?",
                 [end_time.isoformat(), password, pc_id]
             )
+            item_price = cur.execute("SELECT Price FROM SaleItem WHERE ItemID=1").fetchone()
+            cart = [{
+                "Name": "Time package",
+                "Number": time_pack,
+                "Price": item_price[0]
+            }]
             cur.execute(
                 '''INSERT INTO "Bill" ("PcID", "Datetime", "Note", "Total", "Cart") VALUES(?, ?, ?, ?, ?)''',
-                [pc_id, "", "", 0, "[]"]
+                [pc_id, "", "", 0, json.dumps(cart)]
             )
             cur.commit()
         except sqlite3.Error as err:

@@ -23,7 +23,7 @@
       {#each items as it}
         <div class="flex my-2">
           <li class="flex p-2 hover:bg-purple-300 hover:text-black">
-            <a href="/admin/{it[1]}">{it[0]}</a>
+            <a rel="external" href="/admin/{it[1]}">{it[0]}</a>
           </li>
         </div>
       {/each}

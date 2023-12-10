@@ -8,11 +8,24 @@
     let newTime = "newTime"
     const d = new Date();
     let real_time = d.toLocaleString();
+    let openButton;
+    let terminateButton;
     onMount(async()=>{
         const urlSearchParams = new URLSearchParams(window.location.search).get("pc_id");
         pc_info = await pc_info.getPcByID(urlSearchParams).then(res=>res)
 
         newTime = new Date(pc_info.EndTime).toLocaleString()
+        if (pc_info.EndTime === undefined || pc_info.EndTime === "") {
+            openButton.disabled = true
+            terminateButton.disabled = false
+        }
+        else if (new Date(real_time) < new Date(pc_info.EndTime)) {
+            openButton.disabled = true
+            terminateButton.disabled = false
+        } else {
+            openButton.disabled = false
+            terminateButton.disabled = true
+        }
     })
 
     async function click() {
@@ -97,15 +110,15 @@
                         class = "ml-10 w-2/3 h-16 rounded-full hover:bg-amber-400 hover:text-violet-900 active:bg-black  bg-violet-900  font-BlackOpsOne">
                         Save
                     </button>
-                    <button on:click={terminateSession} class = "ml-10 w-2/3 h-16 rounded-full hover:bg-amber-400 hover:text-violet-900 active:bg-black  bg-violet-900 font-BlackOpsOne">
+                    <button on:click={terminateSession} bind:this={terminateButton} class = "ml-10 w-2/3 h-16 rounded-full hover:bg-amber-400 hover:text-violet-900 active:bg-black  bg-violet-900 font-BlackOpsOne">
                         Terminate
                     </button>
                 </div>
             </div>
             <div class="flex flex-col basis-2/5 text-amber-400 text-3xl">
                 <div class ="">
-                    <button class = "ml-16 mt-10 h-16 w-2/3 rounded-full hover:bg-amber-400 hover:text-violet-900 active:bg-black  bg-violet-900 text-yellow-300 font-BlackOpsOne"
-                        on:click={openSession}>
+                    <button class="ml-16 mt-10 h-16 w-2/3 rounded-full hover:bg-amber-400 hover:text-violet-900 active:bg-black  bg-violet-900 text-yellow-300 font-BlackOpsOne"
+                        on:click={openSession} bind:this={openButton}>
                         Open
                     </button>
                 </div>

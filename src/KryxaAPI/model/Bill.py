@@ -107,21 +107,16 @@ def fetch_bill_byID(bill_id: int) -> Bill:
 
 
 def update_bill(new_bill_data: Bill):
-    sql_query: str = "UPDATE Bill SET Datetime = ?, Note = ?, Total = ?, Cart = ? WHERE BillID = ?"
-
     with DBService() as cur:
         try:
+            for item in new_bill_data.Cart:
+                new_bill_data.Total += item["qt"] * item["price"]
             cart_json = json.dumps(new_bill_data.Cart)
 
-            cur.cursor().execute(sql_query,
-                                 (
-                                     new_bill_data.Datetime,
-                                     new_bill_data.Note,
-                                     new_bill_data.Total,
-                                     cart_json,
-                                     new_bill_data.BillID,
-                                 )
-                                 )
+            cur.cursor().execute(
+                "UPDATE Bill SET Datetime = ?, Note = ?, Total = ?, Cart = ? WHERE BillID = ?",
+                (new_bill_data.Datetime, new_bill_data.Note, new_bill_data.Total, cart_json, new_bill_data.BillID)
+            )
             cur.commit()
         except Exception as err:
             cur.rollback()

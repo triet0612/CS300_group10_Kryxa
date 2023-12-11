@@ -81,7 +81,7 @@
   <div class="flex flex-col">
     <AdminNav />
   </div>
-  <div class="flex-col flex h-full w-auto">
+  <div class="flex-col flex h-screen w-auto">
     <div
       class="h-[70px] font-BlackOpsOne text-xl text-purple-300 justify-start items-center flex flex-row my-2"
     >
@@ -101,9 +101,9 @@
         class="bg-purple-900"
       />
     </div>
-    <div class="flex-col flex">
+    <div class="flex-col h-full mb-10">
       <div class="grid grid-flow-col grid-cols-2 gap-5">
-        <div id="bo">
+        <div id="bo" class="overflow-y-scroll no-scrollbar">
           <ul class="grid grid-flow-row grid-cols-3 m-7 gap-5 text-white">
             {#each bill_list as valid}
               {#await validate(valid.Datetime, valid.PcID, valid.BillID)}
@@ -134,7 +134,7 @@
             {/each}
           </ul>
         </div>
-        <div id="bo">
+        <div id="bo" class="overflow-y-scroll no-scrollbar">
           <ul class="grid grid-flow-row grid-cols-3 m-7 gap-5 text-white">
             {#each bill_list as valid}
               {#await validate(valid.Datetime, valid.PcID, valid.BillID)}

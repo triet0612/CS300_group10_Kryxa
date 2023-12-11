@@ -6,45 +6,17 @@
   export let status = "close";
   export let bill_id;
 
-  //     let bills = [
-  //     { id: 1, name: "com chien duong chau", qt: 2, price: 20000, amount: 40000 },
-  //     { id: 2, name: "com chien ga", qt: 1, price: 20000, amount: 20000 },
-  //     { id: 3, name: "Mi 2 trung", qt: 3, price: 10000, amount: 30000 },
-  //   ];
-
   let bill_info = [];
   let formattedDateString = "newTime";
 
-  // onMount(async () => {
-  //   bill_id = 1;
-  //   bill_info = await fetch_all(bill_id).then((res)=>res);
-  //   console.log(bill_info[0])
-  //   const dateTimeArray = bill_info[0].Datetime.split("T");
-  //   const dateArray = dateTimeArray[0].split("-");
-  //   newTime =
-  //     dateArray[2] +
-  //     "/" +
-  //     dateArray[1] +
-  //     "/" +
-  //     dateArray[0] +
-  //     "  " +
-  //     dateTimeArray[1];
-  // });
   async function fetchbills(bill_id) {
     try {
-      // console.log("billID", bill_id);
       bill_info = await fetch_all(bill_id);
       console.log("before update", bill_info[0]);
-      // console.log("bill_info", bill_info); // Log the bill_info array
-      // console.log("bill_info[0]", bill_info[0]); // Log the first element of the array
     } catch (error) {
       console.error("Error fetching bills:", error);
     }
-    // mybill = await getBillbyID(1).then((res) => res);
-    // console.log(mybill);
-    // console.log(bill_id);
     bill_info = await fetch_all(bill_id).then((res) => res);
-    // console.log(bill_info[0]);
     const originalDate = new Date(bill_info[0].Datetime);
     const year = originalDate.getFullYear();
     const month = ("0" + (originalDate.getMonth() + 1)).slice(-2); // Adding 1 because months are zero-based
@@ -57,12 +29,15 @@
   }
 
   async function update_current_bill(bill_data) {
-    let statcode = await update_bill(bill_data).then((res) => res);
-    if (statcode != 200) {
-      console.log("failed to update bill");
+    if (bill_data.Datetime !== undefined && bill_data.Datetime !== ""   && bill_data.Datetime !== null) {
+      let statcode = await update_bill(bill_data).then((res) => res);
+      if (statcode != 200) {
+        console.log("failed to update bill");
+      }
+      console.log("after update", bill_data);
+      location.reload();
     }
-    console.log("after update", bill_data);
-    location.reload();
+    bill_data.Datetime = new Date().toISOString()    
   }
 
   async function remove_item(item_id) {
@@ -151,7 +126,7 @@
                     class="w-[50px]">{item["qt"]}</td
                   ><td class="w-[60px]">{item["price"]}</td><td
                     class="w-[90px] text-right pr-2"
-                    >{item["amount"] * item["price"]}</td
+                    >{item["qt"] * item["price"]}</td
                   >
                 </tr>
               {/each}

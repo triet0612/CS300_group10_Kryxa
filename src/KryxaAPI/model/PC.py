@@ -107,13 +107,14 @@ def start_session(pc_id: int, time_pack: int):
             )
             item_price = cur.execute("SELECT Price FROM SaleItem WHERE ItemID=1").fetchone()
             cart = [{
-                "Name": "Time package",
-                "Number": time_pack,
-                "Price": item_price[0]
+                "id": 1,
+                "name": "Time package",
+                "qt": time_pack,
+                "price": item_price[0],
             }]
             cur.execute(
                 '''INSERT INTO "Bill" ("PcID", "Datetime", "Note", "Total", "Cart") VALUES(?, ?, ?, ?, ?)''',
-                [pc_id, "", "", 0, json.dumps(cart)]
+                [pc_id, "", "", item_price[0] * time_pack, json.dumps(cart)]
             )
             cur.commit()
         except sqlite3.Error as err:

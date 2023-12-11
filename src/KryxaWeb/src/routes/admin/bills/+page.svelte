@@ -11,6 +11,7 @@
   let input_date = "";
   let status = "close";
   let bill_id;
+  let updatable;
 
   // pop up
   function close(event) {
@@ -18,10 +19,11 @@
       status = "close";
     }
   }
-  function openModal(billID) {
+  function openModal(billID, update_type) {
     console.log("id of selected bill: ", billID);
     status = "open";
     bill_id = billID;
+    updatable = update_type
   }
 
   onMount(async () => {
@@ -119,7 +121,7 @@
                       id="bi"
                       class="grid grid-flow-row auto-rows-max"
                       role="button"
-                      on:click={openModal(valid.BillID)}
+                      on:click={openModal(valid.BillID, res === 1? true: false)}
                     >
                       <img
                         src={res === 1? MainScreen["RedForm"]: MainScreen["GreenForm"]}
@@ -150,7 +152,7 @@
                       id="bi"
                       class="grid grid-flow-row auto-rows-max"
                       role="button"
-                      on:click={openModal(valid.BillID)}
+                      on:click={openModal(valid.BillID, false)}
                     >
                       <img src={MainScreen["RedForm"]} alt="screen" />
                       <div class="justify-center">{valid.BillID}</div>
@@ -169,7 +171,7 @@
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div on:keydown={close}>
-  <ModalBill {status} {bill_id} on:keydown={close} />
+  <ModalBill {status} {bill_id} {updatable} on:keydown={close} />
 </div>
 
 <style>

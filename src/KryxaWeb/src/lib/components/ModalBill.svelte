@@ -5,6 +5,7 @@
 
   export let status = "close";
   export let bill_id;
+  export let updatable = false;
 
   let bill_info = [];
   let formattedDateString = "newTime";
@@ -29,6 +30,9 @@
   }
 
   async function update_current_bill(bill_data) {
+    if (updatable) {
+      bill_data.Datetime = new Date().toISOString()
+    }
     if (bill_data.Datetime !== undefined && bill_data.Datetime !== ""   && bill_data.Datetime !== null) {
       let statcode = await update_bill(bill_data).then((res) => res);
       if (statcode != 200) {
@@ -37,7 +41,6 @@
       console.log("after update", bill_data);
       location.reload();
     }
-    bill_data.Datetime = new Date().toISOString()    
   }
 
   async function remove_item(item_id) {
@@ -138,7 +141,7 @@
           <div class="w-[235px] h-[40px">
             <button
               class="w-[200px] h-[40px] bg-[#FFC52F] font-bold mx-[10px] shadow-lg shadow-slate-400"
-              on:click={update_current_bill(bill_info[0])}>Complete</button
+              on:click={update_current_bill(bill_info[0])}>Save</button
             >
           </div>
           <div class="w-[235px] h-[40px] text-center">

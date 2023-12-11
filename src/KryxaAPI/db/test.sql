@@ -1,2 +1,10 @@
 INSERT INTO Pc VALUES (0, "2023-11-13T10:46:00", "123", "192.168.0.2", 0);
-INSERT INTO SaleItem VALUES (1,"Com ga 1",50000,"Food",2);
+INSERT INTO Pc VALUES (1, "2023-11-13T10:46:00", "124", "192.168.0.3", 0);
+INSERT INTO SaleItem VALUES (2,"com chien duong chau",20000,"Food",2);
+INSERT INTO SaleItem VALUES (3,"Com ga 1",50000,"Food",2);
+INSERT INTO Bill VALUES(1, 0,"2023-11-13T10:46:00", "", 120000, "[{'id': 2, 'name': 'com chien duong chau', 'qt': 1, 'price': 20000, 'amount': 20000},{'id': 3, 'name': 'Com ga 1', 'qt': 2, 'price': 50000, 'amount': 100000}]");
+INSERT INTO Bill VALUES(2, 1,"2023-11-14T10:46:00", "", 40000, "[{'id': 2, 'name': 'com chien duong chau', 'qt': 2, 'price': 20000, 'amount': 40000}]");
+INSERT INTO Bill VALUES(3, 1,"2023-11-14T10:46:00", "", 80000, "[{'id': 2, 'name': 'com chien duong chau', 'qt': 4, 'price': 20000, 'amount': 80000}]");
+INSERT INTO Bill VALUES(4, 0,"2023-11-15T10:46:00", "", 20000, "[{'id': 2, 'name': 'com chien duong chau', 'qt': 1, 'price': 20000, 'amount': 20000}]");
+INSERT INTO Bill VALUES(5, 1,"2023-11-15T10:46:00", "", 40000, "[{'id': 2, 'name': 'com chien duong chau', 'qt': 2, 'price': 20000, 'amount': 40000}]");
+INSERT INTO Bill VALUES(6, 0,"2023-11-16T10:46:00", "", 40000, "[{'id': 2, 'name': 'com chien duong chau', 'qt': 2, 'price': 20000, 'amount': 40000}]");

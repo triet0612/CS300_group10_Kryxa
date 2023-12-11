@@ -21,18 +21,22 @@
         status = "close"
         if (statcode !== 200) {
             alert("Failed create new Item")
+            location.reload()
+            return
         }
         let stat = await createImage(files,newItem.ItemID).then(res => res)
         if (stat !== 200) {
             alert("Failed insert image")
+            location.reload()
+            return
         }
         location.reload()
     }
 </script>
 <div class="flex flex-col w-72">
     <dialog bind:this={dialog} id="mydialog">
-        <div class="flex flex-col text-black bg-[#E3A052] justify-center items-center">
-            <img src="{AppLogo}" alt="" width="50%" class=" absolute top-[-115px] border-[#E3A052]">
+        <div class="flex flex-col text-black bg-[#9324C7] justify-center items-center">
+            <img src="{AppLogo}" alt="" width="50%" class=" absolute top-[-115px] border-[#9324C7]">
             <div class="flex flex-col w-64">
                 <input bind:value={newItem.ItemID} class="p-3 my-1 mx-1 bg-white rounded-xl text-left" type="number" placeholder="ItemID">
                 <input bind:value={newItem.Name} class="p-3 my-1 mx-1 bg-white rounded-xl text-left" type="text" placeholder="Name">
@@ -52,7 +56,7 @@
         position: absolute;
         top: 33.3333%;
         padding: 1.25rem;
-        background-color: #E3A052;
+        background-color: #9324C7;
         border-radius: 1.25rem;
         align-items: center;
     }

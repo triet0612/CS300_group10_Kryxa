@@ -11,10 +11,11 @@
     ["Account", "account"]
   ];
 
-  // let notifs = "false";
+  let n = true;
   // let audio;
 
   function get_notif() {
+    n = !n
     console.log($notifs)
     let xhttp = new XMLHttpRequest();
     let res;
@@ -40,6 +41,47 @@
       }
     }
     xhttp.send()
+  }
+
+  async function get_food_queue() {
+    let url = 'http://localhost:8000/api/admin/food_queue'
+    let foods = await fetch(url, {
+      method: "GET",
+      headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + localStorage.getItem("jwt")
+      }
+    })
+    .then(res => {
+        if (res.status === 401){
+            location.replace('/admin/login')
+            return []
+        }
+        return res.json()
+    })
+    .catch(err => {console.log(err); return [];})
+    return foods
+  }
+
+  async function delete_food(food) {
+    let url = 'http://localhost:8000/api/admin/delete_food_queue'
+    await fetch(url, {
+      method: "POST",
+      body: JSON.stringify(food),
+      headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + localStorage.getItem("jwt")
+      }
+    })
+    .then(res => {
+      if (res.status === 401){
+        location.replace('/admin/login')
+        return []
+      }
+      return res
+    })
+    .catch(err => {console.log(err); return [];})
+    location.reload()
   }
 
   onMount(() => {
@@ -81,5 +123,25 @@
         <button class="p-3" on:click={() => logout()}>Logout</button>
       </div>
     </ul>
+    <div class="text-xl h-[90px] text-red-400 font-BlackOpsOne flex flex-col no-scrollbar overflow-auto">
+      {#key n}
+        {#await get_food_queue(n)}
+          <p>None</p>
+        {:then res}
+          {#each res as v}
+            <div class="flex flex-row h-[90px]">
+              <div class="flex flex-col">
+                PcID: {v["PcID"]}
+                Item: {v["ItemID"]}
+                Qt: {v["Qt"]}
+              </div>
+              <div class="flex border-2 border-gray-500 text-purple-00 hover:bg-black hover:text-purple-300 justify-center">
+                <button on:click={() => delete_food(v)}>Complete</button>
+              </div>
+            </div>
+          {/each}
+        {/await}
+      {/key}
+    </div>
   </div>
 </aside>

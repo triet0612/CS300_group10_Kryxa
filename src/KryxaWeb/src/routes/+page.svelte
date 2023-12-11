@@ -205,7 +205,7 @@
           {#if list_item.Stock > 0}
             <button on:click={addItem(list_item.ItemID)}>
               <li
-                class="w-56 h-56 bg-green-600 bg-opacity-75 flex-rowtext-white justify-center text-center border-2 items-center rounded-lg hover:scale-105"
+                class="w-56 h-auto bg-green-600 bg-opacity-75 flex-rowtext-white justify-center text-center border-2 items-center rounded-lg hover:scale-105"
               >
                 <div class="min-w-56 min-h-48 rounded-lg">
                   <!-- svelte-ignore a11y-missing-attribute -->
@@ -216,9 +216,14 @@
                     class="bg-contain w-56 h-48"
                   />
                 </div>
-                <p id="image" class="justify-center font-NotoSans text-xl text-white">
-                  {list_item.Name} | {list_item.Price.toLocaleString()}
-                </p>
+                <div class="bg-gray-900">
+                  <p id="image" class="justify-center font-NotoSans text-xl text-white">
+                    {list_item.Name}
+                  </p>
+                  <p id="image" class="justify-center font-NotoSans text-xl text-white">
+                    {list_item.Price.toLocaleString()}
+                  </p>
+                </div>
               </li>
             </button>
           {/if}

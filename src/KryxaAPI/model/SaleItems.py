@@ -1,3 +1,5 @@
+import os
+
 from pydantic import BaseModel, Field
 from typing import Annotated, Literal
 from db.database import DBService
@@ -82,6 +84,7 @@ def delete_item(item_id: int):
     with DBService() as cur:
         try:
             cur.cursor().execute(sql_query, (item_id,))
+            os.remove("./bin/system/{}.png".format(item_id))
             cur.commit()
         except Exception as err:
             cur.rollback()

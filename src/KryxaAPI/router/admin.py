@@ -6,7 +6,6 @@ from fastapi.responses import StreamingResponse
 from fastapi import APIRouter, HTTPException, Response, Depends, File
 from typing import Annotated
 
-
 from model.PC import Pc, start_session, terminate_session
 from fastapi import APIRouter, HTTPException, Response, Depends, File, Query
 from fastapi.responses import StreamingResponse
@@ -16,7 +15,6 @@ import model.PC
 from service.auth import checkAdminAccount, generate_admin_token, validateAdminToken, AccountDTO, change_password
 import model.SaleItems
 
-
 from model.Admin import Admin
 from model.Bill import fetchSalesByMonth, fetchSalesByPcID
 from model.PC import Pc, fetch_pc_by_id, insert_pc, PcDTO, fetch_time_usage, update_pc_by_id
@@ -24,7 +22,7 @@ from model.SaleItems import SaleItems
 from service.file import get_file
 from model.Bill import Bill, fetch_bill_byID
 from model.Bill import fetchSalesByMonth, fetchSalesByPcID, checkBillRequireConfirm
-
+from model.FoodQueue import get_food_queue, insert_to_food_queue, FoodItem, delete_food
 
 adminRouter = APIRouter(tags=["admin"])
 file_manager = get_file()
@@ -166,7 +164,7 @@ async def create_item(item: SaleItems):
     try:
         model.SaleItems.create_item(item)
         return item
-    except AssertionError as err:
+    except sqlite3.Error as err:
         print(err)
         raise HTTPException(status_code=400, detail="Error create Item")
 
@@ -192,6 +190,7 @@ async def get_file(filename: int):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
 @adminRouter.post("/account")
 async def check_password(acc: Admin) -> str:
     try:
@@ -202,6 +201,7 @@ async def check_password(acc: Admin) -> str:
     except Exception as err:
         print(err)
         raise HTTPException(status_code=401, detail="Error validating")
+
 
 @adminRouter.put("/account")
 async def get_new_password(acc: Admin):
@@ -321,6 +321,36 @@ async def bill_notif():
     except sqlite3.Error as err:
         print(err)
         raise HTTPException(status_code=400, detail="Error checking")
+    except Exception as err:
+        print(err)
+        raise HTTPException(status_code=500, detail="Unknown error")
+
+
+@adminRouter.get("/food_queue")
+async def fetch_food_queue():
+    try:
+        ans = get_food_queue()
+        return ans
+    except HTTPException as err:
+        raise err
+    except sqlite3.Error as err:
+        print(err)
+        raise HTTPException(status_code=400, detail="Error get food_queue")
+    except Exception as err:
+        print(err)
+        raise HTTPException(status_code=500, detail="Unknown error")
+
+
+@adminRouter.post("/delete_food_queue")
+def delete_food_queue(food: FoodItem):
+    try:
+        print(food)
+        delete_food(food)
+    except HTTPException as err:
+        raise err
+    except sqlite3.Error as err:
+        print(err)
+        raise HTTPException(status_code=400, detail="Error get food_queue")
     except Exception as err:
         print(err)
         raise HTTPException(status_code=500, detail="Unknown error")

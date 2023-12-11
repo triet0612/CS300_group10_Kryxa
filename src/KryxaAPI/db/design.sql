@@ -37,5 +37,10 @@ BEGIN
 		RAISE(ABORT, "A bill in progress")
 	END;
 END;
+CREATE TABLE "FOOD_QUEUE" (
+    "PcID" INTEGER NOT NULL,
+    "ItemID" INTEGER NOT NULL CHECK("ItemID" > 1),
+    "Qt" INTEGER NOT NULL
+);
 INSERT INTO Admin VALUES ("1234");
 INSERT INTO SaleItem VALUES (1,"Time package", 10000, "Time", 9999);

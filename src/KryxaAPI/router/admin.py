@@ -6,23 +6,17 @@ from fastapi.responses import StreamingResponse
 from fastapi import APIRouter, HTTPException, Response, Depends, File
 from typing import Annotated
 
+
 from model.PC import Pc, start_session, terminate_session
-from auth import checkAdminAccount, generate_admin_token, validateAdminToken
 from fastapi import APIRouter, HTTPException, Response, Depends, File, Query
 from fastapi.responses import StreamingResponse
 
 import model.Bill
 import model.PC
-from auth import checkAdminAccount, generate_admin_token, validateAdminToken, AccountDTO, change_password
+from service.auth import checkAdminAccount, generate_admin_token, validateAdminToken, AccountDTO, change_password
 import model.SaleItems
-from model.SaleItems import SaleItems, create_item
-import array as arr
-from model.PC import Pc, fetch_pc_by_id, insert_pc, PcDTO, update_pc_by_id, fetch_time_usage
-from model.PC import PcDTO, update_pc_by_id
-from model.SaleItems import SaleItems
-from model.PC import Pc, fetch_pc_by_id, insert_pc
-from model.Admin import Admin
-from auth import checkAdminAccount, generate_admin_token, validateAdminToken
+
+
 from model.Admin import Admin
 from model.Bill import fetchSalesByMonth, fetchSalesByPcID
 from model.PC import Pc, fetch_pc_by_id, insert_pc, PcDTO, fetch_time_usage, update_pc_by_id
@@ -30,6 +24,7 @@ from model.SaleItems import SaleItems
 from service.file import get_file
 from model.Bill import Bill, fetch_bill_byID
 from model.Bill import fetchSalesByMonth, fetchSalesByPcID, checkBillRequireConfirm
+
 
 adminRouter = APIRouter(tags=["admin"])
 file_manager = get_file()

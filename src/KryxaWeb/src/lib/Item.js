@@ -200,4 +200,35 @@ export async function createImage(file,id) {
     return statcode
 }
 
+export async function user_fetch_category(category,name){
+    let url = 'http://localhost:8000/api/items'
 
+    if(name!==""){
+        url+='?item_name='+name
+        if(category!="All"){
+            url+= '&item_category='+category
+        }
+    }
+    else{
+        if(category!="All"){
+            url+= '?item_category='+category
+        }
+    }
+    console.log(url)
+    let items = await fetch(url, {
+    method: "GET",
+    headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("jwt")
+    }
+    })
+    .then(res => {
+        if (res.status === 401){
+            location.replace('/login')
+            return []
+        }
+        return res.json()
+    })
+    .catch(err => {console.log(err); return [];})
+    return items
+}

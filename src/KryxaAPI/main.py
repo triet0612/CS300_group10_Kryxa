@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from router.admin import adminRouter
+from router.user import userRouter
 from service.page import PageServer
 
 
@@ -18,6 +19,7 @@ def get_server():
         expose_headers=["Authorization"]
     )
 
+    app_router.include_router(userRouter, prefix="/api")
     app_router.include_router(adminRouter, prefix="/api/admin")
     app_router.mount("/", PageServer(directory="./bin/www", html=True))
     return app_router

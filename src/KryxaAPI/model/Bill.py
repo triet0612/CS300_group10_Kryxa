@@ -121,3 +121,22 @@ def update_bill(new_bill_data: Bill):
         except Exception as err:
             cur.rollback()
             print(err)
+
+
+def checkBillRequireConfirm():
+    with DBService() as cur:
+        try:
+            rows = cur.cursor().execute(
+                '''SELECT EndTime FROM (
+    SELECT PcID, BillID FROM Bill
+    WHERE "Datetime" = ""
+) b JOIN Pc p ON b.PcID = p.PcID
+''').fetchall()
+            for r in rows:
+                temp_date = datetime.fromisoformat(r[0])
+                if datetime.now() > temp_date:
+                    return True
+            return False
+        except sqlite3.Error as err:
+            print(err)
+            raise HTTPException(500, "Database error")

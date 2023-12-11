@@ -11,6 +11,7 @@ import board from '$lib/assets/admin/board.png'
 import green from '$lib/assets/green.png'
 import red from '$lib/assets/red.png'
 
+import notif_audio from '$lib/assets/call-to-attention-123107.mp3'
 
 import addItem from '$lib/assets/admin/addItem.jpg'
 
@@ -35,3 +36,5 @@ export const PcInfo = {
 
 export const Banner = banner;
 export const Board = board;
+
+export const notif = notif_audio;

@@ -42,12 +42,6 @@
           placeholder="PcID"
         />
         <input
-          bind:value={newPC.MAC}
-          class="p-3 my-1 mx-1 bg-white rounded-xl text-left"
-          type="text"
-          placeholder="MAC"
-        />
-        <input
           bind:value={newPC.IPv4}
           class="p-3 my-1 mx-1 bg-white rounded-xl text-left"
           type="text"

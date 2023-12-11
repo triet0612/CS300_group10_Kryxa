@@ -61,7 +61,7 @@ style="background-image: url({MainScreen['Background2']});">
         </div>
       </div>
       <!-- End search bar -->
-      <div class="mt-32 pl-5 overflow-y-scroll">
+      <div class="mt-32 pl-5 h-full overflow-y-scroll">
         <ul class="grid grid-cols-5 gap-5">
           <div class=" w-56 h-56">
             <button on:click={openModal} class="w-56 h-48">
@@ -70,7 +70,7 @@ style="background-image: url({MainScreen['Background2']});">
             <div class="">Add Item</div>
           </div>
           {#each list_items as list_item}
-            <li class="w-56 h-56 flex-row text-white justify-center text-center border-2 items-center backdrop-blur-2xl rounded-lg {list_item.Stock >0
+            <li class="w-56 h-auto flex-row text-white justify-center text-center border-2 items-center backdrop-blur-2xl rounded-lg {list_item.Stock >0
             ? 'bg-green-600 bg-opacity-75'
             :'bg-red-600 bg-opacity-75'}">
               <a href="/admin/items/detail?item_id={list_item.ItemID}">
@@ -81,7 +81,8 @@ style="background-image: url({MainScreen['Background2']});">
                     />
                 </div>
               </a>
-              <p id ="image"class="justify-center" value={list_item.Name}>{list_item.Name} | {parseInt(list_item.Price/1000)}.000</p>
+              <p id ="image"class="justify-center" value={list_item.Name}>{list_item.Name}</p>
+              <p id ="image"class="justify-center" value={list_item.Name}>{parseInt(list_item.Price/1000)}.000</p>
             </li>
           {/each}
           </ul> 

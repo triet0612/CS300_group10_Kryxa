@@ -30,65 +30,65 @@
 
 </script>
 
-<div id="bg"
-class=" fixed h-full w-full bg-cover {status === 'open' ? 'blur-3xl' : ''} "
-style="background-image: url({MainScreen['Background2']});">
-  <!-- Nav Bar -->
-    <div class="fixed">
-        <AdminNav/>
-    </div>
-    <!-- View Page -->
-    <div class="flex flex-col ml-72 h-screen">
-      <!-- Search bar -->
-      <div class="fixed z-10 ml-5">
-        <div class="flex flex-row">
-          <!-- Input type check -->
-          <input 
-            type="text" 
-            id="search" 
-            placeholder="Search items..." 
-            class="mt-5 px-5 py-5 rounded-3xl" 
-            bind:value = {text_input} 
-            on:change={search_al}
-          />
-          <!-- Drop down -->
-          <select name="category" id="category" class="mt-5 ml-5 px-5 py-5 rounded-3xl" bind:value={category_filter} on:change={search_al}>
-            <option category_filter="All" selected>All</option>
-            <option category_filter="Time" >Time</option>
-            <option category_filter="Food" >Food</option>
-            <option category_filter="Drink" >Drink</option>
-          </select> 
-        </div>
+
+<div class="flex flex-row h-screen bg-cover font-BlackOpsOne" style="background-image: url({MainScreen['Background4']});">
+  <div class = "flex flex-col">
+    <AdminNav/>
+  </div>
+  <!-- View Page -->
+  <div class="h-full w-full">
+    <!-- Search bar -->
+    <div class="m-5">
+      <div class="flex flex-row">
+        <!-- Input type check -->
+        <input 
+          type="text" 
+          id="search" 
+          placeholder="Search items..." 
+          class="mt-5 px-5 py-5 rounded-3xl" 
+          bind:value = {text_input} 
+          on:change={search_al}
+        />
+        <!-- Drop down -->
+        <select name="category" id="category" class="mt-5 ml-5 px-5 py-5 rounded-3xl" bind:value={category_filter} on:change={search_al}>
+          <option category_filter="All" selected>All</option>
+          <option category_filter="Time" >Time</option>
+          <option category_filter="Food" >Food</option>
+          <option category_filter="Drink" >Drink</option>
+        </select> 
       </div>
-      <!-- End search bar -->
-      <div class="mt-32 pl-5 h-full overflow-y-scroll">
-        <ul class="grid grid-cols-5 gap-5">
-          <div class=" w-56 h-56">
-            <button on:click={openModal} class="w-56 h-48">
-              <img src={MainScreen["addItem"]} alt="cover" />
-            </button>
-            <div class="">Add Item</div>
-          </div>
-          {#each list_items as list_item}
-            <li class="w-56 h-auto flex-row text-white justify-center text-center border-2 items-center backdrop-blur-2xl rounded-lg {list_item.Stock >0
-            ? 'bg-green-600 bg-opacity-75'
-            :'bg-red-600 bg-opacity-75'}">
-              <a href="/admin/items/detail?item_id={list_item.ItemID}">
-                <div class="min-w-56 min-h-48 rounded-lg">
-                  <!-- svelte-ignore a11y-missing-attribute -->
-                  <img style = "screen" src="http://localhost:8000/api/admin/getfile/{list_item.ItemID}" sizes="(max-width:224px)"
-                    class="bg-contain w-56 h-48 rounded-lg"
-                    />
-                </div>
-              </a>
+    </div>
+    <!-- End search bar -->
+    <div class="pl-5 h-5/6 overflow-y-scroll no-scrollbar">
+      <ul class="grid grid-cols-5 gap-5">
+        <div class="w-56 h-56">
+          <button on:click={openModal} class="w-56 h-48">
+            <img src={MainScreen["addItem"]} alt="cover" />
+          </button>
+          <div class="">Add Item</div>
+        </div>
+        {#each list_items as list_item}
+          <li class="w-56 h-auto flex-row text-white justify-center text-center border-2 items-center backdrop-blur-2xl rounded-lg {list_item.Stock >0
+          ? 'bg-green-600 bg-opacity-75'
+          :'bg-red-600 bg-opacity-75'}">
+            <a href="/admin/items/detail?item_id={list_item.ItemID}">
+              <div class="min-w-56 min-h-48 rounded-lg">
+                <!-- svelte-ignore a11y-missing-attribute -->
+                <img style = "screen" src="http://localhost:8000/api/admin/getfile/{list_item.ItemID}" sizes="(max-width:224px)"
+                  class="bg-contain w-56 h-48 rounded-lg"
+                  />
+              </div>
+            </a>
+            <div class="bg-gray-800">
               <p id ="image"class="justify-center" value={list_item.Name}>{list_item.Name}</p>
               <p id ="image"class="justify-center" value={list_item.Name}>{parseInt(list_item.Price/1000)}.000</p>
-            </li>
-          {/each}
-          </ul> 
-      </div>
+            </div>
+          </li>
+        {/each}
+        </ul> 
     </div>
   </div>
+</div>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div on:keydown={close}>

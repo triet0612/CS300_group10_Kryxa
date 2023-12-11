@@ -77,13 +77,13 @@
 
 <div
   id="bg"
-  class="flex flex-row h-screen bg-cover"
+  class="flex flex-row h-screen bg-cover font-BlackOpsOne"
   style="background-image: url({MainScreen['Background4']});"
 >
   <div class="flex flex-col">
     <AdminNav />
   </div>
-  <div class="flex-col flex h-screen w-auto">
+  <div class="flex-col flex h-full w-full mx-10">
     <div
       class="h-[70px] font-BlackOpsOne text-xl text-purple-300 justify-start items-center flex flex-row my-2"
     >
@@ -155,8 +155,8 @@
                       on:click={openModal(valid.BillID, false)}
                     >
                       <img src={MainScreen["RedForm"]} alt="screen" />
-                      <div class="justify-center">{valid.BillID}</div>
-                      <div class="justify-center">{refort(valid.Datetime)}</div>
+                      <div class="justify-center text-sm">{valid.BillID}</div>
+                      <div class="justify-center text-sm">{refort(valid.Datetime)}</div>
                     </div>
                   </li>
                 {/if}

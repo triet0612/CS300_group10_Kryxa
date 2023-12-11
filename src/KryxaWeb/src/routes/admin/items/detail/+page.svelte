@@ -42,16 +42,16 @@
 
 </script>
 
-<div 
-    class="flex flex-row h-full w-full bg-cover bg-fixed"
-    style="background-image: url({MainScreen['Background2']});">
-    <div class="w-fit">
-        <AdminNav></AdminNav>
+
+<div class="flex flex-row h-screen bg-cover font-BlackOpsOne" style="background-image: url({MainScreen['Background4']});">
+    <div class = "flex flex-col">
+      <AdminNav/>
     </div>
-    <div class="w-full h-screen flex">
-        <div class="w-fit h-fit mx-auto place-self-center p-16 border-2 rounded-lg {"bg-gradient-to-b from-[#342267] to-black"}/30">
-            <div class="w-fit h-fit grid grid-cols-3">
-                <div class="w-full h-fit flex flex-col gap-y-3 col-span-2">
+    <!-- View Page -->
+    <div class="flex h-screen w-full">
+        <div class="w-fit h-fit m-auto place-self-center p-16 border-2 rounded-lg {"bg-gradient-to-b from-[#342267] to-black"}/30">
+            <div class="grid grid-cols-3">
+                <div class="flex flex-col gap-y-3 col-span-2">
                     <label class="grid grid-flow-row h-fit w-full pr-4">
                         <input 
                             type="text" 

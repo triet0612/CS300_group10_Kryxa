@@ -140,3 +140,17 @@ def checkBillRequireConfirm():
         except sqlite3.Error as err:
             print(err)
             raise HTTPException(500, "Database error")
+
+
+def fetch_bill_by_pc_id(pc_id: int) -> Bill:
+    with DBService() as cur:
+        try:
+            bill = cur.cursor().execute(
+                'SELECT * FROM "Bill" WHERE "PcID" = ? AND "Datetime" = ""', [pc_id]
+            ).fetchone()
+            bill_info = Bill(BillID=bill[0], PcID=bill[1], Datetime=None, Note=bill[3], Total=bill[4],
+                             Cart=list(eval(bill[5])))
+            print(bill_info)
+            return bill_info
+        except Exception as err:
+            print(err)

@@ -115,7 +115,7 @@ def update_bill(new_bill_data: Bill):
 
             cur.cursor().execute(
                 "UPDATE Bill SET Datetime = ?, Note = ?, Total = ?, Cart = ? WHERE BillID = ?",
-                (new_bill_data.Datetime, new_bill_data.Note, new_bill_data.Total, cart_json, new_bill_data.BillID)
+                (new_bill_data.Datetime.isoformat(), new_bill_data.Note, new_bill_data.Total, cart_json, new_bill_data.BillID)
             )
             cur.commit()
         except Exception as err:

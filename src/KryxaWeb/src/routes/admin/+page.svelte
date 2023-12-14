@@ -32,7 +32,7 @@
   <div class="flex flex-col">
     <AdminNav />
   </div>
-  <div class="mr-auto ml-auto p-20 overflow-y-scroll">
+  <div class="mr-auto ml-auto p-20 overflow-y-scroll no-scrollbar">
     <ul class="grid grid-cols-5 gap-20">
       <div
         class="w-50 h-50 bg-yellow-400 bg-opacity-70 backdrop-blur-2xl backdrop-brightness-200 text-black-400 font-NotoSans font-bold text-center flex flex-col rounded-xl justify-center"

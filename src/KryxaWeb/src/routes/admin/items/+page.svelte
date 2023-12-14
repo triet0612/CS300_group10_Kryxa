@@ -75,7 +75,7 @@
               <div class="min-w-56 min-h-48 rounded-lg">
                 <!-- svelte-ignore a11y-missing-attribute -->
                 <img style = "screen" src="http://localhost:8000/api/admin/getfile/{list_item.ItemID}" sizes="(max-width:224px)"
-                  class="bg-contain w-56 h-48 rounded-lg"
+                  class="bg-contain w-56 h-48 rounded-lg p-5"
                   />
               </div>
             </a>

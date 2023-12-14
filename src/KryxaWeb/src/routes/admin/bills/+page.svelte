@@ -50,7 +50,10 @@
       console.log(str, bill_ID, 0)
       return 0;
     } else {
-      if (new Date(refort(item_pc.EndTime)) - new Date(cur()) <= 0) {
+      const d1 = new Date(item_pc.EndTime)
+      const d2 = new Date(  )
+      console.log(d1 <= d2)
+      if (d1 <= d2) {
         // console.log(str, bill_ID, 1)
         console.log(item_pc)
         return 1;

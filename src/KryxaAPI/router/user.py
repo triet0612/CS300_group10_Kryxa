@@ -9,13 +9,13 @@ from service.auth import AccountDTO, checkPcAccount, generate_pc_token, validate
 from typing import Annotated
 from model.SaleItems import fetch_all_items
 from model.PC import fetch_pc_by_id
-
+from model.Bill import fetch_bill_by_pc_id
 userRouter = APIRouter(tags=["user"])
 
 
-@userRouter.get("/")
-async def home_user():
-    return "Home User"
+# @userRouter.get("/")
+# async def home_user():
+#     return "Home User"
 
 
 @userRouter.post("/login")
@@ -87,3 +87,16 @@ async def get_file(filename: int):
         raise HTTPException(status_code=400, detail=str(ve))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@userRouter.get("/")
+async def get_bill(acc: Annotated[AccountDTO, Depends(validatePcToken)]):
+    try:
+        bill = fetch_bill_by_pc_id(acc.PcID)
+        return bill
+    except HTTPException as err:
+        raise err
+    except sqlite3.Error as err:
+        print(err)
+        raise HTTPException(status_code=400, detail="Error fetching bill")
+    except Exception as err:
+        raise HTTPException(status_code=500, detail="Unknown error")

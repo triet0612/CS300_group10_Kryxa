@@ -92,3 +92,28 @@ export async function update_bill(new_data){
     })
     return statcode
 }
+
+
+export async function getBillbyID(){
+    let url='http://localhost:8000/api/'
+    let bill_info = await fetch(url, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + localStorage.getItem("jwt")
+        }
+        })
+    .then(res=>{
+        if(res.status==401){
+            location.replace('/login')
+            return
+        }
+        return res.json()
+    })
+    .catch(err=>{
+        console.log(err)
+        return 500
+    })
+    console.log(bill_info)
+    return bill_info
+}

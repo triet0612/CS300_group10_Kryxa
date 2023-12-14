@@ -135,7 +135,7 @@
                     />
                 </div>
                 <div class = "ml-10 flex flex-row">
-                    <input class ="text-center mt-5 ml-10 w-24 h-16 bg-violet-900/50 rounded font-BlackOpsOne" type ="number" bind:value={session_time}>
+                    <input class ="text-center mt-5 ml-10 w-24 h-16 bg-violet-900/50 rounded font-BlackOpsOne" type ="number" bind:value={session_time} min="0">
                     <div class ="mt-7 ml-3 text-amber-300 font-BlackOpsOne">
                         x30m    
                     </div>

@@ -65,7 +65,7 @@
                     <div class="w-fit h-fit grid grid-flow-col">
                         <div class="w-[255px] h-fit grid grid-flow-row gap-y-4">
                             <!-- svelte-ignore a11y-img-redundant-alt -->
-                            <img src="http://localhost:8000/api/admin/getfile/{item.ItemID}" alt="Item Image" class="w-[255px] h-[255px]">
+                            <img src="http://localhost:8000/api/admin/getfile/{item.ItemID}" alt="Item Image" class="w-[255px] h-[255px]  p-5">
                             <input bind:files class="w-full h-fit my-1 mx-1 bg-white rounded-xl text-left" type="file" accept="image/png, image/jpeg">
                         </div>
                         <div class="h-fit grid grid-flow-row gap-y-10 mx-4">
@@ -73,6 +73,7 @@
                                 <input 
                                     type="number"
                                     placeholder="Price"
+                                    min="0"
                                     bind:value={item.Price}
                                     class="h-fit w-full bg-[#160425]/75 rounded-lg whitespace-nowrap
                                     indent-2.5 text-3xl text-[#BA7000] leading-relaxed font-BlackOpsOne
@@ -97,6 +98,7 @@
                                     type="number"
                                     placeholder="Stock"
                                     bind:value={item.Stock}
+                                    min="0"
                                     class="h-fit w-full bg-[#160425]/75 rounded-lg whitespace-nowrap
                                     indent-2.5 text-3xl text-[#BA7000] leading-relaxed font-BlackOpsOne
                                     placeholder:italic placeholder:text-[#BA7000]

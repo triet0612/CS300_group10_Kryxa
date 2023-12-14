@@ -2,7 +2,8 @@
   import CustomerNav from "$lib/components/CustomerNav.svelte";
 
   import { user_fetch_category } from "$lib/Item.js";
-  import { UserAssets,Trash } from "$lib/Assets.js";
+  import { UserAssets,Trash,AppLogo } from "$lib/Assets.js";
+  import {getBillbyID,Bill} from  "$lib/Bill.js";
   import ModalItem from "$lib/components/ModalItem.svelte";
   import { onMount } from "svelte";
 
@@ -10,12 +11,15 @@
   let list_items = [];
   let list_all_items = [];
   let cart_items = [];
+  let bill = new Bill()
   let text_input = "";
   let status = "close";
   let filter = "All";
   let listCartHTML = document.getElementById("cart_list");
-  
-
+  let billHTML
+  let bill_items = []
+  let cart_btn
+  let bill_btn
   function addItem(ItemID) {
     let positionThisProductInCart = cart_items.findIndex(
       (value) => value.ItemID == ItemID,
@@ -94,8 +98,6 @@
     total_quantity.textContent = totalQuantity + ' items'
   }
 
-  
-
   function add_click(){
     listCartHTML.addEventListener("click", (event) => {
     let positionClick = event.target;
@@ -139,10 +141,37 @@
     addCartToHTML();
     addCartToMemory();
   }
+
   function clearCart(){
     cart_items = []
     addCartToHTML();
     addCartToMemory();
+  }
+  
+  async function switch_tab(id){
+    console.log('press')
+    let cartPage = document.getElementById("cart_page");
+    let billHTML = document.getElementById("billHTML")
+    let cart_btn = document.getElementById("cart_btn")
+    let bill_btn = document.getElementById("bill_btn")
+    if(id===0){
+      console.log('press cart')
+      cartPage.style.display = "block"
+      billHTML.style.display = "none"
+      cart_btn.style.background ='white'
+      bill_btn.style.backgroundColor ='gray'
+    }
+    else{
+      console.log('press bill')
+      cartPage.style.display = "none"
+      billHTML.style.display = "block"
+      cart_btn.style.backgroundColor ='gray'
+      bill_btn.style.background ='white'
+    }
+  }
+  async function getBill(){
+    bill= await getBillbyID()
+    console.log(bill)
   }
   onMount(async () => {
     listCartHTML = document.getElementById("cart_list");
@@ -152,6 +181,11 @@
       cart_items = JSON.parse(localStorage.getItem("cart_items"));
       addCartToHTML();
     }
+    // getBill()
+    bill= await getBillbyID().then(res => res)
+    console.log(bill.BillID)
+    bill_items = bill.Cart
+    console.log(bill_items)
   });
   // pop up
   function close(event) {
@@ -231,44 +265,128 @@
       </ul>
     </div>
   </div>
-  <div id="cartPage" class="flex flex-col w-1/3 bg-white rounded-xl">
+  <div class="flex flex-col w-1/3 bg-white rounded-xl">
     <div class = "flex flex-row">
-      <p class="text-[#FF9900] text-4xl border-b-2 font-BlackOpsOne mx-auto h-14 mt-5">
+      <button id='cart_btn' on:click={async () => {switch_tab(0)}} class="text-[#FF9900] text-4xl border-b-2 font-BlackOpsOne mx-auto h-14 mt-5 w-1/2 flex flex-col items-center justify-center rounded-t-xl">
         My cart
-      </p>
-      <button on:click={clearCart} class = "w-10">
-        <img src={Trash} alt="">
       </button>
-    </div>
-    
-    <div id="cart_list" class="overflow-auto h-2/3"></div>
-    <div class = "bg-gray-400 w-11/12 mx-auto rounded-3xl">
-      <div class = "border-b-4 border-black">
-        <div class ="flex flex-row">
-          <div id = "" class = " text-2xl font-NotoSans mt-8 ml-3 ">
-            Total items: 
-          </div>
-          <div id = "total_quantity" class = "text-2xl font-NotoSans mt-8 ">
-            0 items
-          </div>
-        </div>
-        <div class ="flex flex-row">
-          <p id="" class = "text-2xl font-NotoSans mt-4 ml-3 ">
-            Total price: 
-          </p>
-          <p id="total_price" class = "text-green-900 text-2xl font-NotoSans mt-4 ml-5 ">
-            $0
-          </p>
-        </div>
-        
-      </div>
+      <!-- <button on:click={clearCart} class = "w-10">
+        <img src={Trash} alt="">
+      </button> -->
+      <button id='bill_btn' on:click={async () => {switch_tab(1)}}  class="text-[#FF9900] text-4xl border-b-2 font-BlackOpsOne mx-auto h-14 mt-5 bg-gray-400 w-1/2 flex flex-col items-center justify-center rounded-t-xl">
+        My Bill
+      </button>
       
+    </div>
+    <div id = "cart_page" class = 'w-[500px]'>
+      <div id="cart_list" class="overflow-auto h-2/3" bind:this = {listCartHTML}></div>
+      <div class = "bg-gray-400 w-11/12 mx-auto rounded-3xl">
+        <div class = "border-b-4 border-black">
+          <div class ="flex flex-row">
+            <div id = "" class = " text-2xl font-NotoSans mt-8 ml-3 ">
+              Total items: 
+            </div>
+            <div id = "total_quantity" class = "text-2xl font-NotoSans mt-8 ">
+              0 items
+            </div>
+          </div>
+          <div class ="flex flex-row">
+            <p id="" class = "text-2xl font-NotoSans mt-4 ml-3 ">
+              Total price: 
+            </p>
+            <p id="total_price" class = "text-green-900 text-2xl font-NotoSans mt-4 ml-5 ">
+              $0
+            </p>
+          </div>
+        </div>
       <button class="bg-amber-400 h-20 mb-5 rounded-xl flex flex-col items-center justify-center mx-auto w-11/12 text-3xl mt-3 font-NotoSans font-bold">
         Check Out
       </button>
     </div>
+    </div>
     
     
+     <div id='billHTML' bind:this = {billHTML}>
+      <div
+        class="flex flex-col w-[500px] bg-white border-black border justify-center items-center"
+      >
+        <div
+          id="title"
+          class="w-[470px] font-extrabold text-5xl mt-9 text-center"
+        >
+          KRYXA
+        </div>
+        <div
+          class="w-[470px] h-[160px] border-black border mt-2 mb-2 font-NotoSans inline-flex"
+        >
+          <div class="w-[250px] ml-1 mt-2">
+            <div class="text-black font-semibold mt-2">
+              BillID : {bill.BillID}
+            </div>
+            <div class="text-black font-semibold mt-2">
+              PcID : {bill.PcID}
+            </div>
+            <div class="text-black font-semibold mt-2">
+              Datetime : 
+            </div>
+            <div class="inline-flex">
+              <img src={AppLogo} alt="" width="20%" />
+              <div class="mt-5 ml-2 text-gray-600">since 2023</div>
+            </div>
+          </div>
+          <div class="w-[220px] mt-2">
+            <div class="mr-5 mt-2 font-semibold text-right">Note :</div>
+              <textarea
+                class="w-[200px] h-[100px] border-black border resize-none"
+                bind:value={bill.Note}
+              ></textarea>
+            </div>
+          </div>
+        <div class="w-[470px] mb-2">
+          <table class="mx-auto">
+            <thead class="font-bold">
+              <tr class="h-[40px]">
+                <td class="w-[250px] pl-2">Item description</td><td
+                  class="w-[50px]">Qt</td
+                ><td class="w-[60px]">Price</td><td
+                  class="w-[90px] text-right pr-2">Amount</td
+                >
+              </tr>
+            </thead>
+            <tbody>
+              {#if bill.Cart !== undefined}
+                {#each bill["Cart"] as item}
+                  <tr
+                    class=" h-[40px] {item['id'] % 2 == 0
+                      ? 'bg-white'
+                      : 'bg-slate-200'} cursor-pointer transition-colors duration-300 hover:bg-red-500"
+                    
+                    title="Click to remove"
+                  >
+                    <td class="w-[250px] pl-2">{item["name"]}</td><td
+                      class="w-[50px]">{item["qt"]}</td
+                    ><td class="w-[60px]">{item["price"]}</td><td
+                      class="w-[90px] text-right pr-2"
+                      >{item["qt"] * item["price"]}</td
+                    >
+                  </tr>
+                {/each}
+              {/if}              
+            </tbody>
+          </table>
+        </div>
+        <div class="w-[470px] border-black border mt-4"></div>
+        <div class="flex my-4">
+          <div class="w-[235px] h-[40px] text-center">
+            <div
+              class="w-[230px] h-[30px] text-white text-xl bg-green-600 font-bold mr-[20px] mt-[4px]"
+            >
+              Total : {bill.Total}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     
     
   </div>
@@ -278,3 +396,9 @@
 <div on:keydown={close}>
   <ModalItem {status} on:keydown={close} />
 </div>
+
+<style>
+  #billHTML{
+      display:none
+  }
+</style>

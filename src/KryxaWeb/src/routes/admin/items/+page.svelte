@@ -31,7 +31,7 @@
 </script>
 
 
-<div class="flex flex-row h-100% bg-cover font-BlackOpsOne" style="background-image: url({MainScreen['Background4']});">
+<div class="flex flex-row h-screen bg-cover font-BlackOpsOne" style="background-image: url({MainScreen['Background4']});">
   <div class = "flex flex-col">
     <AdminNav/>
   </div>

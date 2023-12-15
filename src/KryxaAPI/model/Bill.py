@@ -150,7 +150,23 @@ def fetch_bill_by_pc_id(pc_id: int) -> Bill:
             ).fetchone()
             bill_info = Bill(BillID=bill[0], PcID=bill[1], Datetime=None, Note=bill[3], Total=bill[4],
                              Cart=list(eval(bill[5])))
-            print(bill_info)
             return bill_info
         except Exception as err:
+            print(err)
+
+def update_user_bill(new_bill_data: Bill):
+    with DBService() as cur:
+        try:
+            for item in new_bill_data.Cart:
+                new_bill_data.Total += item["qt"] * item["price"]
+            cart_json = json.dumps(new_bill_data.Cart)
+
+            cur.cursor().execute(
+                "UPDATE Bill SET Note = ?, Total = ?, Cart = ? WHERE BillID = ?",
+                (new_bill_data.Note, new_bill_data.Total, cart_json, new_bill_data.BillID)
+            )
+            cur.commit()
+            print(new_bill_data)
+        except Exception as err:
+            cur.rollback()
             print(err)

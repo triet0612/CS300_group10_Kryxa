@@ -9,7 +9,7 @@ from service.auth import AccountDTO, checkPcAccount, generate_pc_token, validate
 from typing import Annotated
 from model.SaleItems import fetch_all_items
 from model.PC import fetch_pc_by_id
-from model.Bill import fetch_bill_by_pc_id
+from model.Bill import fetch_bill_by_pc_id,Bill,update_user_bill
 userRouter = APIRouter(tags=["user"])
 
 
@@ -93,6 +93,19 @@ async def get_bill(acc: Annotated[AccountDTO, Depends(validatePcToken)]):
     try:
         bill = fetch_bill_by_pc_id(acc.PcID)
         return bill
+    except HTTPException as err:
+        raise err
+    except sqlite3.Error as err:
+        print(err)
+        raise HTTPException(status_code=400, detail="Error fetching bill")
+    except Exception as err:
+        raise HTTPException(status_code=500, detail="Unknown error")
+
+@userRouter.post("/")
+async def update_bill(new_bill_data: Bill):
+    try:
+        bill = update_user_bill(new_bill_data)
+        print(bill)
     except HTTPException as err:
         raise err
     except sqlite3.Error as err:

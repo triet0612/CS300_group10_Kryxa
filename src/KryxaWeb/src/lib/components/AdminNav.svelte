@@ -97,53 +97,57 @@
 </script>
 
 
-<aside class="flex flex-col m-4 w-60 h-screen justify-center">
-  <div
-    class="p-3 h-full rounded-lg bg-white/5 border-2 border-gray-500 backdrop-blur-md backdrop-brightness-125 font-BlackOpsOne"
-  >
-    <div class="text-2xl text-purple-300">
-      <ul>
-        <li><img src={AppLogo} alt="Logo" /></li>
-        {#each items as it}
-          <div class="flex my-2">
-            <li class="grid grid-cols-2 gap-4 p-2 hover:bg-purple-300 hover:text-black">
-              <div>
-                <a rel="external" href="/admin/{it[1]}">{it[0]}</a>
-              </div>
-              {#if it[1] === "bills" && $notifs === "True"}
-              <div class=" text-center rounded-lg bg-green-900">
-                  &#128276;
+<aside class="flex flex-col w-72 h-screen justify-center">
+  <div class="p-3 w-full h-full">
+    <div
+      class="p-3 h-full flex flex-col rounded-lg bg-white/5 border-2 border-gray-500 backdrop-blur-md backdrop-brightness-125 font-BlackOpsOne"
+    >
+      <div class="text-2xl text-purple-300">
+        <ul>
+          <li><img src={AppLogo} alt="Logo" /></li>
+          {#each items as it}
+            <div class="flex my-2">
+              <li class="grid grid-cols-2 gap-4 p-2 hover:bg-purple-300 hover:text-black">
+                <div>
+                  <a rel="external" href="/admin/{it[1]}">{it[0]}</a>
                 </div>
-              {/if}
-            </li>
-          </div>
-        {/each}
-        <br>
-      </ul>
-    </div>
-    <div class="text-xl h-[220px] text-yellow-400 font-BlackOpsOne no-scrollbar overflow-auto">
-      {#key n}
-        {#await get_food_queue(n)}
-          <p>None</p>
-        {:then res}
-          {#each res as v}
-            <div class="flex flex-row h-[90px] p-1 justify-between">
-              <div class="flex flex-col">
-                <p>PcID: {v["PcID"]}</p>
-                <p>Item: {v["ItemID"]}</p>
-                <p>Qt: {v["Qt"]}</p>
-              </div>
-              <div class="flex border-2 border-gray-500 text-2xl p-4 text-blue-400 hover:bg-sky-600 hover:text-white justify-center">
-                <button on:click={() => delete_food(v)}>Done</button>
-              </div>
+                {#if it[1] === "bills" && $notifs === "True"}
+                <div class=" text-center rounded-lg bg-green-900">
+                    &#128276;
+                  </div>
+                {/if}
+              </li>
             </div>
-            <br>
           {/each}
-        {/await}
-      {/key}
-    </div>
-    <div class="flex my-3 border-2 text-2xl border-gray-500 text-purple-600 hover:bg-black hover:text-purple-300 justify-center">
-      <button class="p-3" on:click={() => logout()}>Logout</button>
+          <br>
+        </ul>
+      </div>
+      <div class="text-xl h-1/4 text-yellow-400 font-BlackOpsOne no-scrollbar overflow-auto">
+        {#key n}
+          {#await get_food_queue(n)}
+            <p>None</p>
+          {:then res}
+            {#each res as v}
+              <div class="flex flex-row h-[90px] p-1 justify-between">
+                <div class="flex flex-col">
+                  <p>PcID: {v["PcID"]}</p>
+                  <p>Item: {v["ItemID"]}</p>
+                  <p>Qt: {v["Qt"]}</p>
+                </div>
+                <div class="flex border-2 border-gray-500 text-2xl p-4 text-blue-400 hover:bg-sky-600 hover:text-white justify-center">
+                  <button on:click={() => delete_food(v)}>Done</button>
+                </div>
+              </div>
+              <br>
+            {/each}
+          {/await}
+        {/key}
+      </div>
+      <div class="py-3">
+        <div class="text-2xl border-2 border-gray-500 text-purple-600 hover:bg-black hover:text-purple-300 justify-center text-center">
+          <button class="p-3" on:click={() => logout()}>Logout</button>
+        </div>
+      </div>
     </div>
   </div>
 </aside>

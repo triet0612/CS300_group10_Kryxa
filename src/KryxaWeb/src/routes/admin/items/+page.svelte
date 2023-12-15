@@ -45,12 +45,12 @@
           type="text" 
           id="search" 
           placeholder="Search items..." 
-          class="mt-5 px-5 py-5 rounded-3xl" 
+          class="mt-5 px-5 py-5 rounded-3xl bg-purple-900" 
           bind:value = {text_input} 
           on:change={search_al}
         />
         <!-- Drop down -->
-        <select name="category" id="category" class="mt-5 ml-5 px-5 py-5 rounded-3xl" bind:value={category_filter} on:change={search_al}>
+        <select name="category" id="category" class="mt-5 ml-5 px-5 py-5 rounded-3xl bg-purple-900 text-white" bind:value={category_filter} on:change={search_al}>
           <option category_filter="All" selected>All</option>
           <option category_filter="Time" >Time</option>
           <option category_filter="Food" >Food</option>

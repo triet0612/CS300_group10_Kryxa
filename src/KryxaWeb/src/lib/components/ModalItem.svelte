@@ -16,21 +16,27 @@
     }
 
     async function click() {
-        
-        let statcode = await newItem.createItem().then(res => res)
-        status = "close"
-        if (statcode !== 200) {
-            alert("Failed create new Item")
+        if (newItem.Category =="Food" || newItem.Category =="Time" || newItem.Category =="Drink"){
+            let statcode = await newItem.createItem().then(res => res)
+            status = "close"
+            if (statcode !== 200) {
+                alert("Failed create new Item")
+                location.reload()
+                return
+            }
+            let stat = await createImage(files,newItem.ItemID).then(res => res)
+            if (stat !== 200) {
+                alert("Failed insert image")
+                location.reload()
+                return
+            }
             location.reload()
-            return
         }
-        let stat = await createImage(files,newItem.ItemID).then(res => res)
-        if (stat !== 200) {
-            alert("Failed insert image")
-            location.reload()
-            return
+        else{
+            alert("Failed to recognize Category")
+                location.reload()
+                return
         }
-        location.reload()
     }
 </script>
 <div class="flex flex-col w-72">

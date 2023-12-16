@@ -67,24 +67,26 @@
         totalPrice = totalPrice + info.Price * item.quantity;
         listCartHTML.appendChild(newItem);
         newItem.innerHTML = `
-                <div class = "flex flex-row bg-white/80 border-b-2 h-32 w-11/12 mx-auto">
+                <div class = "font-NotoSans font-semibold flex flex-row bg-white/80 border-b-2 h-32 w-11/12 mx-auto">
                   <img style="screen" src="http://localhost:8000/api/getfile/${
                     info.ItemID
                   }" sizes="(max-width:20px)"
                       class="bg-contain rounded-full ml-5 h-14 my-auto w-14"
                     />
-                  <div class = "flex flex-col ml-3 mt-2 w-full">
-                    <div class="text-[#FF9900] text-xl font-BlackOpsOne">
+                  <div class = "flex flex-col ml-3 mt-5 w-full">
+                    <div class="text-[#FF9900] text-xl">
                     ${info.Name}
                     </div>
-                    <div class="text-[#FF9900] text-xl font-BlackOpsOne mt-3">$${
-                      info.Price * item.quantity
-                    }</div>
-                  </div>
-                  <div class="flex flex-row my-auto ml-32">
-                    <button class="minus rounded-full w-7 h-7 bg-gray-300">-</button>
-                    <span class = "ml-3 mr-3 ">${item.quantity}</span>
-                    <button class="plus rounded-full w-7 h-7 bg-gray-300">+</button>
+                    <div class = "flex flex-row mt-5">
+                      <div class="text-[#FF9900] text-xl">$${
+                        info.Price * item.quantity
+                      }</div>
+                      <div class="flex flex-row my-auto ml-40 w-1/2">
+                        <button class="minus rounded-full w-7 h-7 bg-gray-300">-</button>
+                        <span class = "ml-3 mr-3 ">${item.quantity}</span>
+                        <button class="plus rounded-full w-7 h-7 bg-gray-300">+</button>
+                    </div>
+                    </div>
                   </div>
                 </div>
             `;
@@ -153,13 +155,13 @@
     if (id === 0) {
       cartPage.style.display = "block";
       billHTML.style.display = "none";
-      cart_btn.style.color = "black";
+      cart_btn.style.color = "#FF9900";
       bill_btn.style.color = "#e2e8f0";
     } else {
       cartPage.style.display = "none";
       billHTML.style.display = "block";
       cart_btn.style.color = "#e2e8f0";
-      bill_btn.style.color = "black";
+      bill_btn.style.color = "#FF9900";
     }
   }
   async function getBill() {
@@ -187,7 +189,6 @@
           bill.Cart[positionThisProductInBill].qt =
             bill.Cart[positionThisProductInBill].qt + item.quantity;
         }
-        
       });
       clearCart();
 
@@ -201,9 +202,7 @@
   }
 
   function odd_even(id) {
-    let positionProduct = bill.Cart.findIndex(
-      (value) => value.id == id,
-    );
+    let positionProduct = bill.Cart.findIndex((value) => value.id == id);
     return positionProduct;
   }
   onMount(async () => {
@@ -309,7 +308,7 @@
         on:click={async () => {
           switch_tab(0);
         }}
-        class=" text-black text-4xl border-2 font-BlackOpsOne mx-auto h-14 w-1/2 flex flex-col items-center justify-center rounded-t-xl"
+        class=" text-[#FF9900] text-4xl border-2 font-BlackOpsOne mx-auto h-14 w-1/2 flex flex-col items-center justify-center rounded-t-xl"
       >
         My cart
       </button>
@@ -327,7 +326,7 @@
       </button>
     </div>
 
-    <div id="cart_page" class="w-[500px] h-full ">
+    <div id="cart_page" class="w-[500px] h-full">
       <div
         id="cart_list"
         class="overflow-auto h-2/3"
@@ -368,7 +367,7 @@
       >
         <div
           id="title"
-          class="w-[470px] font-extrabold text-5xl mt-9 text-center"
+          class=" w-[470px] font-extrabold text-5xl mt-9 text-center"
         >
           KRYXA
         </div>
@@ -411,7 +410,7 @@
               {#if bill.Cart !== undefined}
                 {#each bill["Cart"] as item}
                   <tr
-                    class=" h-[40px] {odd_even(item["id"]) % 2 == 0
+                    class=" h-[40px] {odd_even(item['id']) % 2 == 0
                       ? 'bg-white'
                       : 'bg-slate-200'} cursor-pointer transition-colors duration-300 hover:bg-green-500"
                     title="Click to remove"

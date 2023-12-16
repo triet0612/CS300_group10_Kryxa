@@ -55,7 +55,7 @@ def checkPcAccount(acc: AccountDTO) -> bool:
     with DBService() as cur:
         try:
             row = cur.cursor().execute(
-                "SELECT Password FROM Pc WHERE PcID=?",
+                '''SELECT Password FROM Pc WHERE PcID=? AND PcID IN (SELECT PcID FROM Bill WHERE Datetime == "")''',
                 [acc.PcID]
             ).fetchone()
             if acc.Password == row[0]:

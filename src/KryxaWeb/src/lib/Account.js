@@ -22,6 +22,7 @@ export class Account {
       if (res.status === 200) {
         return res.headers.get("Authorization")
       } else {
+        alert("Wrong credentials")
         return ""
       }
     })
@@ -53,6 +54,7 @@ export class Account {
       if (res.status === 200) {
         return res.headers.get("Authorization")
       } else {
+        alert("Wrong credentials")
         return ""
       }
     })
@@ -63,35 +65,9 @@ export class Account {
     localStorage.setItem("jwt", creds)
     location.replace('/')
   }
-
-
-  // async changePassword(oldPass,newPass){
-  //   let url = "http://localhost:8000/api/admin/account"
-  //   let newPass = await fetch(url,{
-  //   method: "POST",
-  //   body: JSON.stringify({
-  //     "oldPassword": oldPass,
-  //     "newPassword": newPass
-  //   }),
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //     "Authorization": "Bearer " + localStorage.getItem("jwt")
-  //   },
-  // })
-  // .then(res=>res.json())
-  // .catch(err => {
-  //   console.log(err)
-  //   return 500
-  // })
-  // console.log(newPass)
-  // return newPass
-  // }
-
- 
 }
 
 export async function changePassword(newPass){
-  // let url = `http://localhost:8000/api/admin/account?oldPassword=${oldPass}&newPassword=${newPass}`
   let url = "http://localhost:8000/api/admin/account"
   let statcode = await fetch(url,{
     method: "PUT",

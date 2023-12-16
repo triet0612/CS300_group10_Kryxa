@@ -190,6 +190,24 @@
             bill.Cart[positionThisProductInBill].qt + item.quantity;
         }
       });
+      let temp_food = []
+      cart_items.filter((val) => val.ItemID > 1);
+      for (let i = 0; i < cart_items.length; i++) {
+        temp_food.push({"PcID": 0, "ItemID": cart_items[i].ItemID, "Qt": cart_items[i].quantity})
+      }
+      console.log(temp_food)
+      let add_queue_stat = await fetch("http://localhost:8000/api/food_queue", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + localStorage.getItem("jwt")
+        },
+        body: JSON.stringify(temp_food)
+      }).then(res => res.status).catch(err => {console.log(err); return 500})
+      if (add_queue_stat !== 200) {
+        alert("Error create food queue")
+        return
+      }
       clearCart();
 
       let statcode = await update_user_bill(bill).then((res) => res);

@@ -339,7 +339,7 @@
             <div id="" class=" text-2xl font-NotoSans mt-8 ml-3">
               Total items:
             </div>
-            <div id="total_quantity" class="text-2xl font-NotoSans mt-8">
+            <div id="total_quantity" class="text-2xl font-NotoSans mt-8 ml-40">
               0 items
             </div>
           </div>
@@ -347,7 +347,7 @@
             <p id="" class="text-2xl font-NotoSans mt-4 ml-3">Total price:</p>
             <p
               id="total_price"
-              class="text-green-900 text-2xl font-NotoSans mt-4 ml-5"
+              class="text-green-900 text-2xl font-NotoSans mt-4 ml-40"
             >
               $0
             </p>

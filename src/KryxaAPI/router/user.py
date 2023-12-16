@@ -10,6 +10,7 @@ from typing import Annotated
 from model.SaleItems import fetch_all_items
 from model.PC import fetch_pc_by_id
 from model.Bill import fetch_bill_by_pc_id,Bill,update_user_bill
+from model.FoodQueue import FoodItem, insert_to_food_queue
 userRouter = APIRouter(tags=["user"])
 
 
@@ -112,4 +113,20 @@ async def update_bill(new_bill_data: Bill):
         print(err)
         raise HTTPException(status_code=400, detail="Error fetching bill")
     except Exception as err:
+        raise HTTPException(status_code=500, detail="Unknown error")
+
+
+@userRouter.post("/food_queue")
+async def add_to_food_queue(acc: Annotated[AccountDTO, Depends(validatePcToken)], food: list[FoodItem]):
+    try:
+        for f in food:
+            f.PcID = acc.PcID
+            insert_to_food_queue(f)
+    except HTTPException as err:
+        raise err
+    except sqlite3.Error as err:
+        print(err)
+        raise HTTPException(status_code=400, detail="Error adding to food queue")
+    except Exception as err:
+        print(err)
         raise HTTPException(status_code=500, detail="Unknown error")

@@ -37,7 +37,7 @@
         }
         location.reload()
     }
-    let session_time = 0;
+    let session_time = 1;
     async function openSession() {
         let res = await fetch(`http://localhost:8000/api/admin/session?PcID=${pc_info.PcID}&time=${session_time}`,{
             method: "POST",
@@ -135,7 +135,7 @@
                     />
                 </div>
                 <div class = "ml-10 flex flex-row">
-                    <input class ="text-center mt-5 ml-10 w-24 h-16 bg-violet-900/50 rounded font-BlackOpsOne" type ="number" bind:value={session_time} min="0">
+                    <input class ="text-center mt-5 ml-10 w-24 h-16 bg-violet-900/50 rounded font-BlackOpsOne" type ="number" bind:value={session_time} min="1">
                     <div class ="mt-7 ml-3 text-amber-300 font-BlackOpsOne">
                         x30m    
                     </div>

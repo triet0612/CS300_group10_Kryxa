@@ -78,10 +78,10 @@
                     ${info.Name}
                     </div>
                     <div class = "flex flex-row mt-5">
-                      <div class="text-[#FF9900] text-xl">$${
+                      <div class="text-[#FF9900] text-xl basis-3/4">$${
                         info.Price * item.quantity
                       }</div>
-                      <div class="flex flex-row my-auto ml-40 w-1/2">
+                      <div class="flex flex-row basis-1/4 my-auto ml-40 w-1/2">
                         <button class="minus rounded-full w-7 h-7 bg-gray-300">-</button>
                         <span class = "ml-3 mr-3 ">${item.quantity}</span>
                         <button class="plus rounded-full w-7 h-7 bg-gray-300">+</button>
@@ -332,7 +332,7 @@
         class="overflow-auto h-2/3"
         bind:this={listCartHTML}
       ></div>
-      <div class="bg-gray-400 w-11/12 mx-auto rounded-3xl">
+      <div class="bg-gray-400 w-11/12 mx-auto rounded-3xl font-bold">
         <div class="border-b-4 border-black">
           <div class="flex flex-row mt-20">
             <div id="" class=" text-2xl font-NotoSans mt-8 ml-3">

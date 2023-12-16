@@ -14,9 +14,13 @@
   let text_input = "";
   let status = "close";
   let filter = "All";
-  let listCartHTML = document.getElementById("cart_list");
-  let billHTML;
-  let bill_items = [];
+  let listCartHTML;
+  let bill_tab;
+  let cart_tab;
+  let total_price;
+  let total_quantity;
+  let cart_btn;
+  let bill_btn;
 
   function addItem(ItemID) {
     let positionThisProductInCart = cart_items.findIndex(
@@ -47,8 +51,6 @@
   }
 
   function addCartToHTML() {
-    let total_price = document.getElementById("total_price");
-    let total_quantity = document.getElementById("total_quantity");
     listCartHTML.innerHTML = "";
     let totalQuantity = 0;
     let totalPrice = 0;
@@ -104,7 +106,8 @@
         positionClick.classList.contains("plus")
       ) {
         let ItemID =
-          positionClick.parentElement.parentElement.parentElement.dataset.id;
+          positionClick.parentElement.parentElement.parentElement.parentElement
+            .parentElement.dataset.id;
         let type = "minus";
         if (positionClick.classList.contains("plus")) {
           type = "plus";
@@ -115,7 +118,6 @@
   }
 
   function changeQuantityCart(ItemID, type) {
-    console.log(ItemID);
     let positionItemInCart = cart_items.findIndex(
       (value) => value.ItemID == ItemID,
     );
@@ -148,25 +150,20 @@
   }
 
   async function switch_tab(id) {
-    let cartPage = document.getElementById("cart_page");
-    let billHTML = document.getElementById("billHTML");
-    let cart_btn = document.getElementById("cart_btn");
-    let bill_btn = document.getElementById("bill_btn");
     if (id === 0) {
-      cartPage.style.display = "block";
-      billHTML.style.display = "none";
+      cart_tab.style.display = "block";
+      bill_tab.style.display = "none";
       cart_btn.style.color = "#FF9900";
       bill_btn.style.color = "#e2e8f0";
     } else {
-      cartPage.style.display = "none";
-      billHTML.style.display = "block";
+      cart_tab.style.display = "none";
+      bill_tab.style.display = "block";
       cart_btn.style.color = "#e2e8f0";
       bill_btn.style.color = "#FF9900";
     }
   }
   async function getBill() {
-    bill = await getBillbyID();
-    console.log(bill);
+    bill = await getBillbyID().then((res) => res);
   }
   async function check_out() {
     if (cart_items.length > 0) {
@@ -195,7 +192,6 @@
       let statcode = await update_user_bill(bill).then((res) => res);
       if (statcode != 200) {
         console.log("failed to update bill");
-      } else {
       }
       location.reload();
     }
@@ -206,16 +202,13 @@
     return positionProduct;
   }
   onMount(async () => {
-    listCartHTML = document.getElementById("cart_list");
     add_click();
     list_all_items = await user_fetch_category("All", "");
     if (localStorage.getItem("cart_items")) {
       cart_items = JSON.parse(localStorage.getItem("cart_items"));
       addCartToHTML();
     }
-    // getBill()
-    bill = await getBillbyID().then((res) => res);
-    console.log("cart:", bill.Cart);
+    getBill();
   });
   // pop up
   function close(event) {
@@ -304,7 +297,8 @@
   <div class="flex flex-col w-1/3 bg-white rounded-xl">
     <div class="flex flex-row">
       <button
-        id="cart_btn"
+        id=""
+        bind:this={cart_btn}
         on:click={async () => {
           switch_tab(0);
         }}
@@ -312,11 +306,10 @@
       >
         My cart
       </button>
-      <!-- <button on:click={clearCart} class = "w-10">
-        <img src={Trash} alt="">
-      </button> -->
+
       <button
-        id="bill_btn"
+        id=""
+        bind:this={bill_btn}
         on:click={async () => {
           switch_tab(1);
         }}
@@ -326,26 +319,35 @@
       </button>
     </div>
 
-    <div id="cart_page" class="w-[500px] h-full">
+    <div id="" bind:this={cart_tab} class="w-[500px] h-full overflow-y-hidden">
+      <button on:click={clearCart} class="w-1/4 underline text-3xl text-red-500">
+        Clear all
+      </button>
       <div
         id="cart_list"
         class="overflow-auto h-2/3"
         bind:this={listCartHTML}
       ></div>
-      <div class="bg-gray-400 w-11/12 mx-auto rounded-3xl font-bold">
+      
+      <div class="bg-gray-400 w-10/12 mx-auto rounded-3xl font-bold mt-10">
         <div class="border-b-4 border-black">
-          <div class="flex flex-row mt-20">
+          <div class="flex flex-row ">
             <div id="" class=" text-2xl font-NotoSans mt-8 ml-3">
               Total items:
             </div>
-            <div id="total_quantity" class="text-2xl font-NotoSans mt-8 ml-40">
+            <div
+              id=""
+              bind:this={total_quantity}
+              class="text-2xl font-NotoSans mt-8 ml-40"
+            >
               0 items
             </div>
           </div>
           <div class="flex flex-row">
             <p id="" class="text-2xl font-NotoSans mt-4 ml-3">Total price:</p>
             <p
-              id="total_price"
+              id=""
+              bind:this={total_price}
               class="text-green-900 text-2xl font-NotoSans mt-4 ml-40"
             >
               $0
@@ -361,7 +363,7 @@
       </div>
     </div>
 
-    <div id="billHTML" bind:this={billHTML}>
+    <div id="billHTML" bind:this={bill_tab}>
       <div
         class="flex flex-col w-[500px] bg-white border-black border justify-center items-center"
       >

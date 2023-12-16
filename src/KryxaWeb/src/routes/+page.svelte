@@ -3,7 +3,7 @@
 
   import { user_fetch_category } from "$lib/Item.js";
   import { UserAssets, Trash, AppLogo } from "$lib/Assets.js";
-  import { getBillbyID, Bill,update_user_bill } from "$lib/Bill.js";
+  import { getBillbyID, Bill, update_user_bill } from "$lib/Bill.js";
   import ModalItem from "$lib/components/ModalItem.svelte";
   import { onMount } from "svelte";
 
@@ -153,13 +153,13 @@
     if (id === 0) {
       cartPage.style.display = "block";
       billHTML.style.display = "none";
-      cart_btn.style.background = "white";
-      bill_btn.style.backgroundColor = "gray";
+      cart_btn.style.color = "black";
+      bill_btn.style.color = "#e2e8f0";
     } else {
       cartPage.style.display = "none";
       billHTML.style.display = "block";
-      cart_btn.style.backgroundColor = "gray";
-      bill_btn.style.background = "white";
+      cart_btn.style.color = "#e2e8f0";
+      bill_btn.style.color = "black";
     }
   }
   async function getBill() {
@@ -181,24 +181,30 @@
             id: item.ItemID,
             name: info.Name,
             qt: item.quantity,
-            price: info.Price * item.quantity
+            price: info.Price,
           });
         } else {
           bill.Cart[positionThisProductInBill].qt =
-          bill.Cart[positionThisProductInBill].qt + item.quantity;
+            bill.Cart[positionThisProductInBill].qt + item.quantity;
         }
         
       });
-      clearCart()
-      console.log('bill cart now:',bill.Cart)
+      clearCart();
+
       let statcode = await update_user_bill(bill).then((res) => res);
       if (statcode != 200) {
         console.log("failed to update bill");
+      } else {
       }
-      else{
-      }
-      location.reload()
+      location.reload();
     }
+  }
+
+  function odd_even(id) {
+    let positionProduct = bill.Cart.findIndex(
+      (value) => value.id == id,
+    );
+    return positionProduct;
   }
   onMount(async () => {
     listCartHTML = document.getElementById("cart_list");
@@ -210,7 +216,7 @@
     }
     // getBill()
     bill = await getBillbyID().then((res) => res);
-    console.log('cart:',bill.Cart);
+    console.log("cart:", bill.Cart);
   });
   // pop up
   function close(event) {
@@ -231,7 +237,6 @@
   $: {
     search_all(filter, text_input);
   }
-
 </script>
 
 <div
@@ -304,7 +309,7 @@
         on:click={async () => {
           switch_tab(0);
         }}
-        class="text-[#FF9900] text-4xl border-b-2 font-BlackOpsOne mx-auto h-14 mt-5 w-1/2 flex flex-col items-center justify-center rounded-t-xl"
+        class=" text-black text-4xl border-2 font-BlackOpsOne mx-auto h-14 w-1/2 flex flex-col items-center justify-center rounded-t-xl"
       >
         My cart
       </button>
@@ -316,13 +321,13 @@
         on:click={async () => {
           switch_tab(1);
         }}
-        class="text-[#FF9900] text-4xl border-b-2 font-BlackOpsOne mx-auto h-14 mt-5 bg-gray-400 w-1/2 flex flex-col items-center justify-center rounded-t-xl"
+        class="text-[#e2e8f0] text-4xl border-2 font-BlackOpsOne mx-auto h-14 w-1/2 flex flex-col items-center justify-center rounded-t-xl"
       >
         My Bill
       </button>
     </div>
 
-    <div id="cart_page" class="w-[500px] h-full">
+    <div id="cart_page" class="w-[500px] h-full ">
       <div
         id="cart_list"
         class="overflow-auto h-2/3"
@@ -406,9 +411,9 @@
               {#if bill.Cart !== undefined}
                 {#each bill["Cart"] as item}
                   <tr
-                    class=" h-[40px] {item['id'] % 2 == 0
+                    class=" h-[40px] {odd_even(item["id"]) % 2 == 0
                       ? 'bg-white'
-                      : 'bg-slate-200'} cursor-pointer transition-colors duration-300 hover:bg-red-500"
+                      : 'bg-slate-200'} cursor-pointer transition-colors duration-300 hover:bg-green-500"
                     title="Click to remove"
                   >
                     <td class="w-[250px] pl-2">{item["name"]}</td><td

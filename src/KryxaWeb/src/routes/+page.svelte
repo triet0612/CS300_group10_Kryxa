@@ -24,7 +24,7 @@
 
   function addItem(ItemID) {
     let positionThisProductInCart = cart_items.findIndex(
-      (value) => value.ItemID == ItemID,
+      (value) => value.ItemID == ItemID
     );
     if (cart_items.length <= 0) {
       cart_items = [
@@ -63,7 +63,7 @@
         newItem.dataset.id = item.ItemID;
 
         let positionProduct = list_all_items.findIndex(
-          (value) => value.ItemID == item.ItemID,
+          (value) => value.ItemID == item.ItemID
         );
         let info = list_all_items[positionProduct];
         totalPrice = totalPrice + info.Price * item.quantity;
@@ -119,7 +119,7 @@
 
   function changeQuantityCart(ItemID, type) {
     let positionItemInCart = cart_items.findIndex(
-      (value) => value.ItemID == ItemID,
+      (value) => value.ItemID == ItemID
     );
     if (positionItemInCart >= 0) {
       let info = cart_items[positionItemInCart];
@@ -153,13 +153,13 @@
     if (id === 0) {
       cart_tab.style.display = "block";
       bill_tab.style.display = "none";
-      cart_btn.style.color = "#FF9900";
+      cart_btn.style.color = "#C27500";
       bill_btn.style.color = "#e2e8f0";
     } else {
       cart_tab.style.display = "none";
       bill_tab.style.display = "block";
       cart_btn.style.color = "#e2e8f0";
-      bill_btn.style.color = "#FF9900";
+      bill_btn.style.color = "#C27500";
     }
   }
   async function getBill() {
@@ -169,11 +169,11 @@
     if (cart_items.length > 0) {
       cart_items.forEach((item) => {
         let positionProduct = list_all_items.findIndex(
-          (value) => value.ItemID == item.ItemID,
+          (value) => value.ItemID == item.ItemID
         );
         let info = list_all_items[positionProduct];
         let positionThisProductInBill = bill.Cart.findIndex(
-          (value) => value.id == item.ItemID,
+          (value) => value.id == item.ItemID
         );
         if (positionThisProductInBill < 0) {
           bill.Cart.push({
@@ -187,26 +187,35 @@
             bill.Cart[positionThisProductInBill].qt + item.quantity;
         }
       });
-      let temp_food = []
-      console.log(cart_items)
+      let temp_food = [];
+      console.log(cart_items);
       for (let i = 0; i < cart_items.length; i++) {
         if (cart_items[i].Cart > 1) {
-          console.log(cart_items[i])
-          temp_food.push({"PcID": 0, "ItemID": cart_items[i].ItemID, "Qt": cart_items[i].quantity})
+          console.log(cart_items[i]);
+          temp_food.push({
+            PcID: 0,
+            ItemID: cart_items[i].ItemID,
+            Qt: cart_items[i].quantity,
+          });
         }
       }
-      console.log(temp_food)
+      console.log(temp_food);
       let add_queue_stat = await fetch("http://localhost:8000/api/food_queue", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer " + localStorage.getItem("jwt")
+          Authorization: "Bearer " + localStorage.getItem("jwt"),
         },
-        body: JSON.stringify(temp_food)
-      }).then(res => res.status).catch(err => {console.log(err); return 500})
+        body: JSON.stringify(temp_food),
+      })
+        .then((res) => res.status)
+        .catch((err) => {
+          console.log(err);
+          return 500;
+        });
       if (add_queue_stat !== 200) {
-        alert("Error create food queue")
-        return
+        alert("Error create food queue");
+        return;
       }
       clearCart();
 
@@ -315,7 +324,7 @@
       </ul>
     </div>
   </div>
-  <div class="flex flex-col w-1/3 bg-white rounded-xl">
+  <div class="flex flex-col w-1/3 bg-white rounded-l-3xl">
     <div class="flex flex-row">
       <button
         id=""
@@ -323,9 +332,9 @@
         on:click={async () => {
           switch_tab(0);
         }}
-        class=" text-[#FF9900] text-4xl border-2 font-BlackOpsOne mx-auto h-14 w-1/2 flex flex-col items-center justify-center rounded-t-xl"
+        class=" text-[#C27500] text-4xl border-2 font-NotoSans font-extrabold mx-auto h-14 w-1/2 flex flex-col items-center justify-center rounded-tl-3xl"
       >
-        My cart
+        My Cart
       </button>
 
       <button
@@ -334,14 +343,17 @@
         on:click={async () => {
           switch_tab(1);
         }}
-        class="text-[#e2e8f0] text-4xl border-2 font-BlackOpsOne mx-auto h-14 w-1/2 flex flex-col items-center justify-center rounded-t-xl"
+        class="text-[#e2e8f0] text-4xl border-2 font-NotoSans font-extrabold mx-auto h-14 w-1/2 flex flex-col items-center justify-center"
       >
         My Bill
       </button>
     </div>
 
     <div id="" bind:this={cart_tab} class="w-[500px] h-full overflow-y-hidden">
-      <button on:click={clearCart} class="w-1/4 underline text-3xl text-red-500">
+      <button
+        on:click={clearCart}
+        class="w-[150px] text-3xl text-white bg-green-600 font-NotoSans mt-2 rounded-3xl ml-[175px] hover:bg-red-600"
+      >
         Clear all
       </button>
       <div
@@ -349,17 +361,19 @@
         class="overflow-auto h-2/3"
         bind:this={listCartHTML}
       ></div>
-      
-      <div class="bg-gray-400 w-10/12 mx-auto rounded-3xl font-bold mt-10">
-        <div class="border-b-4 border-black">
-          <div class="flex flex-row ">
-            <div id="" class=" text-2xl font-NotoSans mt-8 ml-3">
+
+      <div
+        class="bg-zinc-300 w-[440px] h-[210px] ml-[32px] rounded-xl font-bold mt-4"
+      >
+        <div class="border-b-2 border-black pb-4 w-[420px] ml-[10px]">
+          <div class="flex flex-row">
+            <div id="" class=" text-2xl font-NotoSans mt-4 ml-3">
               Total items:
             </div>
             <div
               id=""
               bind:this={total_quantity}
-              class="text-2xl font-NotoSans mt-8 ml-40"
+              class="text-2xl font-NotoSans mt-4 ml-40"
             >
               0 items
             </div>
@@ -376,7 +390,7 @@
           </div>
         </div>
         <button
-          class="bg-amber-400 h-20 rounded-xl flex flex-col items-center justify-center mx-auto w-11/12 text-3xl mt-3 mb-3 font-NotoSans font-bold"
+          class="bg-amber-400 h-16 rounded-xl flex flex-col items-center justify-center mx-auto w-11/12 text-3xl mt-4 mb-3 font-NotoSans font-bold shadow-lg shadow-slate-400"
           on:click={async () => check_out()}
         >
           Check Out
@@ -385,9 +399,7 @@
     </div>
 
     <div id="billHTML" bind:this={bill_tab}>
-      <div
-        class="flex flex-col w-[500px] bg-white border-black border justify-center items-center"
-      >
+      <div class="flex flex-col w-[500px] bg-white justify-center items-center">
         <div
           id="title"
           class=" w-[470px] font-extrabold text-5xl mt-9 text-center"

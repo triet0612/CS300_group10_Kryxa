@@ -354,3 +354,17 @@ def delete_food_queue(food: FoodItem):
     except Exception as err:
         print(err)
         raise HTTPException(status_code=500, detail="Unknown error")
+
+
+@adminRouter.delete("/pc/{pc_id}", dependencies=[Depends(validateAdminToken)])
+def delete_pc_by_id(pc_id: int):
+    try:
+        model.PC.delete_pc(pc_id)
+    except HTTPException as err:
+        raise err
+    except sqlite3.Error as err:
+        print(err)
+        raise HTTPException(status_code=400, detail="Error get food_queue")
+    except Exception as err:
+        print(err)
+        raise HTTPException(status_code=500, detail="Unknown error")

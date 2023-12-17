@@ -69,6 +69,22 @@
             location.reload()
         }
     }
+
+    async function deletepc() {
+        let res = await fetch(`http://localhost:8000/api/admin/pc/${pc_info.PcID}`,{
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("jwt")
+            },
+        }).then(r => r.status !== 200? "": r.statusText)
+        .catch(err => {console.log(err); return ""})
+        if (res === "") {
+            alert("Error closing")
+        } else {
+            location.replace("/admin")
+        }
+    }
 </script>
 
 <div 
@@ -103,8 +119,8 @@
                     {newTime}
                 </div>
                 <div class ="flex flex-row text-amber-400">
-                    <button class = "w-2/3 h-16 rounded-full hover:bg-yellow-300 hover:text-violet-900 active:bg-black  bg-violet-900  font-BlackOpsOne">
-                        Bill
+                    <button on:click={async () => deletepc()} class = "w-2/3 h-16 rounded-full hover:bg-yellow-300 hover:text-violet-900 active:bg-black  bg-violet-900  font-BlackOpsOne">
+                        Delete
                     </button>
                     <button on:click={async () => click()}
                         class = "ml-10 w-2/3 h-16 rounded-full hover:bg-amber-400 hover:text-violet-900 active:bg-black  bg-violet-900  font-BlackOpsOne">

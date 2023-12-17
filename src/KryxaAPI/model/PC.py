@@ -162,3 +162,13 @@ def update_datetime(pc_id: int, new_pack: int):
         except sqlite3.Error as err:
             cur.rollback()
             raise err
+
+
+def delete_pc(pc_id: int):
+    with DBService() as cur:
+        try:
+            cur.execute("DELETE FROM Pc WHERE PcID = ?", [pc_id]).fetchone()
+            cur.commit()
+        except sqlite3.Error as err:
+            cur.rollback()
+            raise err

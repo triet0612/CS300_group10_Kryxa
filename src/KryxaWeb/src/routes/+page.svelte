@@ -189,7 +189,6 @@
       });
       let temp_food = []
       console.log(cart_items)
-      alert("asd")
       for (let i = 0; i < cart_items.length; i++) {
         if (cart_items[i].Cart > 1) {
           console.log(cart_items[i])

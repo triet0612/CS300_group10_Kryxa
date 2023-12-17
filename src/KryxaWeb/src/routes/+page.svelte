@@ -188,9 +188,13 @@
         }
       });
       let temp_food = []
-      cart_items.filter((val) => val.ItemID > 1);
+      console.log(cart_items)
+      alert("asd")
       for (let i = 0; i < cart_items.length; i++) {
-        temp_food.push({"PcID": 0, "ItemID": cart_items[i].ItemID, "Qt": cart_items[i].quantity})
+        if (cart_items[i].Cart > 1) {
+          console.log(cart_items[i])
+          temp_food.push({"PcID": 0, "ItemID": cart_items[i].ItemID, "Qt": cart_items[i].quantity})
+        }
       }
       console.log(temp_food)
       let add_queue_stat = await fetch("http://localhost:8000/api/food_queue", {

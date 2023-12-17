@@ -158,6 +158,7 @@ def update_user_bill(new_bill_data: Bill):
     with DBService() as cur:
         try:
             total = 0
+            print(new_bill_data.Cart)
             for item in new_bill_data.Cart:
                 total += item["qt"] * item["price"]
             new_bill_data.Total = total

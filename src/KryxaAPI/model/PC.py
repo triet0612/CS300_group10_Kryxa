@@ -9,6 +9,8 @@ from datetime import datetime
 from datetime import timedelta
 import json
 
+from model.Bill import fetch_bill_by_pc_id
+
 
 class Pc(BaseModel):
     PcID: Annotated[int, Field(ge=0)]
@@ -134,6 +136,27 @@ def terminate_session(pc_id: int):
             cur.execute(
                 'DELETE FROM "Bill" WHERE "PcID" = ? AND "Datetime" = ""',
                 [pc_id]
+            )
+            cur.commit()
+        except sqlite3.Error as err:
+            cur.rollback()
+            raise err
+
+
+def update_datetime(pc_id: int, new_pack: int):
+    with DBService() as cur:
+        try:
+            cur_bill = fetch_bill_by_pc_id(pc_id)
+            cur_pack = list(filter(lambda x: x["id"] == 1, cur_bill.Cart))[0]["qt"]
+            diff = new_pack - cur_pack
+            end_time = datetime.fromisoformat(str(cur.execute(
+                "SELECT Endtime FROM Pc WHERE PcID = ?",
+                [pc_id]
+            ).fetchone()[0]))
+            end_time += timedelta(minutes=diff * 30)
+            cur.execute(
+                'UPDATE Pc SET Endtime = ? WHERE PcId = ?',
+                [end_time, pc_id]
             )
             cur.commit()
         except sqlite3.Error as err:

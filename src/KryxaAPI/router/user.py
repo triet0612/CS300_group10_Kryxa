@@ -8,7 +8,7 @@ from fastapi.responses import StreamingResponse
 from service.auth import AccountDTO, checkPcAccount, generate_pc_token, validatePcToken
 from typing import Annotated
 from model.SaleItems import fetch_all_items
-from model.PC import fetch_pc_by_id
+from model.PC import fetch_pc_by_id, update_datetime
 from model.Bill import fetch_bill_by_pc_id,Bill,update_user_bill
 from model.FoodQueue import FoodItem, insert_to_food_queue
 userRouter = APIRouter(tags=["user"])
@@ -102,17 +102,23 @@ async def get_bill(acc: Annotated[AccountDTO, Depends(validatePcToken)]):
     except Exception as err:
         raise HTTPException(status_code=500, detail="Unknown error")
 
+
 @userRouter.post("/")
 async def update_bill(new_bill_data: Bill):
     try:
+        for item in new_bill_data.Cart:
+            if item["id"] == 1:
+                update_datetime(new_bill_data.PcID, item["qt"])
         bill = update_user_bill(new_bill_data)
         print(bill)
     except HTTPException as err:
+        print(err)
         raise err
     except sqlite3.Error as err:
         print(err)
         raise HTTPException(status_code=400, detail="Error fetching bill")
     except Exception as err:
+        print(err)
         raise HTTPException(status_code=500, detail="Unknown error")
 
 

@@ -190,7 +190,7 @@
       let temp_food = [];
       console.log(cart_items);
       for (let i = 0; i < cart_items.length; i++) {
-        if (cart_items[i].Cart > 1) {
+        if (cart_items[i].ItemID > 1) {
           console.log(cart_items[i]);
           temp_food.push({
             PcID: 0,
@@ -223,7 +223,7 @@
       if (statcode != 200) {
         console.log("failed to update bill");
       }
-      location.reload();
+      // location.reload();
     }
   }
 

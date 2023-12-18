@@ -33,29 +33,30 @@ export class Pc {
     return statcode
   }
 
-  async getPcByID(pc_id){
-    let url = `http://localhost:8000/api/admin/pc/${pc_id}`
-    let pc_info = await fetch(url,{
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + localStorage.getItem("jwt")
-      },
-    })
-    .then(res=>{
-      if (res.status==401){
-        location.replace('/admin/login')
-        return
-      }
-      return res.json()
-    })
-    .catch(err => {
-      console.log(err)
-      return 500
-    })
-    console.log(pc_info)
-    return pc_info
-  }
+}
+
+export async function getPcByID(pc_id){
+  let url = `http://localhost:8000/api/admin/pc/${pc_id}`
+  let pc_info = await fetch(url,{
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + localStorage.getItem("jwt")
+    },
+  })
+  .then(res=>{
+    if (res.status==401){
+      location.replace('/admin/login')
+      return
+    }
+    return res.json()
+  })
+  .catch(err => {
+    console.log(err)
+    return 500
+  })
+  console.log(pc_info)
+  return pc_info
 }
 
 export async function get_Pcs(){ //Fetch all Pcs with their ID and Status

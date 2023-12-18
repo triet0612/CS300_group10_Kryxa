@@ -2,7 +2,7 @@
   import AdminNav from "$lib/components/AdminNav.svelte";
   import { MainScreen } from "$lib/Assets.js";
   import { fetch_all } from "$lib/Bill.js";
-  import { Pc } from "$lib/Pc.js";
+  import { Pc, getPcByID } from "$lib/Pc.js";
   import { onMount } from "svelte";
   import ModalBill from "$lib/components/ModalBill.svelte"
   let bill_list = [];
@@ -44,7 +44,7 @@
   }
 
   async function validate(str, pc_id, bill_ID) {
-    item_pc = await item_pc.getPcByID(pc_id).then(res => res);
+    item_pc = await getPcByID(pc_id).then(res => res);
     console.log(str)
     if (str !== undefined && str !== null && str !== "") {
       console.log(str, bill_ID, 0)

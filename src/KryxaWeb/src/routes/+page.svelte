@@ -223,7 +223,7 @@
       if (statcode != 200) {
         console.log("failed to update bill");
       }
-      // location.reload();
+      location.reload();
     }
   }
 

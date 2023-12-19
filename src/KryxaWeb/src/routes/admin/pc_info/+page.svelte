@@ -1,7 +1,7 @@
 <script>
     import AdminNav from "$lib/components/AdminNav.svelte";
     import { MainScreen } from "$lib/Assets.js";
-    import {Pc} from "$lib/Pc.js";
+    import {Pc, getPcByID} from "$lib/Pc.js";
     import {updateThisPcByID} from "$lib/Pc.js";
     import { onMount } from "svelte";
     let pc_info = new Pc()
@@ -12,7 +12,7 @@
     let terminateButton;
     onMount(async()=>{
         const urlSearchParams = new URLSearchParams(window.location.search).get("pc_id");
-        pc_info = await pc_info.getPcByID(urlSearchParams).then(res=>res)
+        pc_info = await getPcByID(urlSearchParams).then(res=>res)
 
         newTime = new Date(pc_info.EndTime).toLocaleString()
         if (pc_info.EndTime === undefined || pc_info.EndTime === "") {

@@ -33,6 +33,8 @@ export class Pc {
     return statcode
   }
 
+  
+
 }
 
 export async function getPcByID(pc_id){

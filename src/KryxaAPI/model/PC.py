@@ -104,8 +104,8 @@ def start_session(pc_id: int, time_pack: int):
             end_time = end_time.replace(microsecond=0)
             password = random.randrange(100, 999, 1)
             cur.execute(
-                "UPDATE Pc SET EndTime=?, Password=? WHERE PcID=?",
-                [end_time.isoformat(), password, pc_id]
+                "UPDATE Pc SET EndTime=?, Password=?, TimeUsage = TimeUsage + ? WHERE PcID=?",
+                [end_time.isoformat(), password, time_pack * 30,pc_id]
             )
             item_price = cur.execute("SELECT Price FROM SaleItem WHERE ItemID=1").fetchone()
             cart = [{
@@ -155,8 +155,8 @@ def update_datetime(pc_id: int, new_pack: int):
             ).fetchone()[0]))
             end_time += timedelta(minutes=diff * 30)
             cur.execute(
-                'UPDATE Pc SET Endtime = ? WHERE PcId = ?',
-                [end_time, pc_id]
+                'UPDATE Pc SET Endtime = ?, TimeUsage = TimeUsage + ? WHERE PcId = ?',
+                [end_time, diff * 30, pc_id]
             )
             cur.commit()
         except sqlite3.Error as err:

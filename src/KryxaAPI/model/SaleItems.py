@@ -8,7 +8,7 @@ from db.database import DBService
 class SaleItems(BaseModel):
     ItemID: Annotated[int, Field(ge=0)]
     Name: Annotated[str, Field(max_length=20)]
-    Price: float
+    Price: Annotated[float, Field(ge=0)]
     Category: Annotated[str, Field(max_length=20)]
     Stock: Annotated[int, Field(ge=0)]
 

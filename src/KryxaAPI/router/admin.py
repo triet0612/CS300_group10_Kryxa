@@ -53,7 +53,7 @@ async def get_all_bills(
             raise HTTPException(status_code=404, detail="No items")
         if day and month and year:
             time_obj = datetime.strptime(f'{year}-{month}-{day}', "%Y-%m-%d")
-            bill_list[:] = [bill for bill in bill_list if time_obj.date() == bill.Datetime.date()]
+            bill_list[:] = [bill for bill in bill_list if bill.Datetime is not None and time_obj.date() == bill.Datetime.date()]
         if bill_id:
             bill_list[:] = [bill for bill in bill_list if bill.BillID == bill_id]
         return bill_list

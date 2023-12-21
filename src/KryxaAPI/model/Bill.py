@@ -45,7 +45,7 @@ def fetch_all_bills():
         items = cur.cursor().execute(sql_query).fetchall()  # Row objects fetched
         item_list = []
         for item_row in items:  # Convert Row objects to SaleItems objects
-            if item_row[2]:
+            if item_row[2] != "":
                 item_list.append(
                     Bill(BillID=item_row[0], PcID=item_row[1], Datetime=item_row[2], Note=item_row[3], Total=item_row[4],
                          Cart=list(eval(item_row[5]))), )

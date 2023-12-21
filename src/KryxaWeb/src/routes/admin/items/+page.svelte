@@ -80,7 +80,7 @@
               </div>
             </a>
             <div class="bg-gray-800">
-              <p id ="image"class="justify-center" value={list_item.Name}>{list_item.Name}</p>
+              <p id ="image"class="justify-center" value={list_item.Name}>{list_item.Name != ''?list_item.Name : 'Null'}</p>
               <p id ="image"class="justify-center" value={list_item.Name}>{parseInt(list_item.Price/1000)}.000</p>
             </div>
           </li>
